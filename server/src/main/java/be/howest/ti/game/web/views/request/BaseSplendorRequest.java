@@ -20,4 +20,6 @@ public class BaseSplendorRequest extends ContextBasedRequestView {
     public String getAuthorizedPlayerName() {
         return getSplendorPlayer().getPlayerName();
     }
+
+
 }

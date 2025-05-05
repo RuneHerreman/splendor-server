@@ -72,8 +72,12 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
     }
 
     @Operation("create-game")
-    public NotYetImplementedResponse createGame(BaseSplendorRequest request) {
-        return new NotYetImplementedResponse("create-game");
+    public CreateGameResponse createGame(CreateGameRequest request) {
+        int generatedGameId = request.getAuthorizedGameId();
+        String playerUsername =  request.getAuthorizedPlayerName();
+        String playerToken = generatedGameId + "_" + playerUsername;
+
+        return new CreateGameResponse( generatedGameId,playerUsername, playerToken);
     }
 
     @Operation("delete-games")
@@ -103,8 +107,8 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
 
     //region Game Action operations
     @Operation("update-tokens")
-    public NotYetImplementedResponse updateTokens(BaseSplendorRequest request) {
-        return new NotYetImplementedResponse("update-tokens");
+    public UpdateTokensResponse updateTokens(UpdateTokensRequest request) {
+        return new UpdateTokensResponse();
     }
 
     @Operation("buy-development")
