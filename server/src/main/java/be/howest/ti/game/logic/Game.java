@@ -31,7 +31,7 @@ public class Game {
         this.started = false;
         this.players = new ArrayList<>() ;
         this.activePlayer = players.getFirst();
-        this.market = getMarket();
+        this.market = getInitMarket();
         this.unclaimedTokens = market.getUnclaimedTokens();
         this.unclaimedNobles = market.getNoblesAvailableInMarket() ;
         this.winner = null;
