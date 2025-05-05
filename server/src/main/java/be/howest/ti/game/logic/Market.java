@@ -12,27 +12,38 @@ public class Market {
     private final List<List<Development>> cardsAvailableInMarket ;
     private final List<Noble> noblesAvailableInMarket;
 
-    public Market(List<List<Development>> allCards, List<Noble> noblesAvailableInMarket , List<List<Development>> cardsAvailableInMarket , List<Noble> nobles) {
+    private List<TokenBundle> unclaimedTokens;
+
+    public Market(List<List<Development>> allCards, List<Noble> noblesAvailableInMarket , List<List<Development>> cardsAvailableInMarket , List<Noble> nobles , List<TokenBundle> unclaimedTokens) {
         this.allCards = allCards;
         this.allNobles = noblesAvailableInMarket;
         this.cardsAvailableInMarket = cardsAvailableInMarket;
         this.noblesAvailableInMarket = noblesAvailableInMarket;
-    }
-
-    public List<List<Development>> getAllCards() {
-        return allCards;
+        this.unclaimedTokens =unclaimedTokens;
     }
 
     public List<Noble> getAllNobles() {
         return allNobles;
     }
 
-    public List<List<Development>> getCardsForMarket() {
+    public List<List<Development>> getAllCards() {
+        return allCards;
+    }
+
+    public List<List<Development>> getCardsAvailableInMarket() {
         return cardsAvailableInMarket;
     }
 
-    public List<Noble> getNoblesForMarket() {
+    public List<Noble> getNoblesAvailableInMarket() {
         return noblesAvailableInMarket;
+    }
+
+    public List<TokenBundle> getUnclaimedTokens() {
+        return unclaimedTokens;
+    }
+
+    public void setUnclaimedTokens(List<TokenBundle> unclaimedTokens) {
+        this.unclaimedTokens = unclaimedTokens;
     }
 
     public void setCardToMarket(Development developmentCard){
