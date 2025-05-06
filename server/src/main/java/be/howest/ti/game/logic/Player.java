@@ -69,6 +69,7 @@ public class Player {
     }
 
     public void getNoble(Noble noble){
+        //max voorwaarde nog aan toevoegen
         nobles.add(noble);
     }
 
