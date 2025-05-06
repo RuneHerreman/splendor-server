@@ -68,7 +68,7 @@ public class Player {
         reserved.remove(development);
     }
 
-    public void getNoble(Noble noble){
+    public void addNoble(Noble noble){
         //max voorwaarde nog aan toevoegen
         nobles.add(noble);
     }
