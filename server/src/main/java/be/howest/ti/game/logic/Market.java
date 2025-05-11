@@ -6,11 +6,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Market {
-
-    private final List<List<Development>> allCards;
-    private final List<Noble> allNobles;
-    private final List<List<Development>> cardsAvailableInMarket ;
-    private final List<Noble> noblesAvailableInMarket;
+    private static List<List<Development>> allCards;
+    private static List<Noble> allNobles;
+    private List<List<Development>> cardsAvailableInMarket;
+    private List<Noble> noblesAvailableInMarket;
     private List<TokenBundle> unclaimedTokens;
 
     public Market(int amountOfPlayers) {
@@ -21,26 +20,56 @@ public class Market {
         this.unclaimedTokens = createInitTokens(amountOfPlayers);
     }
 
-    private List<TokenBundle> createInitTokens(int amountOfPlayers) {
+    public List<Noble> getAllNobles() {
+        return allNobles;
     }
 
-    private List<Noble> getInitNoblesForMarket(int amountOfPlayers) {
-        return null;
+    public List<List<Development>> getAllCards() {
+        return allCards;
     }
 
-    private List<List<Development>> getInitDevelopmentCardsForMarket() {
-        return null;
+    public List<List<Development>> getCardsAvailableInMarket() {
+        return cardsAvailableInMarket;
     }
 
-    private List<Noble> createNobles() {
-        return null;
+    public List<Noble> getNoblesAvailableInMarket() {
+        return noblesAvailableInMarket;
     }
 
-    private List<List<Development>> createAllCards() {
+    public List<TokenBundle> getUnclaimedTokens() {
+        return unclaimedTokens;
+    }
+
+    public void setUnclaimedTokens(List<TokenBundle> unclaimedTokens) {
+        this.unclaimedTokens = unclaimedTokens;
+    }
+
+    public void setCardToMarket(Development developmentCard) {
+        int cardLevel = developmentCard.getLevel();
+        int cardLevelIndex = cardLevel - 1;
+        cardsAvailableInMarket.get(cardLevelIndex).add(developmentCard);
+        allCards.get(cardLevelIndex).remove(developmentCard);
+    }
+
+    public void setNobleToMarket(Noble noble) {
+        noblesAvailableInMarket.add(noble);
+        allNobles.remove(noble);
+    }
+
+    public void removeCardFromMarket(Development developmentCard) {
+        int cardLevel = developmentCard.getLevel();
+        int cardLevelIndex = cardLevel - 1;
+        cardsAvailableInMarket.get(cardLevelIndex).remove(developmentCard);
+    }
+
+    public void removeNobleFromMarket(Noble noble) {
+        noblesAvailableInMarket.remove(noble);
+    }
+
+    public static List<List<Development>> createAllCards() {
         List<List<Development>> allCards = new ArrayList<>();
 
-        // Dummy data / moet alle cards ophalen van een file >recorces > developmentCards
-        //todo
+        // Dummy data / moet alle cards halen van een file >recorces > developmentCards
         List<Development> level1Cards = Arrays.asList(
                 new Development("Emerald Mine", 0, CardUtils.getCostTokenSetFromLetters("EEECC"), new TokenBundle(Token.EMERALD, 1), 1),
                 new Development("Sapphire Workshop", 0, CardUtils.getCostTokenSetFromLetters("SSCC"), new TokenBundle(Token.SAPPHIRE, 1), 1),
@@ -69,51 +98,95 @@ public class Market {
         return allCards;
     }
 
-    public List<Noble> getAllNobles() {
+    public static List<Noble> createNobles() {
+        List<Noble> allNobles = new ArrayList<>();
+
+        allNobles.add(new Noble("Mary Stuart", 3, CardUtils.getCostTokenSetFromLetters("EEEERRRR")));
+        allNobles.add(new Noble("Suleiman the Magnificent", 3, CardUtils.getCostTokenSetFromLetters("SSSSEEEE")));
+        allNobles.add(new Noble("Niccolo Machiavelli", 3, CardUtils.getCostTokenSetFromLetters("CCCCSSSS")));
+        allNobles.add(new Noble("Isabella of Castile", 3, CardUtils.getCostTokenSetFromLetters("CCCCOOOO")));
+        allNobles.add(new Noble("Henry VIII", 3, CardUtils.getCostTokenSetFromLetters("RRRROOOO")));
+        allNobles.add(new Noble("Elizabeth of Austria", 3, CardUtils.getCostTokenSetFromLetters("CCCSSSOOO")));
+        allNobles.add(new Noble("Francois the 1st", 3, CardUtils.getCostTokenSetFromLetters("EEERRROOO")));
+        allNobles.add(new Noble("Charles the Fifth", 3, CardUtils.getCostTokenSetFromLetters("CCCRRROOO")));
+        allNobles.add(new Noble("Catherine de Medici", 3, CardUtils.getCostTokenSetFromLetters("SSSEEERRR")));
+        allNobles.add(new Noble("Anne of Brittany", 3, CardUtils.getCostTokenSetFromLetters("CCCSSSEEE")));
+
         return allNobles;
     }
 
-    public List<List<Development>> getAllCards() {
-        return allCards;
+    public static List<TokenBundle> createInitTokens(int totalPlayers) {
+        List<TokenBundle> initTokens = new ArrayList<>();
+
+        for (Token token : Token.values()) {
+            if (token == Token.GOLD) {
+                initTokens.add(new TokenBundle(token, 5));
+            } else {
+                initTokens.add(new TokenBundle(token, getAmountOfTokenAccourdingToPlayer(totalPlayers)));
+            }
+        }
+
+        return initTokens;
     }
 
-    public List<List<Development>> getCardsAvailableInMarket() {
-        return cardsAvailableInMarket;
+    private static int getAmountOfTokenAccourdingToPlayer(int totalPlayers) {
+        /*  4 spelers : 7 van elk tokens
+            3 : 5
+            2 : 4   */
+        Map<Integer, Integer> tokenAccourding = new HashMap<>();
+        tokenAccourding.put(4, 7);
+        tokenAccourding.put(3, 5);
+        tokenAccourding.put(2, 4);
+
+        return tokenAccourding.get(totalPlayers);
     }
 
-    public List<Noble> getNoblesAvailableInMarket() {
-        return noblesAvailableInMarket;
+    public List<Noble> getInitNoblesForMarket(int amountOfPlayers) {
+        List<Noble> noblesForMarket = new ArrayList<>();
+        int noblesToSelect = amountOfPlayers + 1;
+
+        Random random = new Random();
+        List<Integer> selectedIndices = new ArrayList<>();
+
+        while (noblesForMarket.size() < noblesToSelect && selectedIndices.size() < allNobles.size()) {
+            int index = random.nextInt(allNobles.size());
+            if (!selectedIndices.contains(index)) {
+                selectedIndices.add(index);
+                noblesForMarket.add(allNobles.get(index));
+            }
+        }
+
+        return noblesForMarket;
     }
 
-    public List<TokenBundle> getUnclaimedTokens() {
-        return unclaimedTokens;
+    public List<List<Development>> getInitDevelopmentCardsForMarket() {
+        List<List<Development>> developmentCardsForMarket = new ArrayList<>();
+        Random random = new Random();
+
+        for (List<Development> levelCards : allCards) {
+            List<Development> marketCards = new ArrayList<>();
+            Set<Integer> selectedIndices = new HashSet<>();
+            int cardsToSelect = Math.min(4, levelCards.size());
+
+            while (marketCards.size() < cardsToSelect && selectedIndices.size() < levelCards.size()) {
+                int index = random.nextInt(levelCards.size());
+                if (!selectedIndices.contains(index)) {
+                    selectedIndices.add(index);
+                    marketCards.add(levelCards.get(index));
+                }
+            }
+
+            developmentCardsForMarket.add(marketCards);
+        }
+
+        return developmentCardsForMarket;
     }
 
-    public void setUnclaimedTokens(List<TokenBundle> unclaimedTokens) {
-        this.unclaimedTokens = unclaimedTokens;
-    }
+    @Override public String toString() { return "Market{" + "allCards=" + allCards + ", allNobles=" + allNobles + ", cardsAvailableInMarket=" + cardsAvailableInMarket + ", noblesAvailableInMarket=" + noblesAvailableInMarket + ", unclaimedTokens=" + unclaimedTokens + '}'; }
 
-    public void setCardToMarket(Development developmentCard){
-        int cardLevel = developmentCard.getLevel();
-        int cardLevelIndex = cardLevel - 1;
-        cardsAvailableInMarket.get(cardLevelIndex).add(developmentCard);
-        allCards.get(cardLevelIndex).remove(developmentCard);
-    }
+}
 
-    public void setNobleToMarket(Noble noble){;
-        noblesAvailableInMarket.add(noble);
-        allNobles.remove(noble);
-    }
 
-    public void removeCardFromMarket(Development developmentCard){
-        int cardLevel = developmentCard.getLevel();
-        int cardLevelIndex = cardLevel - 1;
-        cardsAvailableInMarket.get(cardLevelIndex).remove(developmentCard);
-    }
-
-    public void removeNobleFromMarket(Noble noble){;
-        noblesAvailableInMarket.remove(noble);
-    }
 
 
 
