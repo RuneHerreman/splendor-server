@@ -10,20 +10,9 @@ public class CardUtils {
     private static final Map<Character, Token> costMap = costLetterToTokenMap();
 
     public static Set<TokenBundle> getCostTokenSetFromLetters(String costString) {
-
-        Map<Token, Integer> tokenCounts = new HashMap<>();
-
-        for (char c : costString.toCharArray()) {
-            Token token = costMap.get(c);
-
-            if(tokenCounts.containsKey(token)) {
-                tokenCounts.put(token, tokenCounts.get(token) + 1);
-            }else {
-                tokenCounts.put(token, 1);
-            }
-        }
-
         Set<TokenBundle> bundles = new HashSet<>();
+        Map<Token, Integer> tokenCounts = getTokenWithAmountFromLetters(costString);
+
         for (Map.Entry<Token, Integer> entry : tokenCounts.entrySet()) {
             bundles.add(new TokenBundle(entry.getKey(), entry.getValue()));
         }
@@ -39,5 +28,22 @@ public class CardUtils {
         costMap.put('R', Token.RUBY);
         costMap.put('E', Token.EMERALD);
         return costMap;
+    }
+
+    private static Map<Token, Integer> getTokenWithAmountFromLetters(String tokensAsString) {
+        Map<Token, Integer> tokenCounts = new HashMap<>();
+        char[] tokens = tokensAsString.toCharArray();
+
+        for (char c : tokens) {
+            Token token = costMap.get(c);
+
+            if(tokenCounts.containsKey(token)) {
+                tokenCounts.put(token, tokenCounts.get(token) + 1);
+            }else {
+                tokenCounts.put(token, 1);
+            }
+
+        }
+        return tokenCounts;
     }
 }
