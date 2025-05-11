@@ -77,5 +77,41 @@ public class Player {
         this.prestigePoints += toBeAdded;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public int getGameId() {
+        return gameId;
+    }
+
+    public int getPrestigePoints() {
+        return prestigePoints;
+    }
+
+    public List<Development> getPurchasedDevelopments() {
+        return purchasedDevelopments;
+    }
+
+    public List<Development> getReserved() {
+        return reserved;
+    }
+
+    public List<Noble> getNobles() {
+        return nobles;
+    }
+
+    public List<TokenBundle> getTokens() {
+        return tokens;
+    }
+
+    public List<TokenBundle> getBonuses() {
+        return bonuses;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 
 }
