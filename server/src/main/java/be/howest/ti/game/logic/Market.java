@@ -68,8 +68,14 @@ public class Market {
         noblesAvailableInMarket.remove(noble);
     }
 
-
-
-
-
+    @Override
+    public String toString() {
+        return "Market{" +
+                "allCards=" + allCards +
+                ", allNobles=" + allNobles +
+                ", cardsAvailableInMarket=" + cardsAvailableInMarket +
+                ", noblesAvailableInMarket=" + noblesAvailableInMarket +
+                ", unclaimedTokens=" + unclaimedTokens +
+                '}';
+    }
 }
