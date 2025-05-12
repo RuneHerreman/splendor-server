@@ -1,9 +1,12 @@
 package be.howest.ti.game.logic;
 
+import be.howest.ti.game.logic.gameTools.Development;
+import be.howest.ti.game.logic.gameTools.Noble;
+import be.howest.ti.game.logic.gameTools.Token;
+import be.howest.ti.game.logic.gameTools.TokenBundle;
 import be.howest.ti.game.logic.utils.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Market {
     private static List<List<Development>> allCards;
@@ -133,6 +136,7 @@ public class Market {
         /*  4 spelers : 7 van elk tokens
             3 : 5
             2 : 4   */
+
         Map<Integer, Integer> tokenAccourding = new HashMap<>();
         tokenAccourding.put(4, 7);
         tokenAccourding.put(3, 5);
@@ -146,12 +150,12 @@ public class Market {
         int noblesToSelect = amountOfPlayers + 1;
 
         Random random = new Random();
-        List<Integer> selectedIndices = new ArrayList<>();
+        List<Integer> selectedIndexes = new ArrayList<>();
 
-        while (noblesForMarket.size() < noblesToSelect && selectedIndices.size() < allNobles.size()) {
+        while (noblesForMarket.size() < noblesToSelect && selectedIndexes.size() < allNobles.size()) {
             int index = random.nextInt(allNobles.size());
-            if (!selectedIndices.contains(index)) {
-                selectedIndices.add(index);
+            if (!selectedIndexes.contains(index)) {
+                selectedIndexes.add(index);
                 noblesForMarket.add(allNobles.get(index));
             }
         }
@@ -165,13 +169,13 @@ public class Market {
 
         for (List<Development> levelCards : allCards) {
             List<Development> marketCards = new ArrayList<>();
-            Set<Integer> selectedIndices = new HashSet<>();
+            Set<Integer> selectedIndexes = new HashSet<>();
             int cardsToSelect = Math.min(4, levelCards.size());
 
-            while (marketCards.size() < cardsToSelect && selectedIndices.size() < levelCards.size()) {
+            while (marketCards.size() < cardsToSelect && selectedIndexes.size() < levelCards.size()) {
                 int index = random.nextInt(levelCards.size());
-                if (!selectedIndices.contains(index)) {
-                    selectedIndices.add(index);
+                if (!selectedIndexes.contains(index)) {
+                    selectedIndexes.add(index);
                     marketCards.add(levelCards.get(index));
                 }
             }

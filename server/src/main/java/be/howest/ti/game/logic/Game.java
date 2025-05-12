@@ -1,9 +1,8 @@
 package be.howest.ti.game.logic;
 
-import be.howest.ti.game.logic.utils.Development;
-import be.howest.ti.game.logic.utils.GameState;
-import be.howest.ti.game.logic.utils.Noble;
-import be.howest.ti.game.logic.utils.TokenBundle;
+import be.howest.ti.game.logic.gameTools.GameState;
+import be.howest.ti.game.logic.gameTools.Noble;
+import be.howest.ti.game.logic.gameTools.TokenBundle;
 
 import java.util.List;
 
@@ -22,10 +21,10 @@ public class Game {
     private Player winner;
     private GameState gameState;
 
-    public Game(String gameName, int gameId , int numberOfPlayers , List<Player> players) {
+    public Game(String gameName, int gameId  , List<Player> players) {
         this.gameName = gameName;
         this.gameId = gameId;
-        this.numberOfPlayers = numberOfPlayers;
+        this.numberOfPlayers = players.size();
         this.started = false;
         this.players = players ;
         this.activePlayer = players.getFirst();

@@ -1,5 +1,8 @@
 package be.howest.ti.game.logic.utils;
 
+import be.howest.ti.game.logic.gameTools.Token;
+import be.howest.ti.game.logic.gameTools.TokenBundle;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
