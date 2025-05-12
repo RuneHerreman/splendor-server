@@ -32,5 +32,8 @@ public class Development {
     public TokenBundle getBonus() {
         return bonus;
     }
+    public String toString() {
+        return name;
+    }
 
 }

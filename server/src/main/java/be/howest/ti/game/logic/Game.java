@@ -104,10 +104,20 @@ public class Game {
                 '}';
     }
 
-
-
-
-
-
-
+    @Override
+    public String toString() {
+        return "Game{" +
+                "gameName='" + gameName + '\'' +
+                ", gameId=" + gameId +
+                ", started=" + started +
+                ", numberOfPlayers=" + numberOfPlayers +
+                ", activePlayer=" + activePlayer +
+                ", players=" + players +
+                ", market=" + market +
+                ", unclaimedTokens=" + unclaimedTokens +
+                ", unclaimedNobles=" + unclaimedNobles +
+                ", winner=" + winner +
+                ", gameState=" + gameState +
+                '}';
+    }
 }
