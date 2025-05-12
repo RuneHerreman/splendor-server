@@ -7,9 +7,9 @@ public class Development {
     private int level;
     private int prestigePoints;
     private Set<TokenBundle> cost;
-    private final TokenBundle bonus;
+    private final Token bonus;
 
-    public Development(String name, int prestigePoints, Set<TokenBundle> cost , TokenBundle bonus , int level) {
+    public Development(String name, int prestigePoints, Set<TokenBundle> cost , Token bonus , int level) {
         this.name = name;
         this.prestigePoints = prestigePoints;
         this.cost = cost;
@@ -29,7 +29,7 @@ public class Development {
     public int getLevel() {
         return level;
     }
-    public TokenBundle getBonus() {
+    public Token getBonus() {
         return bonus;
     }
 

@@ -2,6 +2,8 @@ package be.howest.ti.game.logic;
 
 import be.howest.ti.game.logic.utils.*;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -69,31 +71,45 @@ public class Market {
     public static List<List<Development>> createAllCards() {
         List<List<Development>> allCards = new ArrayList<>();
 
-        // Dummy data / moet alle cards halen van een file >recorces > developmentCards
-        List<Development> level1Cards = Arrays.asList(
-                new Development("Emerald Mine", 0, CardUtils.getCostTokenSetFromLetters("EEECC"), new TokenBundle(Token.EMERALD, 1), 1),
-                new Development("Sapphire Workshop", 0, CardUtils.getCostTokenSetFromLetters("SSCC"), new TokenBundle(Token.SAPPHIRE, 1), 1),
-                new Development("Onyx Quarry", 0, CardUtils.getCostTokenSetFromLetters("OOCR"), new TokenBundle(Token.ONYX, 1), 1),
-                new Development("Ruby Vein", 0, CardUtils.getCostTokenSetFromLetters("RRCC"), new TokenBundle(Token.RUBY, 1), 1)
-        );
+        List<Development>level1Cards = new ArrayList<>();
+        List<Development> level2Cards = new  ArrayList<>();
+        List<Development> level3Cards = new  ArrayList<>();
 
-        List<Development> level2Cards = Arrays.asList(
-                new Development("Emerald Exchange", 1, CardUtils.getCostTokenSetFromLetters("EEECCRR"), new TokenBundle(Token.EMERALD, 2), 2),
-                new Development("Sapphire Market", 1, CardUtils.getCostTokenSetFromLetters("SSCCOO"), new TokenBundle(Token.SAPPHIRE, 2), 2),
-                new Development("Onyx Workshop", 1, CardUtils.getCostTokenSetFromLetters("OOCRRR"), new TokenBundle(Token.ONYX, 2), 2),
-                new Development("Ruby Guild", 1, CardUtils.getCostTokenSetFromLetters("RRCCOO"), new TokenBundle(Token.RUBY, 2), 2)
-        );
+        try {
+            File developmentCards = new File("resources/data/developments.txt");
+            Scanner scanner = new Scanner(developmentCards);
+            if (scanner.hasNextLine()) scanner.nextLine(); // Skip header
 
-        List<Development> level3Cards = Arrays.asList(
-                new Development("Emerald Vault", 2, CardUtils.getCostTokenSetFromLetters("EEEERRRRCC"), new TokenBundle(Token.EMERALD, 3), 3),
-                new Development("Sapphire Grand Market", 2, CardUtils.getCostTokenSetFromLetters("SSSCCOOO"), new TokenBundle(Token.SAPPHIRE, 3), 3),
-                new Development("Onyx Treasure Hall", 2, CardUtils.getCostTokenSetFromLetters("OOOCCCERR"), new TokenBundle(Token.ONYX, 3), 3),
-                new Development("Ruby Master Mine", 2, CardUtils.getCostTokenSetFromLetters("RRRCCCOOO"), new TokenBundle(Token.RUBY, 3), 3)
-        );
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] token = line.split("\\t");
 
-        allCards.add(new ArrayList<>(level1Cards));
-        allCards.add(new ArrayList<>(level2Cards));
-        allCards.add(new ArrayList<>(level3Cards));
+                String cardName = token[0];
+                int level = Integer.parseInt(token[1]);
+                Token cardType = CardUtils.getTokenFromLetters(token[2]);
+                int points = Integer.parseInt(token[4]);
+                Set<TokenBundle> tokenBundles = CardUtils.getCostTokenSetFromLetters(token[5]);
+
+                Development development = new Development(cardName , points , tokenBundles ,  cardType  , level);
+
+                if(level == 1){
+                    level1Cards.add(development);
+                }else if (level == 2){
+                    level2Cards.add(development);
+                }else{
+                    level3Cards.add(development);
+                }
+            }
+
+            scanner.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        allCards.add(level1Cards);
+        allCards.add(level2Cards);
+        allCards.add(level3Cards);
 
         return allCards;
     }
@@ -101,16 +117,29 @@ public class Market {
     public static List<Noble> createNobles() {
         List<Noble> allNobles = new ArrayList<>();
 
-        allNobles.add(new Noble("Mary Stuart", 3, CardUtils.getCostTokenSetFromLetters("EEEERRRR")));
-        allNobles.add(new Noble("Suleiman the Magnificent", 3, CardUtils.getCostTokenSetFromLetters("SSSSEEEE")));
-        allNobles.add(new Noble("Niccolo Machiavelli", 3, CardUtils.getCostTokenSetFromLetters("CCCCSSSS")));
-        allNobles.add(new Noble("Isabella of Castile", 3, CardUtils.getCostTokenSetFromLetters("CCCCOOOO")));
-        allNobles.add(new Noble("Henry VIII", 3, CardUtils.getCostTokenSetFromLetters("RRRROOOO")));
-        allNobles.add(new Noble("Elizabeth of Austria", 3, CardUtils.getCostTokenSetFromLetters("CCCSSSOOO")));
-        allNobles.add(new Noble("Francois the 1st", 3, CardUtils.getCostTokenSetFromLetters("EEERRROOO")));
-        allNobles.add(new Noble("Charles the Fifth", 3, CardUtils.getCostTokenSetFromLetters("CCCRRROOO")));
-        allNobles.add(new Noble("Catherine de Medici", 3, CardUtils.getCostTokenSetFromLetters("SSSEEERRR")));
-        allNobles.add(new Noble("Anne of Brittany", 3, CardUtils.getCostTokenSetFromLetters("CCCSSSEEE")));
+        try {
+            File noblesFile = new File("resources/data/nobles.txt");
+            Scanner scanner = new Scanner(noblesFile);
+            if (scanner.hasNextLine()) scanner.nextLine(); // Skip header
+
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] token = line.split("\\t");
+
+                String cardName = token[0];
+                Set<TokenBundle> tokenBundles = CardUtils.getCostTokenSetFromLetters(token[1]);
+                int point = Integer.parseInt(token[2]);
+
+                Noble noble = new Noble(cardName ,point ,  tokenBundles);
+                allNobles.add(noble);
+
+            }
+
+            scanner.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
         return allNobles;
     }
@@ -192,4 +221,4 @@ public class Market {
 
 
 
-}
+

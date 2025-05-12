@@ -46,4 +46,8 @@ public class CardUtils {
         }
         return tokenCounts;
     }
+
+    public static Token getTokenFromLetters(String letter) {
+        return costMap.get(letter);
+    }
 }
