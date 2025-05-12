@@ -1,13 +1,10 @@
 package be.howest.ti.game.logic;
-import be.howest.ti.game.logic.utils.Development;
-import be.howest.ti.game.logic.utils.Noble;
-import be.howest.ti.game.logic.utils.Token;
-import be.howest.ti.game.logic.utils.TokenBundle;
+import be.howest.ti.game.logic.gameTools.Development;
+import be.howest.ti.game.logic.gameTools.Noble;
+import be.howest.ti.game.logic.gameTools.TokenBundle;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Player {
 

@@ -1,4 +1,4 @@
-package be.howest.ti.game.logic.utils;
+package be.howest.ti.game.logic.gameTools;
 
 import java.util.Objects;
 import java.util.Set;
