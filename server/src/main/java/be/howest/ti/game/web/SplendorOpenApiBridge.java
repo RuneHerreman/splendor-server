@@ -1,5 +1,7 @@
 package be.howest.ti.game.web;
 
+import be.howest.ti.game.logic.Player;
+import be.howest.ti.game.logic.service.GameManager;
 import be.howest.ti.game.logic.service.SplendorService;
 import be.howest.ti.game.logic.service.SplendorServiceImpl;
 import be.howest.ti.game.web.tokens.PlainTextTokens;
@@ -13,6 +15,7 @@ import java.util.function.Supplier;
 public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is not a monster class, it is a bridge :-)
 
     private final Supplier<SplendorService> serviceFactory;
+    private final GameManager gameManager = new GameManager();
 
     public SplendorOpenApiBridge() {
         this(SplendorServiceImpl::new, new PlainTextTokens());
@@ -73,11 +76,17 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
 
     @Operation("create-game")
     public CreateGameResponse createGame(CreateGameRequest request) {
-        int generatedGameId = request.getAuthorizedGameId();
+        int generatedGameID = request.getAuthorizedGameId();
+        String gameName = request.getGameName();
         String playerUsername =  request.getAuthorizedPlayerName();
-        String playerToken = generatedGameId + "_" + playerUsername;
+        String playerToken = generatedGameID + "_" + playerUsername;
 
-        return new CreateGameResponse( generatedGameId,playerUsername, playerToken);
+        List<Player> players = new ArrayList<>();
+        players.add(new Player(playerUsername, generatedGameID));
+
+        gameManager.createGame(gameName, generatedGameID, players);
+
+        return new CreateGameResponse(generatedGameID,playerUsername, playerToken);
     }
 
     @Operation("delete-games")

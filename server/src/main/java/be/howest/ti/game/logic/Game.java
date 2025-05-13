@@ -95,10 +95,12 @@ public class Game {
                 ", gameId=" + gameId +
                 ", started=" + started +
                 ", numberOfPlayers=" + numberOfPlayers +
-                ", activePlayer=" +  activePlayer.getName()  +
+                ", activePlayer=" + activePlayer +
                 ", players=" + players +
                 ", market=" + market +
-                ", winner=" + (winner != null ? winner.getName() : "None") +
+                ", unclaimedTokens=" + unclaimedTokens +
+                ", unclaimedNobles=" + unclaimedNobles +
+                ", winner=" + winner +
                 ", gameState=" + gameState +
                 '}';
     }
