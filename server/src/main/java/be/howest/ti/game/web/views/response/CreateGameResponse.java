@@ -1,30 +1,28 @@
 package be.howest.ti.game.web.views.response;
 
 public class CreateGameResponse extends AbstractResponseWithHiddenStatus {
-    private int gameId;
+
     private String playerName;
-    private String playerToken;
+    private int gameId;
 
-    public CreateGameResponse() {
-        super(200);
-    }
 
-    public CreateGameResponse(int gameId, String playerName, String playerToken) {
+    public CreateGameResponse(String playerName, int gameId) {
         super(200);
-        this.gameId = gameId;
         this.playerName = playerName;
-        this.playerToken = playerToken;
+        this.gameId = gameId;
+
     }
 
     public int getGameId() {
         return gameId;
     }
 
+    public String getPlayerToken() {
+        return gameId + "_" + playerName;
+    }
+
     public String getPlayerName() {
         return playerName;
     }
 
-    public String getPlayerToken() {
-        return playerToken;
-    }
 }

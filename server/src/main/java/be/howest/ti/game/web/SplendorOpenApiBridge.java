@@ -73,11 +73,13 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
 
     @Operation("create-game")
     public CreateGameResponse createGame(CreateGameRequest request) {
-        int generatedGameId = request.getAuthorizedGameId();
-        String playerUsername =  request.getAuthorizedPlayerName();
-        String playerToken = generatedGameId + "_" + playerUsername;
+        int gameId = 1;
+        //acties die nog moeten gebeuren
+        //game id halen van de services of ergens
+        //game maken
+        //dan return
+        return new CreateGameResponse(request.getName(), gameId);
 
-        return new CreateGameResponse( generatedGameId,playerUsername, playerToken);
     }
 
     @Operation("delete-games")
