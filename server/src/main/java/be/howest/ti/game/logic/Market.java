@@ -8,6 +8,7 @@ import be.howest.ti.game.logic.utils.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.*;
 
 public class Market {
@@ -79,9 +80,10 @@ public class Market {
         List<Development> level3Cards = new  ArrayList<>();
 
         try {
-            File developmentCards = new File("resources/data/developments.txt");
+            File developmentCards = new File("src/main/resources/data/developments.txt");
             Scanner scanner = new Scanner(developmentCards);
             if (scanner.hasNextLine()) scanner.nextLine(); // Skip header
+
 
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
@@ -121,7 +123,7 @@ public class Market {
         List<Noble> allNobles = new ArrayList<>();
 
         try {
-            File noblesFile = new File("resources/data/nobles.txt");
+            File noblesFile = new File("src/main/resources/data/nobles.txt");
             Scanner scanner = new Scanner(noblesFile);
             if (scanner.hasNextLine()) scanner.nextLine(); // Skip header
 
