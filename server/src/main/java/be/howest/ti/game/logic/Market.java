@@ -1,25 +1,28 @@
 package be.howest.ti.game.logic;
 
+import be.howest.ti.game.logic.gameTools.Development;
+import be.howest.ti.game.logic.gameTools.Noble;
+import be.howest.ti.game.logic.gameTools.Token;
+import be.howest.ti.game.logic.gameTools.TokenBundle;
 import be.howest.ti.game.logic.utils.*;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Market {
-
-    private final List<List<Development>> allCards;
-    private final List<Noble> allNobles;
-    private final List<List<Development>> cardsAvailableInMarket ;
-    private final List<Noble> noblesAvailableInMarket;
-
+    private static List<List<Development>> allCards;
+    private static List<Noble> allNobles;
+    private List<List<Development>> cardsAvailableInMarket;
+    private List<Noble> noblesAvailableInMarket;
     private List<TokenBundle> unclaimedTokens;
 
-    public Market(List<List<Development>> allCards, List<Noble> noblesAvailableInMarket , List<List<Development>> cardsAvailableInMarket , List<Noble> nobles , List<TokenBundle> unclaimedTokens) {
-        this.allCards = allCards;
-        this.allNobles = noblesAvailableInMarket;
-        this.cardsAvailableInMarket = cardsAvailableInMarket;
-        this.noblesAvailableInMarket = noblesAvailableInMarket;
-        this.unclaimedTokens =unclaimedTokens;
+    public Market(int amountOfPlayers) {
+        allCards = createAllCards();
+        allNobles = createNobles();
+        this.cardsAvailableInMarket = getInitDevelopmentCardsForMarket();
+        this.noblesAvailableInMarket = getInitNoblesForMarket(amountOfPlayers);
+        this.unclaimedTokens = createInitTokens(amountOfPlayers);
     }
 
     public List<Noble> getAllNobles() {
@@ -46,30 +49,180 @@ public class Market {
         this.unclaimedTokens = unclaimedTokens;
     }
 
-    public void setCardToMarket(Development developmentCard){
+    public void setCardToMarket(Development developmentCard) {
         int cardLevel = developmentCard.getLevel();
         int cardLevelIndex = cardLevel - 1;
         cardsAvailableInMarket.get(cardLevelIndex).add(developmentCard);
         allCards.get(cardLevelIndex).remove(developmentCard);
     }
 
-    public void setNobleToMarket(Noble noble){;
+    public void setNobleToMarket(Noble noble) {
         noblesAvailableInMarket.add(noble);
         allNobles.remove(noble);
     }
 
-    public void removeCardFromMarket(Development developmentCard){
+    public void removeCardFromMarket(Development developmentCard) {
         int cardLevel = developmentCard.getLevel();
         int cardLevelIndex = cardLevel - 1;
         cardsAvailableInMarket.get(cardLevelIndex).remove(developmentCard);
     }
 
-    public void removeNobleFromMarket(Noble noble){;
+    public void removeNobleFromMarket(Noble noble) {
         noblesAvailableInMarket.remove(noble);
     }
 
+    public static List<List<Development>> createAllCards() {
+        List<List<Development>> allCards = new ArrayList<>();
 
+        List<Development>level1Cards = new ArrayList<>();
+        List<Development> level2Cards = new  ArrayList<>();
+        List<Development> level3Cards = new  ArrayList<>();
 
+        try {
+            File developmentCards = new File("resources/data/developments.txt");
+            Scanner scanner = new Scanner(developmentCards);
+            if (scanner.hasNextLine()) scanner.nextLine(); // Skip header
 
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] token = line.split("\\t");
+
+                String cardName = token[0];
+                int level = Integer.parseInt(token[1]);
+                Token cardType = CardUtils.getTokenFromLetters(token[2]);
+                int points = Integer.parseInt(token[4]);
+                Set<TokenBundle> tokenBundles = CardUtils.getCostTokenSetFromLetters(token[5]);
+
+                Development development = new Development(cardName , points , tokenBundles ,  cardType  , level);
+
+                if(level == 1){
+                    level1Cards.add(development);
+                }else if (level == 2){
+                    level2Cards.add(development);
+                }else{
+                    level3Cards.add(development);
+                }
+            }
+
+            scanner.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        allCards.add(level1Cards);
+        allCards.add(level2Cards);
+        allCards.add(level3Cards);
+
+        return allCards;
+    }
+
+    public static List<Noble> createNobles() {
+        List<Noble> allNobles = new ArrayList<>();
+
+        try {
+            File noblesFile = new File("resources/data/nobles.txt");
+            Scanner scanner = new Scanner(noblesFile);
+            if (scanner.hasNextLine()) scanner.nextLine(); // Skip header
+
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] token = line.split("\\t");
+
+                String cardName = token[0];
+                Set<TokenBundle> tokenBundles = CardUtils.getCostTokenSetFromLetters(token[1]);
+                int point = Integer.parseInt(token[2]);
+
+                Noble noble = new Noble(cardName ,point ,  tokenBundles);
+                allNobles.add(noble);
+
+            }
+
+            scanner.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return allNobles;
+    }
+
+    public static List<TokenBundle> createInitTokens(int totalPlayers) {
+        List<TokenBundle> initTokens = new ArrayList<>();
+
+        for (Token token : Token.values()) {
+            if (token == Token.GOLD) {
+                initTokens.add(new TokenBundle(token, 5));
+            } else {
+                initTokens.add(new TokenBundle(token, getAmountOfTokenAccourdingToPlayer(totalPlayers)));
+            }
+        }
+
+        return initTokens;
+    }
+
+    private static int getAmountOfTokenAccourdingToPlayer(int totalPlayers) {
+        /*  4 spelers : 7 van elk tokens
+            3 : 5
+            2 : 4   */
+
+        Map<Integer, Integer> tokenAccourding = new HashMap<>();
+        tokenAccourding.put(4, 7);
+        tokenAccourding.put(3, 5);
+        tokenAccourding.put(2, 4);
+
+        return tokenAccourding.get(totalPlayers);
+    }
+
+    public List<Noble> getInitNoblesForMarket(int amountOfPlayers) {
+        List<Noble> noblesForMarket = new ArrayList<>();
+        int noblesToSelect = amountOfPlayers + 1;
+
+        Random random = new Random();
+        List<Integer> selectedIndexes = new ArrayList<>();
+
+        while (noblesForMarket.size() < noblesToSelect && selectedIndexes.size() < allNobles.size()) {
+            int index = random.nextInt(allNobles.size());
+            if (!selectedIndexes.contains(index)) {
+                selectedIndexes.add(index);
+                noblesForMarket.add(allNobles.get(index));
+            }
+        }
+
+        return noblesForMarket;
+    }
+
+    public List<List<Development>> getInitDevelopmentCardsForMarket() {
+        List<List<Development>> developmentCardsForMarket = new ArrayList<>();
+        Random random = new Random();
+
+        for (List<Development> levelCards : allCards) {
+            List<Development> marketCards = new ArrayList<>();
+            Set<Integer> selectedIndexes = new HashSet<>();
+            int cardsToSelect = Math.min(4, levelCards.size());
+
+            while (marketCards.size() < cardsToSelect && selectedIndexes.size() < levelCards.size()) {
+                int index = random.nextInt(levelCards.size());
+                if (!selectedIndexes.contains(index)) {
+                    selectedIndexes.add(index);
+                    marketCards.add(levelCards.get(index));
+                }
+            }
+
+            developmentCardsForMarket.add(marketCards);
+        }
+
+        return developmentCardsForMarket;
+    }
+
+    @Override public String toString() { return "Market{" + "allCards=" + allCards + ", allNobles=" + allNobles + ", cardsAvailableInMarket=" + cardsAvailableInMarket + ", noblesAvailableInMarket=" + noblesAvailableInMarket + ", unclaimedTokens=" + unclaimedTokens + '}'; }
 
 }
+
+
+
+
+
+
+
+

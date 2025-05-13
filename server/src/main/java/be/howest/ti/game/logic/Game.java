@@ -1,14 +1,11 @@
 package be.howest.ti.game.logic;
 
-import be.howest.ti.game.logic.utils.Development;
-import be.howest.ti.game.logic.utils.GameState;
-import be.howest.ti.game.logic.utils.Noble;
-import be.howest.ti.game.logic.utils.TokenBundle;
+import be.howest.ti.game.logic.gameTools.GameState;
+import be.howest.ti.game.logic.gameTools.Noble;
+import be.howest.ti.game.logic.gameTools.TokenBundle;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
 
 public class Game {
 
@@ -24,16 +21,14 @@ public class Game {
     private Player winner;
     private GameState gameState;
 
-    public Game(String gameName, int gameId , int numberOfPlayers){
+    public Game(String gameName, int gameId  , List<Player> players) {
         this.gameName = gameName;
         this.gameId = gameId;
-        this.numberOfPlayers = numberOfPlayers;
+        this.numberOfPlayers = players.size();
         this.started = false;
-        this.players = new ArrayList<>() ;
+        this.players = players ;
         this.activePlayer = players.getFirst();
-        this.market = getInitMarket();
-        this.unclaimedTokens = market.getUnclaimedTokens();
-        this.unclaimedNobles = market.getNoblesAvailableInMarket() ;
+        this.market = new Market(numberOfPlayers);
         this.winner = null;
     }
 
@@ -93,20 +88,35 @@ public class Game {
         activePlayer = players.get(nextIndex);
     }
 
-    private Market getInitMarket(){
-        List<List<Development>> allCards = new ArrayList<>();
-        List<List<Development>> cardsAvailableInMarket = new ArrayList<>();
-        List<Noble> allNobles = new ArrayList<>();
-        List<Noble> noblesInMarket = new ArrayList<>();
-        List<TokenBundle> unclaimedTokens = new ArrayList<>();
-
-        return new Market(allCards, noblesInMarket, cardsAvailableInMarket, allNobles, unclaimedTokens);
+    @Override
+    public String toString() {
+        return "Game{" +
+                "gameName='" + gameName + '\'' +
+                ", gameId=" + gameId +
+                ", started=" + started +
+                ", numberOfPlayers=" + numberOfPlayers +
+                ", activePlayer=" +  activePlayer.getName()  +
+                ", players=" + players +
+                ", market=" + market +
+                ", winner=" + (winner != null ? winner.getName() : "None") +
+                ", gameState=" + gameState +
+                '}';
     }
 
-
-
-
-
-
-
+    @Override
+    public String toString() {
+        return "Game{" +
+                "gameName='" + gameName + '\'' +
+                ", gameId=" + gameId +
+                ", started=" + started +
+                ", numberOfPlayers=" + numberOfPlayers +
+                ", activePlayer=" + activePlayer +
+                ", players=" + players +
+                ", market=" + market +
+                ", unclaimedTokens=" + unclaimedTokens +
+                ", unclaimedNobles=" + unclaimedNobles +
+                ", winner=" + winner +
+                ", gameState=" + gameState +
+                '}';
+    }
 }

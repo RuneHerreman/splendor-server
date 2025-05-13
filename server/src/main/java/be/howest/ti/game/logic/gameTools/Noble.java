@@ -1,5 +1,6 @@
-package be.howest.ti.game.logic.utils;
+package be.howest.ti.game.logic.gameTools;
 
+import java.util.Objects;
 import java.util.Set;
 
 public class Noble {
@@ -24,5 +25,21 @@ public class Noble {
 
     public Set<TokenBundle> getNeededBonuses() {
         return neededBonuses;
+    }
+
+    public String toString() {
+        return name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Noble noble = (Noble) o;
+        return prestigePoints == noble.prestigePoints && Objects.equals(name, noble.name) && Objects.equals(neededBonuses, noble.neededBonuses);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, prestigePoints, neededBonuses);
     }
 }

@@ -1,13 +1,10 @@
 package be.howest.ti.game.logic;
-import be.howest.ti.game.logic.utils.Development;
-import be.howest.ti.game.logic.utils.Noble;
-import be.howest.ti.game.logic.utils.Token;
-import be.howest.ti.game.logic.utils.TokenBundle;
+import be.howest.ti.game.logic.gameTools.Development;
+import be.howest.ti.game.logic.gameTools.Noble;
+import be.howest.ti.game.logic.gameTools.TokenBundle;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Player {
 
@@ -68,7 +65,8 @@ public class Player {
         reserved.remove(development);
     }
 
-    public void getNoble(Noble noble){
+    public void addNoble(Noble noble){
+        //max voorwaarde nog aan toevoegen
         nobles.add(noble);
     }
 
@@ -76,8 +74,41 @@ public class Player {
         this.prestigePoints += toBeAdded;
     }
 
-    public int getPrestigePoints(){
+    public String getName() {
+        return name;
+    }
+
+    public int getGameId() {
+        return gameId;
+    }
+
+    public int getPrestigePoints() {
         return prestigePoints;
+    }
+
+    public List<Development> getPurchasedDevelopments() {
+        return purchasedDevelopments;
+    }
+
+    public List<Development> getReserved() {
+        return reserved;
+    }
+
+    public List<Noble> getNobles() {
+        return nobles;
+    }
+
+    public List<TokenBundle> getTokens() {
+        return tokens;
+    }
+
+    public List<TokenBundle> getBonuses() {
+        return bonuses;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 
 }
