@@ -95,21 +95,6 @@ public class Game {
                 ", gameId=" + gameId +
                 ", started=" + started +
                 ", numberOfPlayers=" + numberOfPlayers +
-                ", activePlayer=" +  activePlayer.getName()  +
-                ", players=" + players +
-                ", market=" + market +
-                ", winner=" + (winner != null ? winner.getName() : "None") +
-                ", gameState=" + gameState +
-                '}';
-    }
-
-    @Override
-    public String toString() {
-        return "Game{" +
-                "gameName='" + gameName + '\'' +
-                ", gameId=" + gameId +
-                ", started=" + started +
-                ", numberOfPlayers=" + numberOfPlayers +
                 ", activePlayer=" + activePlayer +
                 ", players=" + players +
                 ", market=" + market +
