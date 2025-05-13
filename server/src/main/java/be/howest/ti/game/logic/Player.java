@@ -8,14 +8,14 @@ import java.util.List;
 
 public class Player {
 
-    private String name;
-    private int gameId;
+    private final String name;
+    private final int gameId;
     private int prestigePoints;
-    private List<Development> purchasedDevelopments;
-    private List<Development> reserved;
-    private List<Noble> nobles;
-    private List<TokenBundle>tokens;
-    private List<TokenBundle> bonuses;
+    private final List<Development> purchasedDevelopments;
+    private final List<Development> reserved;
+    private final List<Noble> nobles;
+    private final List<TokenBundle>tokens;
+    private final List<TokenBundle> bonuses;
 
     public Player(String username , int gameId){
         this.name = username;
