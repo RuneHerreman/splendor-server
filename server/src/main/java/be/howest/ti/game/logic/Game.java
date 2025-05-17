@@ -2,9 +2,13 @@ package be.howest.ti.game.logic;
 
 import be.howest.ti.game.logic.gameTools.GameState;
 import be.howest.ti.game.logic.gameTools.Noble;
+import be.howest.ti.game.logic.gameTools.Token;
 import be.howest.ti.game.logic.gameTools.TokenBundle;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class Game {
@@ -20,19 +24,31 @@ public class Game {
     private List<Noble> unclaimedNobles;
     private Player winner;
     private GameState gameState;
+    private boolean returnExcessTokensRequired;
+    private boolean pickNobleRequired;
 
-    public Game(String gameName, int gameId  , List<Player> players) {
+    public Game(String gameName, int gameId  , int maxPlayer , Player host) {
         this.gameName = gameName;
         this.gameId = gameId;
-        this.numberOfPlayers = players.size();
+        this.numberOfPlayers = maxPlayer;
         this.started = false;
-        this.players = players ;
+        this.players = getHostPlayerOnGameInititalization(host) ;
         this.activePlayer = players.getFirst();
         this.market = new Market(numberOfPlayers);
+        this.unclaimedTokens = market.getUnclaimedTokens();
+        this.unclaimedNobles = market.getNoblesAvailableInMarket();
         this.winner = null;
+        this.returnExcessTokensRequired = false;
+        this.pickNobleRequired = false;
     }
 
+    private List<Player> getHostPlayerOnGameInititalization(Player host ) {
+        List<Player> players = new ArrayList<>();
+        players.add(host);
+        return players;
 
+
+    }
     public GameState getGameState() {
         return gameState;
     }
@@ -88,18 +104,18 @@ public class Game {
         activePlayer = players.get(nextIndex);
     }
 
+
     @Override
     public String toString() {
-        return "Game{" +
-                "gameName='" + gameName + '\'' +
-                ", gameId=" + gameId +
-                ", started=" + started +
-                ", numberOfPlayers=" + numberOfPlayers +
-                ", activePlayer=" +  activePlayer.getName()  +
-                ", players=" + players +
-                ", market=" + market +
-                ", winner=" + (winner != null ? winner.getName() : "None") +
-                ", gameState=" + gameState +
-                '}';
+        return
+                "gameName='" + gameName +
+                " gameId=" + gameId +
+                " started=" + started +
+                " numberOfPlayers=" + numberOfPlayers +
+                " players=" + players +
+                " returnExcessTokensRequired=" + returnExcessTokensRequired +
+                " pickNobleRequired=" + pickNobleRequired;
     }
+
+
 }

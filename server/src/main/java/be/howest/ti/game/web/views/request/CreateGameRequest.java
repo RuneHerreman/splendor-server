@@ -13,12 +13,16 @@ public class CreateGameRequest extends BaseSplendorRequest {
         numberOfPlayers = params.body().getJsonObject().getInteger("numberOfPlayers");
     }
 
-    public String getName() {
+    public String getPlayerName() {
         return name;
     }
 
     public int getNumberOfPlayers() {
         return numberOfPlayers;
+    }
+
+    public String getGameName() {
+        return name + "'s game";
     }
 
 

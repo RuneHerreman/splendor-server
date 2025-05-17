@@ -1,5 +1,7 @@
 package be.howest.ti.game.web;
 
+import be.howest.ti.game.logic.Player;
+import be.howest.ti.game.logic.service.GameManager;
 import be.howest.ti.game.logic.service.SplendorService;
 import be.howest.ti.game.logic.service.SplendorServiceImpl;
 import be.howest.ti.game.web.tokens.PlainTextTokens;
@@ -13,6 +15,7 @@ import java.util.function.Supplier;
 public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is not a monster class, it is a bridge :-)
 
     private final Supplier<SplendorService> serviceFactory;
+    private final GameManager gameManager = new GameManager();
 
     public SplendorOpenApiBridge() {
         this(SplendorServiceImpl::new, new PlainTextTokens());
@@ -67,19 +70,23 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
     //region Game Management operations
 
     @Operation("get-games")
-    public NotYetImplementedResponse getGames(BaseSplendorRequest request) {
-        return new NotYetImplementedResponse("get-games");
+    public getGamesResponse getGames(BaseSplendorRequest request) {
+
+        return new getGamesResponse(gameManager);
     }
 
     @Operation("create-game")
     public CreateGameResponse createGame(CreateGameRequest request) {
-        int gameId = 1;
-        //acties die nog moeten gebeuren
-        //game id halen van de services of ergens
-        //game maken
-        //dan return
-        return new CreateGameResponse(request.getName(), gameId);
 
+        String gameHost = request.getPlayerName();
+        int gameId = gameManager.getAllGames().size() + 1 ;
+        int maxPlayer =  request.getNumberOfPlayers();
+        String gameName = request.getGameName();
+        Player host =  new Player(gameHost, gameId);
+
+        gameManager.createGame(gameName , gameId ,maxPlayer ,  host);
+
+        return new CreateGameResponse(gameHost, gameId );
     }
 
     @Operation("delete-games")
