@@ -104,21 +104,11 @@ public class Game {
         activePlayer = players.get(nextIndex);
     }
 
+    public boolean isReturnExcessTokensRequired() {
+        return returnExcessTokensRequired;
+    }
 
-//    @Override
-//    public String toString() {
-//        return
-//                "gameName='" + gameName +
-//                " gameId=" + gameId +
-//                " started=" + started +
-//                " numberOfPlayers=" + numberOfPlayers +
-//                " players=" + players +
-//                " returnExcessTokensRequired=" + returnExcessTokensRequired +
-//                " pickNobleRequired=" + pickNobleRequired;
-//    }
-
-
-    public void startGame() {
-        started = true;
+    public boolean isPickNobleRequired() {
+        return pickNobleRequired;
     }
 }
