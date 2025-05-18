@@ -12,9 +12,10 @@ public class DeleteGamesRequest extends BaseSplendorRequest{
     }
 
     public int getGameID() {
-        if (!bodyIsEmpty()) {
-            return params.body().getJsonObject().getInteger("gameID");
-        }
-        return -1;
+        return params.body().getJsonObject().getInteger("gameID");
+    }
+
+    public String getScope() {
+        return params.body().getJsonObject().getString("scope");
     }
 }
