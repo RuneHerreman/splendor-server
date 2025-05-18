@@ -1,10 +1,13 @@
 package be.howest.ti.game.logic;
 import be.howest.ti.game.logic.gameTools.Development;
 import be.howest.ti.game.logic.gameTools.Noble;
+import be.howest.ti.game.logic.gameTools.Token;
 import be.howest.ti.game.logic.gameTools.TokenBundle;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Player {
 
@@ -13,8 +16,8 @@ public class Player {
     private final List<Development> purchasedDevelopments;
     private final List<Development> reserved;
     private final List<Noble> nobles;
-    private final List<TokenBundle>tokens;
-    private final List<TokenBundle> bonuses;
+    private final Map<Token, Integer> tokens;
+    private final Map<Token, Integer> bonuses;
 
     public Player(String username){
         this.name = username;
@@ -22,54 +25,46 @@ public class Player {
         this.purchasedDevelopments = new ArrayList<>();
         this.reserved = new ArrayList<>();
         this.nobles = new ArrayList<>();
-        this.tokens = new ArrayList<>();
-        this.bonuses = new ArrayList<>();
+        this.tokens = new HashMap<>();
+        this.bonuses = new HashMap<>();
     }
 
-    public void addToken(TokenBundle token){
-        for(TokenBundle tokensInInventory : tokens){
-            if(tokensInInventory.getToken().equals(token.getToken())){
-                int newTokenAmount = tokensInInventory.getAmount() + token.getAmount();
-                tokensInInventory.setAmount(newTokenAmount);
-                return;
-            }
-        }
-
-        tokens.add(token);
+    public void addToken(Token token, int amount) {
+        tokens.put(token, tokens.getOrDefault(token, 0) + amount);
     }
 
-    public void addBonus(TokenBundle bonus){
-        for(TokenBundle bonusesInInventory : bonuses){
-            if(bonusesInInventory.getToken().equals(bonus.getToken())){
-                int newBonusAmount = bonusesInInventory.getAmount() + bonus.getAmount();
-                bonusesInInventory.setAmount(newBonusAmount);
-                return;
-            }
-        }
-
-        tokens.add(bonus);
+    public void addBonus(Token token, int amount) {
+        bonuses.put(token, bonuses.getOrDefault(token, 0) + amount);
     }
 
-    public void buyCard(Development development){
+    public void buyCard(Development development) {
         purchasedDevelopments.add(development);
     }
 
-    public void reserveCard(Development development){
+    public void reserveCard(Development development) {
         reserved.add(development);
     }
 
-    public void buyReserved(Development development){
+    public void buyReserved(Development development) {
         purchasedDevelopments.add(development);
         reserved.remove(development);
     }
 
-    public void addNoble(Noble noble){
-        //max voorwaarde nog aan toevoegen
+    public void addNoble(Noble noble) {
         nobles.add(noble);
     }
 
-    public void updatePrestigePoints(int toBeAdded){
+    public void updatePrestigePoints(int toBeAdded) {
         this.prestigePoints += toBeAdded;
+    }
+    public Map<Token, Integer> generateTokensAndBonuses() {
+        Map<Token, Integer> result = new HashMap<>(tokens);
+
+        for (Map.Entry<Token, Integer> bonus : bonuses.entrySet()) {
+            result.put(bonus.getKey(), result.getOrDefault(bonus.getKey(), 0) + bonus.getValue());
+        }
+
+        return result;
     }
 
     public String getName() {
@@ -92,11 +87,11 @@ public class Player {
         return nobles;
     }
 
-    public List<TokenBundle> getTokens() {
+    public Map<Token , Integer> getTokens() {
         return tokens;
     }
 
-    public List<TokenBundle> getBonuses() {
+    public Map<Token , Integer>  getBonuses() {
         return bonuses;
     }
 
