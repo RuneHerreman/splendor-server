@@ -9,7 +9,6 @@ import java.util.List;
 public class Player {
 
     private final String name;
-    private final int gameId;
     private int prestigePoints;
     private final List<Development> purchasedDevelopments;
     private final List<Development> reserved;
@@ -75,10 +74,6 @@ public class Player {
 
     public String getName() {
         return name;
-    }
-
-    public int getGameId() {
-        return gameId;
     }
 
     public int getPrestigePoints() {
