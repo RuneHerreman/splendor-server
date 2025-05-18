@@ -7,8 +7,5 @@ public class DeleteGamesResponse extends AbstractResponseWithHiddenStatus {
         super(200);
     }
 
-    public String getLunte(int LunteID) {
-        return "Lunte with ID " + LunteID + " has been deleted.";
-    }
 }
 
