@@ -13,14 +13,14 @@ import java.util.Map;
 
 public class Game {
 
-    private String gameName;
-    private int gameId;
+    private final String gameName;
+    private final int gameId;
     private boolean started;
-    private int numberOfPlayers;
+    private final int numberOfPlayers;
     private Player activePlayer;
     private final List<Player> players;
     private Market market;
-    private List<TokenBundle> unclaimedTokens;
+    private Map<Token, Integer> unclaimedTokens;
     private List<Noble> unclaimedNobles;
     private Player winner;
     private GameState gameState;
@@ -33,7 +33,7 @@ public class Game {
         this.numberOfPlayers = maxPlayer;
         this.started = false;
         this.players = getHostPlayerOnGameInititalization(host) ;
-        this.activePlayer = players.get(0);
+        this.activePlayer = players.getFirst();
         this.market = new Market(numberOfPlayers);
         this.unclaimedTokens = market.getUnclaimedTokens();
         this.unclaimedNobles = market.getNoblesAvailableInMarket();
@@ -81,7 +81,7 @@ public class Game {
         return market;
     }
 
-    public List<TokenBundle> getUnclaimedTokens() {
+    public Map<Token , Integer> getUnclaimedTokens() {
         return unclaimedTokens;
     }
 
