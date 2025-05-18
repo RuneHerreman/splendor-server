@@ -230,21 +230,27 @@ public class Market {
         return true;
     }
     public boolean areTokensAvailableInMarket(Map<Token , Integer> tokens) {
-        if (areValidTokensPick(tokens)){
-            for (Map.Entry<Token , Integer> tokenBundle : tokens.entrySet()) {
-                Token token = tokenBundle.getKey();
-                if(token.equals(Token.GOLD)){
-                    return false;
-                }
-                if(tokens.size()== 1){
-                    if(!checkTakeDoubleTokenPossibility(token)){
-                        return false;
-                    }
-                }
+        if (!areValidTokensPick(tokens)) {return false;}
+
+        for (Map.Entry<Token, Integer> entry : tokens.entrySet()) {
+            Token token = entry.getKey();
+            int requestedTokenAmount = entry.getValue();
+
+            if (token == Token.GOLD) {
+                return false;
             }
-            return true;
+
+            if (tokens.size() == 1 && !checkTakeDoubleTokenPossibility(token)) {
+                return false;
+            }
+
+            int available = unclaimedTokens.getOrDefault(token, 0);
+            if (available < requestedTokenAmount) {
+                return false;
+            }
         }
-        return false;
+
+        return true;
     }
     private boolean checkTakeDoubleTokenPossibility(Token token) {
         return unclaimedTokens.getOrDefault(token, 0) > 4;
@@ -252,7 +258,6 @@ public class Market {
     public void removeTokensFromMarket(Map<Token, Integer> tokens) {
         for (Map.Entry<Token , Integer> tokenBundle : tokens.entrySet()) {
             removeTokensFromMarket(tokenBundle.getKey(), tokenBundle.getValue());
-
         }
     }
 
