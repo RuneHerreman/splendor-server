@@ -22,6 +22,13 @@ public class SplendorServiceImpl implements SplendorService {
         return game;
     }
 
+    public Game createGame(int maxPlayers , Player host) {
+        int gameID = getRandomID();
+        Game game = new Game(null, gameID, maxPlayers, host);
+        games.add(game);
+        return game;
+    }
+
     private boolean gameIDisUnique(int randomID) {
         for (Game game : games) {
             if (game.getGameId() == randomID) {
@@ -29,13 +36,6 @@ public class SplendorServiceImpl implements SplendorService {
             }
         }
         return true;
-    }
-
-    public Game createGame(int maxPlayers , Player host) {
-        int gameID = getRandomID();
-        Game game = new Game(null, gameID, maxPlayers, host);
-        games.add(game);
-        return game;
     }
 
     private int getRandomID() {
