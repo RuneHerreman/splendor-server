@@ -246,6 +246,9 @@ public class Market {
         }
         return false;
     }
+    private boolean checkTakeDoubleTokenPossibility(Token token) {
+        return unclaimedTokens.getOrDefault(token, 0) > 4;
+    }
 
     @Override public String toString() { return "Market{" + "allCards=" + allCards + ", allNobles=" + allNobles + ", cardsAvailableInMarket=" + cardsAvailableInMarket + ", noblesAvailableInMarket=" + noblesAvailableInMarket + ", unclaimedTokens=" + unclaimedTokens + '}'; }
 
