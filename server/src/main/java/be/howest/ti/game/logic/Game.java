@@ -108,12 +108,15 @@ public class Game {
         return market.areTokensAvailableInMarket(tokens);
     }
 
-    public void handleTokenPurchase(Player player ,Map<Token , Integer> tokens) {
-        if(areTokensAvailableInMarket(tokens)){
-            player.addTokens(tokens);
+    public boolean handleTokenPurchase(Map<Token, Integer> tokens) {
+        boolean success = areTokensAvailableInMarket(tokens);
+        if (success) {
+            activePlayer.addTokens(tokens);
             market.removeTokensFromMarket(tokens);
+            switchTurn();
         }
 
+        return success;
     }
 
 
