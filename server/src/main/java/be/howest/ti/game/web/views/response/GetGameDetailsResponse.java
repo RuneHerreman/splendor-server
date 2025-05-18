@@ -2,10 +2,12 @@ package be.howest.ti.game.web.views.response;
 
 import be.howest.ti.game.logic.Game;
 import be.howest.ti.game.logic.Player;
+import be.howest.ti.game.logic.gameTools.Development;
 import be.howest.ti.game.logic.gameTools.Noble;
 import be.howest.ti.game.logic.gameTools.Token;
-import be.howest.ti.game.logic.gameTools.TokenBundle;
+import be.howest.ti.game.web.views.CardLevelsInListView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -41,8 +43,14 @@ public class GetGameDetailsResponse extends AbstractResponseWithHiddenStatus{
         return game.getPlayers();
     }
 
-    public List<MarketInListView> getMarket() {
-        return game.getMarket().getMarketInListView();
+    public List<CardLevelsInListView> getMarket() {
+        List<CardLevelsInListView> listView = new ArrayList<>();
+
+        for (List<Development> cardLevel : game.getMarket().getCardsAvailableInMarket()) {
+            listView.add(new CardLevelsInListView(cardLevel, game.getMarket()));
+        }
+
+        return listView;
     }
 
     public Map<Token, Integer> getUnclaimedTokens() {
@@ -53,10 +61,23 @@ public class GetGameDetailsResponse extends AbstractResponseWithHiddenStatus{
         return game.getUnclaimedNobles();
     }
 
-    public boolean getActive() {
+    public boolean getStarted() {
         return game.isStarted();
     }
 
+    public String getGameState() {
+        return game.getGameState().toString();
+    }
 
+    public String getCurrentPlayerIndex() {
+        return game.getActivePlayer().getName();
+    }
 
+    public String getWinner() {
+        return game.getWinner().getName();
+    }
+
+    public boolean getActive() {
+        return game.getActive();
+    }
 }

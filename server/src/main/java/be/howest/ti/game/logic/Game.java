@@ -17,13 +17,14 @@ public class Game {
     private final int numberOfPlayers;
     private Player activePlayer;
     private final List<Player> players;
-    private Market market;
-    private Map<Token, Integer> unclaimedTokens;
-    private List<Noble> unclaimedNobles;
-    private Player winner;
+    private final Market market;
+    private final Map<Token, Integer> unclaimedTokens;
+    private final List<Noble> unclaimedNobles;
+    private final Player winner;
     private GameState gameState;
-    private boolean returnExcessTokensRequired;
-    private boolean pickNobleRequired;
+    private final boolean returnExcessTokensRequired;
+    private final boolean pickNobleRequired;
+    private final boolean active;
 
     public Game(String gameName, int gameId  , int maxPlayer , Player host) {
         this.gameName = gameName;
@@ -38,6 +39,7 @@ public class Game {
         this.winner = null;
         this.returnExcessTokensRequired = false;
         this.pickNobleRequired = false;
+        this.active = true;
     }
 
     private List<Player> getHostPlayerOnGameInititalization(Player host ) {
@@ -120,20 +122,6 @@ public class Game {
         return success;
     }
 
-
-//    @Override
-//    public String toString() {
-//        return
-//                "gameName='" + gameName +
-//                " gameId=" + gameId +
-//                " started=" + started +
-//                " numberOfPlayers=" + numberOfPlayers +
-//                " players=" + players +
-//                " returnExcessTokensRequired=" + returnExcessTokensRequired +
-//                " pickNobleRequired=" + pickNobleRequired;
-//    }
-
-
     public void joinGame(String playerName) {
         Player newPlayer = new Player(playerName);
         players.add(newPlayer);
@@ -146,5 +134,9 @@ public class Game {
 
     public boolean isPickNobleRequired() {
         return pickNobleRequired;
+    }
+
+    public boolean getActive() {
+        return active;
     }
 }
