@@ -1,41 +1,97 @@
 package be.howest.ti.game.logic.service;
 
+import be.howest.ti.game.logic.Game;
+import be.howest.ti.game.logic.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class SplendorServiceImplTest {
+    private SplendorServiceImpl service;
+    private String gameName;
+    private Player john;
+    private int numberOfPlayers;
 
     @BeforeEach
     void setUp() {
+        service = new SplendorServiceImpl();
+        gameName = "Test Game";
+        john = new Player("John Doe");
+        numberOfPlayers = 4;
     }
 
     @Test
     void createGame() {
+        Game game = service.createGame(numberOfPlayers, john);
+
+        assertEquals(1, service.getAllGames().size());
+        assertEquals(4, game.getNumberOfPlayers());
+        assertNotNull(game.getPlayers());
     }
 
     @Test
-    void testCreateGame() {
+    void createGameWithName() {
+        Game game = service.createGame(gameName, numberOfPlayers, john);
+
+        assertEquals(1, service.getAllGames().size());
+        assertEquals("Test Game", game.getGameName());
+        assertEquals(4, game.getNumberOfPlayers());
+        assertNotNull(game.getPlayers());
     }
 
     @Test
     void deleteGame() {
+        Game game = service.createGame(gameName, numberOfPlayers, john);
+
+        service.deleteGame(game.getGameId());
+
+        assertEquals(0, service.getAllGames().size());
     }
 
     @Test
     void deleteAllGames() {
+        service.createGame(gameName, numberOfPlayers, john);
+        service.createGame(gameName, numberOfPlayers, john);
+        service.createGame(gameName, numberOfPlayers, john);
+        service.createGame(gameName, numberOfPlayers, john);
+        service.createGame(gameName, numberOfPlayers, john);
+
+        service.deleteAllGames();
+
+        assertEquals(0, service.getAllGames().size());
     }
 
     @Test
     void getGameByID() {
+        Game game = service.createGame(gameName, numberOfPlayers, john);
+
+        Game retrievedGame = service.getGameByID(game.getGameId());
+
+        assertEquals(game, retrievedGame);
     }
 
     @Test
     void getAllGames() {
+        service.createGame(gameName, numberOfPlayers, john);
+        service.createGame(gameName, numberOfPlayers, john);
+        service.createGame(gameName, numberOfPlayers, john);
+        service.createGame(gameName, numberOfPlayers, john);
+        service.createGame(gameName, numberOfPlayers, john);
+
+        assertEquals(5, service.getAllGames().size());
     }
 
     @Test
     void testGetAllGames() {
+        Game startedGame = service.createGame(gameName, numberOfPlayers, john);
+        startedGame.startGame();
+        service.createGame(gameName, numberOfPlayers, john);
+        service.createGame(gameName, numberOfPlayers, john);
+        service.createGame(gameName, numberOfPlayers, john);
+        service.createGame(gameName, numberOfPlayers, john);
+
+        assertEquals(1, service.getAllGames(true).size());
     }
 }

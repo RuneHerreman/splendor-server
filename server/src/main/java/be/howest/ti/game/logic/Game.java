@@ -33,7 +33,7 @@ public class Game {
         this.numberOfPlayers = maxPlayer;
         this.started = false;
         this.players = getHostPlayerOnGameInititalization(host) ;
-        this.activePlayer = players.getFirst();
+        this.activePlayer = players.get(0);
         this.market = new Market(numberOfPlayers);
         this.unclaimedTokens = market.getUnclaimedTokens();
         this.unclaimedNobles = market.getNoblesAvailableInMarket();
@@ -105,17 +105,20 @@ public class Game {
     }
 
 
-    @Override
-    public String toString() {
-        return
-                "gameName='" + gameName +
-                " gameId=" + gameId +
-                " started=" + started +
-                " numberOfPlayers=" + numberOfPlayers +
-                " players=" + players +
-                " returnExcessTokensRequired=" + returnExcessTokensRequired +
-                " pickNobleRequired=" + pickNobleRequired;
+//    @Override
+//    public String toString() {
+//        return
+//                "gameName='" + gameName +
+//                " gameId=" + gameId +
+//                " started=" + started +
+//                " numberOfPlayers=" + numberOfPlayers +
+//                " players=" + players +
+//                " returnExcessTokensRequired=" + returnExcessTokensRequired +
+//                " pickNobleRequired=" + pickNobleRequired;
+//    }
+
+
+    public void startGame() {
+        started = true;
     }
-
-
 }

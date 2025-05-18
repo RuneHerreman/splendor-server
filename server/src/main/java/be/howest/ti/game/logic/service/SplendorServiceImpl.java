@@ -31,6 +31,13 @@ public class SplendorServiceImpl implements SplendorService {
         return true;
     }
 
+    public Game createGame(int maxPlayers , Player host) {
+        int gameID = getRandomID();
+        Game game = new Game(null, gameID, maxPlayers, host);
+        games.add(game);
+        return game;
+    }
+
     private int getRandomID() {
         SecureRandom random = new SecureRandom();
         int randomID;
@@ -40,13 +47,6 @@ public class SplendorServiceImpl implements SplendorService {
         } while (!gameIDisUnique(randomID));
 
         return randomID;
-    }
-
-    public Game createGame(int maxPlayers , Player host) {
-        int gameID = getRandomID();
-        Game game = new Game(null, gameID, maxPlayers, host);
-        games.add(game);
-        return game;
     }
 
     public void deleteGame(int gameID){
