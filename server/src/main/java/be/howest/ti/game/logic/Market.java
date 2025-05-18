@@ -229,6 +229,23 @@ public class Market {
         }
         return true;
     }
+    public boolean areTokensAvailableInMarket(Map<Token , Integer> tokens) {
+        if (areValidTokensPick(tokens)){
+            for (Map.Entry<Token , Integer> tokenBundle : tokens.entrySet()) {
+                Token token = tokenBundle.getKey();
+                if(token.equals(Token.GOLD)){
+                    return false;
+                }
+                if(tokens.size()== 1){
+                    if(!checkTakeDoubleTokenPossibility(token)){
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        return false;
+    }
 
     @Override public String toString() { return "Market{" + "allCards=" + allCards + ", allNobles=" + allNobles + ", cardsAvailableInMarket=" + cardsAvailableInMarket + ", noblesAvailableInMarket=" + noblesAvailableInMarket + ", unclaimedTokens=" + unclaimedTokens + '}'; }
 
