@@ -17,9 +17,8 @@ public class Player {
     private final List<TokenBundle>tokens;
     private final List<TokenBundle> bonuses;
 
-    public Player(String username , int gameId){
+    public Player(String username){
         this.name = username;
-        this.gameId = gameId;
         this.prestigePoints = 0;
         this.purchasedDevelopments = new ArrayList<>();
         this.reserved = new ArrayList<>();
