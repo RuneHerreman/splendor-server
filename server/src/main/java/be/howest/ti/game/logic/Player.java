@@ -43,7 +43,7 @@ public class Player {
         bonuses.put(token, bonuses.getOrDefault(token, 0) + amount);
     }
 
-    public void buyCard(Development development) {
+    public void addCard(Development development) {
         purchasedDevelopments.add(development);
     }
 
@@ -118,6 +118,4 @@ public class Player {
         }
     }
 
-    public void addCard(Development developmentCard) {
-    }
 }
