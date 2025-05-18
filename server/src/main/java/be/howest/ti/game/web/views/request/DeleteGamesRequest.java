@@ -7,8 +7,14 @@ public class DeleteGamesRequest extends BaseSplendorRequest{
         super(context);
     }
 
-    public void DeleteGame(int gameID) {
-        // Logic to delete the game with the given gameID
-        // This could involve calling a service method to remove the game from the database or in-memory storage
+    public boolean bodyIsEmpty() {
+        return params.body().getJsonObject().isEmpty();
+    }
+
+    public int getGameID() {
+        if (!bodyIsEmpty()) {
+            return params.body().getJsonObject().getInteger("gameID");
+        }
+        return -1;
     }
 }

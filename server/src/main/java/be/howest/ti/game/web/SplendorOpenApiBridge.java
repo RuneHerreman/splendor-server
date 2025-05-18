@@ -69,7 +69,7 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
     //region Game Management operations
 
     @Operation("get-games")
-    public getGamesResponse getGames(BaseSplendorRequest request) {
+    public GetGamesResponse getGames(GetGamesRequest request) {
         return null;
     }
 
@@ -95,8 +95,16 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
     }
 
     @Operation("delete-games")
-    public NotYetImplementedResponse deleteGames(BaseSplendorRequest request) {
-        return new NotYetImplementedResponse("delete-games");
+    public DeleteGamesResponse deleteGames(DeleteGamesRequest request) {
+        SplendorService service = getService(request);
+
+        if (request.bodyIsEmpty()) {
+            service.deleteAllGames();
+        } else {
+            service.deleteGame(request.getGameID());
+        }
+
+        return new DeleteGamesResponse();
     }
 
     @Operation("get-game-details")
