@@ -212,6 +212,59 @@ public class Market {
 
         return developmentCardsForMarket;
     }
+    private boolean areValidTokensPick(Map<Token , Integer> tokens) {
+        if (tokens.isEmpty() || (tokens.size() != 1 && tokens.size() != 3)) {return false;}
+        if(tokens.containsKey(Token.GOLD)){return false;}
+
+        for (int value : tokens.values()) {
+            if (tokens.size() == 3) {
+                if (value != 1) {
+                    return false;
+                }
+            } else {//token size 1
+                if (value != 3) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    public boolean areTokensAvailableInMarket(Map<Token , Integer> tokens) {
+        if (!areValidTokensPick(tokens)) {return false;}
+
+        for (Map.Entry<Token, Integer> entry : tokens.entrySet()) {
+            Token token = entry.getKey();
+            int requestedTokenAmount = entry.getValue();
+
+            if (token == Token.GOLD) {
+                return false;
+            }
+
+            if (tokens.size() == 1 && !checkTakeDoubleTokenPossibility(token)) {
+                return false;
+            }
+
+            int available = unclaimedTokens.getOrDefault(token, 0);
+            if (available < requestedTokenAmount) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    private boolean checkTakeDoubleTokenPossibility(Token token) {
+        return unclaimedTokens.getOrDefault(token, 0) > 4;
+    }
+    public void removeTokensFromMarket(Map<Token, Integer> tokens) {
+        for (Map.Entry<Token , Integer> tokenBundle : tokens.entrySet()) {
+            removeTokensFromMarket(tokenBundle.getKey(), tokenBundle.getValue());
+        }
+    }
+
+    private void removeTokensFromMarket(Token token  , int amount) {
+        int tempAmount = unclaimedTokens.get(token);
+        unclaimedTokens.replace(token , tempAmount - amount);
+    }
 
     @Override public String toString() { return "Market{" + "allCards=" + allCards + ", allNobles=" + allNobles + ", cardsAvailableInMarket=" + cardsAvailableInMarket + ", noblesAvailableInMarket=" + noblesAvailableInMarket + ", unclaimedTokens=" + unclaimedTokens + '}'; }
 

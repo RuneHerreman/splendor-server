@@ -104,13 +104,19 @@ public class Game {
         activePlayer = players.get(nextIndex);
     }
 
-    public void joinGame(String playerName) {
-        Player player = new Player(playerName);
-        players.add(player);
+    public boolean areTokensAvailableInMarket(Map<Token, Integer> tokens) {
+        return market.areTokensAvailableInMarket(tokens);
+    }
 
-        if (players.size() == numberOfPlayers) {
-            startGame();
+    public boolean handleTokenPurchase(Map<Token, Integer> tokens) {
+        boolean success = areTokensAvailableInMarket(tokens);
+        if (success) {
+            activePlayer.addTokens(tokens);
+            market.removeTokensFromMarket(tokens);
+            switchTurn();
         }
+
+        return success;
     }
 
 
