@@ -1,9 +1,6 @@
 package be.howest.ti.game.logic;
 
-import be.howest.ti.game.logic.gameTools.GameState;
-import be.howest.ti.game.logic.gameTools.Noble;
-import be.howest.ti.game.logic.gameTools.Token;
-import be.howest.ti.game.logic.gameTools.TokenBundle;
+import be.howest.ti.game.logic.gameTools.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -117,6 +114,29 @@ public class Game {
         }
 
         return success;
+    }
+    public boolean handleDevelopmentCardPurchase(Development developmentCard , Boolean reserved) {
+        boolean success = developmentCard.isCardAffordableByPlayer(activePlayer);
+        if (success) {
+            int cardLevel = developmentCard.getLevel();
+            int cardIndexInMarket = market.getIndexCardFromMarket(developmentCard);
+            Map<Token , Integer> costCard = developmentCard.getCost();
+            market.removeCardFromMarket(developmentCard);
+            if(!reserved){ market.addRandomCardToTheMarket(cardLevel , cardIndexInMarket);}
+            activePlayer.removeTokens(costCard);
+            activePlayer.addCard(developmentCard);
+            switchTurn();
+        }
+        return success;
+    }
+
+    public void joinGame(String playerName) {
+        Player player = new Player(playerName);
+        players.add(player);
+
+        if (players.size() == numberOfPlayers) {
+            startGame();
+        }
     }
 
 

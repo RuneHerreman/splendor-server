@@ -268,6 +268,26 @@ public class Market {
 
     @Override public String toString() { return "Market{" + "allCards=" + allCards + ", allNobles=" + allNobles + ", cardsAvailableInMarket=" + cardsAvailableInMarket + ", noblesAvailableInMarket=" + noblesAvailableInMarket + ", unclaimedTokens=" + unclaimedTokens + '}'; }
 
+    public int getIndexCardFromMarket(Development developmentCard) {
+        for (List<Development> levelCards : cardsAvailableInMarket) {
+            if (levelCards.contains(developmentCard)) {
+                return levelCards.indexOf(developmentCard);
+            }
+        }
+        return -1;
+    }
+
+    public void addRandomCardToTheMarket(int cardLevel, int cardIndexInMarket) {
+        int levelIndex = cardLevel - 1;
+        if (levelIndex < 0 || levelIndex >= cardsAvailableInMarket.size()) return;
+        cardsAvailableInMarket.get(levelIndex).add(cardIndexInMarket , getRandomCardFromMarket(cardLevel));
+    }
+
+    private Development getRandomCardFromMarket(int cardLevel) {
+        Random random = new Random();
+        List<Development> deck = allCards.get(cardLevel - 1);
+        return deck.get(random.nextInt(deck.size()));
+    }
 }
 
 

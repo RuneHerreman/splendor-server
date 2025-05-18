@@ -106,4 +106,18 @@ public class Player {
         return name;
     }
 
+    private void removeToken(Token token, int amount) {
+        int amountBonus = bonuses.getOrDefault(token, 0);
+        int amountToRemoveAfterBonus = amount - amountBonus;
+        tokens.put(token, tokens.getOrDefault(token, 0) - amountToRemoveAfterBonus);
+    }
+
+    public void removeTokens(Map<Token, Integer> toRemove) {
+        for (Map.Entry<Token, Integer> entry : toRemove.entrySet()) {
+            removeToken(entry.getKey(), entry.getValue());
+        }
+    }
+
+    public void addCard(Development developmentCard) {
+    }
 }
