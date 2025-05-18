@@ -9,7 +9,6 @@ import java.util.List;
 public class Player {
 
     private final String name;
-    private final int gameId;
     private int prestigePoints;
     private final List<Development> purchasedDevelopments;
     private final List<Development> reserved;
@@ -17,9 +16,8 @@ public class Player {
     private final List<TokenBundle>tokens;
     private final List<TokenBundle> bonuses;
 
-    public Player(String username , int gameId){
+    public Player(String username){
         this.name = username;
-        this.gameId = gameId;
         this.prestigePoints = 0;
         this.purchasedDevelopments = new ArrayList<>();
         this.reserved = new ArrayList<>();
@@ -76,10 +74,6 @@ public class Player {
 
     public String getName() {
         return name;
-    }
-
-    public int getGameId() {
-        return gameId;
     }
 
     public int getPrestigePoints() {

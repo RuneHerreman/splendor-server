@@ -1,7 +1,7 @@
 package be.howest.ti.game.web;
 
+import be.howest.ti.game.logic.Game;
 import be.howest.ti.game.logic.Player;
-import be.howest.ti.game.logic.service.GameManager;
 import be.howest.ti.game.logic.service.SplendorService;
 import be.howest.ti.game.logic.service.SplendorServiceImpl;
 import be.howest.ti.game.web.tokens.PlainTextTokens;
@@ -15,7 +15,6 @@ import java.util.function.Supplier;
 public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is not a monster class, it is a bridge :-)
 
     private final Supplier<SplendorService> serviceFactory;
-    private final GameManager gameManager = new GameManager();
 
     public SplendorOpenApiBridge() {
         this(SplendorServiceImpl::new, new PlainTextTokens());
@@ -71,22 +70,28 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
 
     @Operation("get-games")
     public getGamesResponse getGames(BaseSplendorRequest request) {
-
-        return new getGamesResponse(gameManager);
+        return null;
     }
 
     @Operation("create-game")
     public CreateGameResponse createGame(CreateGameRequest request) {
+        SplendorService service = getService(request);
 
-        String gameHost = request.getPlayerName();
-        int gameId = gameManager.getAllGames().size() + 1 ;
-        int maxPlayer =  request.getNumberOfPlayers();
-        String gameName = request.getGameName();
-        Player host =  new Player(gameHost, gameId);
+        Game game;
+        if (request.getGameName() == null) {
+            game = service.createGame(
+                    request.getNumberOfPlayers(),
+                    new Player(request.getPlayerName())
+            );
+        } else {
+            game = service.createGame(
+                    request.getGameName(),
+                    request.getNumberOfPlayers(),
+                    new Player(request.getPlayerName())
+            );
+        }
 
-        gameManager.createGame(gameName , gameId ,maxPlayer ,  host);
-
-        return new CreateGameResponse(gameHost, gameId );
+        return new CreateGameResponse(game, request.getPlayerName());
     }
 
     @Operation("delete-games")

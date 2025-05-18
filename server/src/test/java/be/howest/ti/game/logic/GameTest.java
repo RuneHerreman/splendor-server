@@ -17,8 +17,8 @@ class GameTest {
 
     @BeforeEach
     void setUp() {
-        player1 = new Player("Alice", 1);
-        player2 = new Player("Bob", 1);
+        player1 = new Player("Alice");
+        player2 = new Player("Bob");
         players = new ArrayList<>();
         players.add(player1);
         players.add(player2);
@@ -41,7 +41,7 @@ class GameTest {
 
     @Test
     void testAddPlayerDoesNotAddWhenGameIsFull() {
-        Player newPlayer = new Player("Charlie", 1);
+        Player newPlayer = new Player("Charlie");
         game.addPlayer(newPlayer);
         // The players list should not be modified because it's already full
         assertEquals(2, game.getPlayers().size());
