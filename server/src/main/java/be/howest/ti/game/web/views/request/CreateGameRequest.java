@@ -4,28 +4,29 @@ import io.vertx.ext.web.RoutingContext;
 
 public class CreateGameRequest extends BaseSplendorRequest {
 
-    private int authorizedGameId;
-    private String authorizedPlayerName;
+    private final String name;
+    private final int numberOfPlayers;
 
     public CreateGameRequest(RoutingContext ctx) {
         super(ctx);
+        name = params.body().getJsonObject().getString("playerName");
+        numberOfPlayers = params.body().getJsonObject().getInteger("numberOfPlayers");
     }
 
-    public int getAuthorizedGameId() {
-        return authorizedGameId;
+    public String getPlayerName() {
+        return name;
     }
 
-    public void setAuthorizedGameId(int authorizedGameId) {
-        this.authorizedGameId = authorizedGameId;
+    public int getNumberOfPlayers() {
+        return numberOfPlayers;
     }
 
-    public String getAuthorizedPlayerName() {
-        return authorizedPlayerName;
+    public String getGameName() {
+        return name + "'s game";
     }
 
-    public void setAuthorizedPlayerName(String authorizedPlayerName) {
-        this.authorizedPlayerName = authorizedPlayerName;
-    }
+
+
 
 
 }

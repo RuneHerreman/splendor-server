@@ -70,23 +70,23 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
     //region Game Management operations
 
     @Operation("get-games")
-    public NotYetImplementedResponse getGames(BaseSplendorRequest request) {
-        return new NotYetImplementedResponse("get-games");
+    public getGamesResponse getGames(BaseSplendorRequest request) {
+
+        return new getGamesResponse(gameManager);
     }
 
     @Operation("create-game")
     public CreateGameResponse createGame(CreateGameRequest request) {
-        int generatedGameID = request.getAuthorizedGameId();
+
+        String gameHost = request.getPlayerName();
+        int gameId = gameManager.getAllGames().size() + 1 ;
+        int maxPlayer =  request.getNumberOfPlayers();
         String gameName = request.getGameName();
-        String playerUsername =  request.getAuthorizedPlayerName();
-        String playerToken = generatedGameID + "_" + playerUsername;
+        Player host =  new Player(gameHost, gameId);
 
-        List<Player> players = new ArrayList<>();
-        players.add(new Player(playerUsername, generatedGameID));
+        gameManager.createGame(gameName , gameId ,maxPlayer ,  host);
 
-        gameManager.createGame(gameName, generatedGameID, players);
-
-        return new CreateGameResponse(generatedGameID,playerUsername, playerToken);
+        return new CreateGameResponse(gameHost, gameId );
     }
 
     @Operation("delete-games")

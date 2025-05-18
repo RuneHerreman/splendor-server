@@ -9,14 +9,14 @@ import java.util.List;
 import java.util.Set;
 
 public class GameManager {
-    private final Set<Game> games;
+    private final List<Game> games;
 
     public GameManager() {
-        this.games = new HashSet<>();
+        this.games = new ArrayList<>();
     }
 
-    public void createGame(String gameName, int gameID, List<Player> players) {
-        games.add(new Game(gameName, gameID, players));
+    public void createGame(String gameName, int gameID, int maxPlayers , Player host) {
+        games.add(new Game(gameName, gameID, maxPlayers , host));
     }
 
     public void deleteGame(int gameID){

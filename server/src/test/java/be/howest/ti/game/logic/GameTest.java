@@ -23,7 +23,8 @@ class GameTest {
         players.add(player1);
         players.add(player2);
 
-        game = new Game("TestGame", 1, players);
+
+        game = new Game("TestGame", 1 , 2 , player1);
     }
 
     @Test
