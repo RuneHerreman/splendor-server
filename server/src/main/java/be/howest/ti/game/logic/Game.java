@@ -43,8 +43,6 @@ public class Game {
         List<Player> players = new ArrayList<>();
         players.add(host);
         return players;
-
-
     }
     public GameState getGameState() {
         return gameState;
