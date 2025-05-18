@@ -104,6 +104,18 @@ public class Game {
         activePlayer = players.get(nextIndex);
     }
 
+    public boolean areTokensAvailableInMarket(Map<Token, Integer> tokens) {
+        return market.areTokensAvailableInMarket(tokens);
+    }
+
+    public void handleTokenPurchase(Player player ,Map<Token , Integer> tokens) {
+        if(areTokensAvailableInMarket(tokens)){
+            player.addTokens(tokens);
+            market.removeTokensFromMarket(tokens);
+        }
+
+    }
+
 
 //    @Override
 //    public String toString() {

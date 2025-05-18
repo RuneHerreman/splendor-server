@@ -33,6 +33,12 @@ public class Player {
         tokens.put(token, tokens.getOrDefault(token, 0) + amount);
     }
 
+    public void addTokens(Map<Token, Integer> tokens) {
+        for (Map.Entry<Token, Integer> entry : tokens.entrySet()) {
+            addToken(entry.getKey(), entry.getValue());
+        }
+    }
+
     public void addBonus(Token token, int amount) {
         bonuses.put(token, bonuses.getOrDefault(token, 0) + amount);
     }
