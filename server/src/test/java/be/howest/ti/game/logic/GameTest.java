@@ -71,4 +71,10 @@ class GameTest {
         assertNull(game.getUnclaimedTokens());
         assertNull(game.getUnclaimedNobles());
     }
+
+    @Test
+    void testJoinGame() {
+        game.joinGame("Charlie");
+        assertEquals("Charlie", game.getPlayers().get(1).getName());
+    }
 }

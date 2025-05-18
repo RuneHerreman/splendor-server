@@ -104,6 +104,15 @@ public class Game {
         activePlayer = players.get(nextIndex);
     }
 
+    public void joinGame(String playerName) {
+        Player player = new Player(playerName);
+        players.add(player);
+
+        if (players.size() == numberOfPlayers) {
+            startGame();
+        }
+    }
+
 
 //    @Override
 //    public String toString() {
