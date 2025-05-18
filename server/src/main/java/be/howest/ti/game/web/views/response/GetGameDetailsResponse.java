@@ -3,10 +3,11 @@ package be.howest.ti.game.web.views.response;
 import be.howest.ti.game.logic.Game;
 import be.howest.ti.game.logic.Player;
 import be.howest.ti.game.logic.gameTools.Noble;
+import be.howest.ti.game.logic.gameTools.Token;
 import be.howest.ti.game.logic.gameTools.TokenBundle;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class GetGameDetailsResponse extends AbstractResponseWithHiddenStatus{
     private final Game game;
@@ -44,7 +45,7 @@ public class GetGameDetailsResponse extends AbstractResponseWithHiddenStatus{
         return game.getMarket().getMarketInListView();
     }
 
-    public List<TokenBundle> getUnclaimedTokens() {
+    public Map<Token, Integer> getUnclaimedTokens() {
         return game.getUnclaimedTokens();
     }
 

@@ -3,10 +3,8 @@ package be.howest.ti.game.logic;
 import be.howest.ti.game.logic.gameTools.GameState;
 import be.howest.ti.game.logic.gameTools.Noble;
 import be.howest.ti.game.logic.gameTools.Token;
-import be.howest.ti.game.logic.gameTools.TokenBundle;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
