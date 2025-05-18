@@ -249,6 +249,17 @@ public class Market {
     private boolean checkTakeDoubleTokenPossibility(Token token) {
         return unclaimedTokens.getOrDefault(token, 0) > 4;
     }
+    public void removeTokensFromMarket(Map<Token, Integer> tokens) {
+        for (Map.Entry<Token , Integer> tokenBundle : tokens.entrySet()) {
+            removeTokensFromMarket(tokenBundle.getKey(), tokenBundle.getValue());
+
+        }
+    }
+
+    private void removeTokensFromMarket(Token token  , int amount) {
+        int tempAmount = unclaimedTokens.get(token);
+        unclaimedTokens.replace(token , tempAmount - amount);
+    }
 
     @Override public String toString() { return "Market{" + "allCards=" + allCards + ", allNobles=" + allNobles + ", cardsAvailableInMarket=" + cardsAvailableInMarket + ", noblesAvailableInMarket=" + noblesAvailableInMarket + ", unclaimedTokens=" + unclaimedTokens + '}'; }
 
