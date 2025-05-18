@@ -8,7 +8,6 @@ import be.howest.ti.game.logic.utils.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.*;
 
 public class Market {
@@ -16,7 +15,7 @@ public class Market {
     private static List<Noble> allNobles;
     private List<List<Development>> cardsAvailableInMarket;
     private List<Noble> noblesAvailableInMarket;
-    private List<TokenBundle> unclaimedTokens;
+    private Map<Token , Integer> unclaimedTokens;
 
     public Market(int amountOfPlayers) {
         allCards = createAllCards();
@@ -42,12 +41,8 @@ public class Market {
         return noblesAvailableInMarket;
     }
 
-    public List<TokenBundle> getUnclaimedTokens() {
+    public Map<Token , Integer> getUnclaimedTokens() {
         return unclaimedTokens;
-    }
-
-    public void setUnclaimedTokens(List<TokenBundle> unclaimedTokens) {
-        this.unclaimedTokens = unclaimedTokens;
     }
 
     public void setCardToMarket(Development developmentCard) {
@@ -91,9 +86,10 @@ public class Market {
 
                 String cardName = token[0];
                 int level = Integer.parseInt(token[1]);
-                Token cardType = CardUtils.getTokenFromLetters(token[2]);
+                char tokenSymbol = token[2].charAt(0);
+                Token cardType = CardUtils.getTokenFromLetters(tokenSymbol);
                 int points = Integer.parseInt(token[4]);
-                Set<TokenBundle> tokenBundles = CardUtils.getCostTokenSetFromLetters(token[5]);
+                Map<Token , Integer> tokenBundles = CardUtils.getCostTokenSetFromLetters(token[5]);
 
                 Development development = new Development(cardName , points , tokenBundles ,  cardType  , level);
 
@@ -132,7 +128,7 @@ public class Market {
                 String[] token = line.split("\\t");
 
                 String cardName = token[0];
-                Set<TokenBundle> tokenBundles = CardUtils.getCostTokenSetFromLetters(token[1]);
+                Map<Token , Integer> tokenBundles = CardUtils.getCostTokenSetFromLetters(token[1]);
                 int point = Integer.parseInt(token[2]);
 
                 Noble noble = new Noble(cardName ,point ,  tokenBundles);
@@ -149,14 +145,14 @@ public class Market {
         return allNobles;
     }
 
-    public static List<TokenBundle> createInitTokens(int totalPlayers) {
-        List<TokenBundle> initTokens = new ArrayList<>();
+    public static   Map<Token, Integer> createInitTokens(int totalPlayers) {
+        Map<Token, Integer> initTokens = new HashMap<>();
 
         for (Token token : Token.values()) {
             if (token == Token.GOLD) {
-                initTokens.add(new TokenBundle(token, 5));
+                initTokens.put(token, 5);
             } else {
-                initTokens.add(new TokenBundle(token, getAmountOfTokenAccourdingToPlayer(totalPlayers)));
+                initTokens.put(token, getAmountOfTokenAccourdingToPlayer(totalPlayers));
             }
         }
 
@@ -215,6 +211,59 @@ public class Market {
         }
 
         return developmentCardsForMarket;
+    }
+    private boolean areValidTokensPick(Map<Token , Integer> tokens) {
+        if (tokens.isEmpty() || (tokens.size() != 1 && tokens.size() != 3)) {return false;}
+        if(tokens.containsKey(Token.GOLD)){return false;}
+
+        for (int value : tokens.values()) {
+            if (tokens.size() == 3) {
+                if (value != 1) {
+                    return false;
+                }
+            } else {//token size 1
+                if (value != 3) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    public boolean areTokensAvailableInMarket(Map<Token , Integer> tokens) {
+        if (!areValidTokensPick(tokens)) {return false;}
+
+        for (Map.Entry<Token, Integer> entry : tokens.entrySet()) {
+            Token token = entry.getKey();
+            int requestedTokenAmount = entry.getValue();
+
+            if (token == Token.GOLD) {
+                return false;
+            }
+
+            if (tokens.size() == 1 && !checkTakeDoubleTokenPossibility(token)) {
+                return false;
+            }
+
+            int available = unclaimedTokens.getOrDefault(token, 0);
+            if (available < requestedTokenAmount) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    private boolean checkTakeDoubleTokenPossibility(Token token) {
+        return unclaimedTokens.getOrDefault(token, 0) > 4;
+    }
+    public void removeTokensFromMarket(Map<Token, Integer> tokens) {
+        for (Map.Entry<Token , Integer> tokenBundle : tokens.entrySet()) {
+            removeTokensFromMarket(tokenBundle.getKey(), tokenBundle.getValue());
+        }
+    }
+
+    private void removeTokensFromMarket(Token token  , int amount) {
+        int tempAmount = unclaimedTokens.get(token);
+        unclaimedTokens.replace(token , tempAmount - amount);
     }
 
     @Override public String toString() { return "Market{" + "allCards=" + allCards + ", allNobles=" + allNobles + ", cardsAvailableInMarket=" + cardsAvailableInMarket + ", noblesAvailableInMarket=" + noblesAvailableInMarket + ", unclaimedTokens=" + unclaimedTokens + '}'; }

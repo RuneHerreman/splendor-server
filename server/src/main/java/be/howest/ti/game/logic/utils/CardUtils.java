@@ -12,17 +12,6 @@ public class CardUtils {
 
     private static final Map<Character, Token> costMap = costLetterToTokenMap();
 
-    public static Set<TokenBundle> getCostTokenSetFromLetters(String costString) {
-        Set<TokenBundle> bundles = new HashSet<>();
-        Map<Token, Integer> tokenCounts = getTokenWithAmountFromLetters(costString);
-
-        for (Map.Entry<Token, Integer> entry : tokenCounts.entrySet()) {
-            bundles.add(new TokenBundle(entry.getKey(), entry.getValue()));
-        }
-
-        return bundles;
-    }
-
     private static Map<Character, Token> costLetterToTokenMap() {
         Map<Character, Token> costMap = new HashMap<>();
         costMap.put('C', Token.DIAMOND);
@@ -33,24 +22,18 @@ public class CardUtils {
         return costMap;
     }
 
-    private static Map<Token, Integer> getTokenWithAmountFromLetters(String tokensAsString) {
+    public static Map<Token, Integer> getCostTokenSetFromLetters(String tokensString) {
         Map<Token, Integer> tokenCounts = new HashMap<>();
-        char[] tokens = tokensAsString.toCharArray();
+        char[] tokens = tokensString.toCharArray();
 
         for (char c : tokens) {
             Token token = costMap.get(c);
-
-            if(tokenCounts.containsKey(token)) {
-                tokenCounts.put(token, tokenCounts.get(token) + 1);
-            }else {
-                tokenCounts.put(token, 1);
-            }
-
+            tokenCounts.put(token, tokenCounts.getOrDefault(token, 0) + 1);
         }
         return tokenCounts;
     }
 
-    public static Token getTokenFromLetters(String letter) {
+    public static Token getTokenFromLetters(char letter) {
         return costMap.get(letter);
     }
 }

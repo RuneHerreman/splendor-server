@@ -13,14 +13,14 @@ import java.util.Map;
 
 public class Game {
 
-    private String gameName;
-    private int gameId;
+    private final String gameName;
+    private final int gameId;
     private boolean started;
-    private int numberOfPlayers;
+    private final int numberOfPlayers;
     private Player activePlayer;
     private final List<Player> players;
     private Market market;
-    private List<TokenBundle> unclaimedTokens;
+    private Map<Token, Integer> unclaimedTokens;
     private List<Noble> unclaimedNobles;
     private Player winner;
     private GameState gameState;
@@ -81,7 +81,7 @@ public class Game {
         return market;
     }
 
-    public List<TokenBundle> getUnclaimedTokens() {
+    public Map<Token , Integer> getUnclaimedTokens() {
         return unclaimedTokens;
     }
 
@@ -107,6 +107,33 @@ public class Game {
     public boolean isReturnExcessTokensRequired() {
         return returnExcessTokensRequired;
     }
+    public boolean areTokensAvailableInMarket(Map<Token, Integer> tokens) {
+        return market.areTokensAvailableInMarket(tokens);
+    }
+
+    public boolean handleTokenPurchase(Map<Token, Integer> tokens) {
+        boolean success = areTokensAvailableInMarket(tokens);
+        if (success) {
+            activePlayer.addTokens(tokens);
+            market.removeTokensFromMarket(tokens);
+            switchTurn();
+        }
+
+        return success;
+    }
+
+
+//    @Override
+//    public String toString() {
+//        return
+//                "gameName='" + gameName +
+//                " gameId=" + gameId +
+//                " started=" + started +
+//                " numberOfPlayers=" + numberOfPlayers +
+//                " players=" + players +
+//                " returnExcessTokensRequired=" + returnExcessTokensRequired +
+//                " pickNobleRequired=" + pickNobleRequired;
+//    }
 
     public boolean isPickNobleRequired() {
         return pickNobleRequired;

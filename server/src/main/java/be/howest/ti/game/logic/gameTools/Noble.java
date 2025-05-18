@@ -1,15 +1,18 @@
 package be.howest.ti.game.logic.gameTools;
 
+import be.howest.ti.game.logic.Player;
+
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
 public class Noble {
 
     private final String name;
-    private int prestigePoints;
-    private final Set<TokenBundle> neededBonuses;
+    private final int prestigePoints;
+    private final Map<Token, Integer> neededBonuses;
 
-    public Noble(String name, int points, Set<TokenBundle> bonus) {
+    public Noble(String name, int points, Map<Token, Integer> bonus) {
         this.name = name;
         this.prestigePoints = points;
         this.neededBonuses = bonus;
@@ -23,13 +26,28 @@ public class Noble {
         return prestigePoints;
     }
 
-    public Set<TokenBundle> getNeededBonuses() {
+    public boolean isNobleClaimableByPlayer(Player player) {
+        Map<Token, Integer> playerBonuses = player.getBonuses();
+
+        for (Map.Entry<Token, Integer> neededBonus : neededBonuses.entrySet()) {
+            Token bonusToken = neededBonus.getKey();
+            int bonusTokenAmount = neededBonus.getValue();
+            int playerBonusAmount = playerBonuses.getOrDefault(bonusToken, 0);
+
+            if (playerBonusAmount < bonusTokenAmount) {
+                return false;
+            }
+        }
+        return true;
+    }
+    public Map<Token, Integer> getNeededBonuses() {
         return neededBonuses;
     }
 
     public String toString() {
         return name;
     }
+
 
     @Override
     public boolean equals(Object o) {
