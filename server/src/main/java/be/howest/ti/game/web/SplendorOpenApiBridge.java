@@ -70,7 +70,20 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
 
     @Operation("get-games")
     public GetGamesResponse getGames(GetGamesRequest request) {
-        return null;
+        SplendorService service = getService(request);
+
+        List<Game> games = new ArrayList<>();
+        try {
+            if (request.getStarted()) {
+                games = service.getStartedGames();
+            } else if (!request.getStarted()) {
+                games = service.getNonStartedGames();
+            }
+        } catch (NullPointerException e) {
+            games = service.getAllGames();
+        }
+
+        return new GetGamesResponse(games);
     }
 
     @Operation("create-game")
@@ -98,18 +111,18 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
     public DeleteGamesResponse deleteGames(DeleteGamesRequest request) {
         SplendorService service = getService(request);
 
-        if (request.bodyIsEmpty()) {
-            service.deleteAllGames();
-        } else {
-            service.deleteGame(request.getGameID());
-        }
+        List<Game> deletedGames = service.deleteAllGames();
 
-        return new DeleteGamesResponse();
+        return new DeleteGamesResponse(deletedGames);
     }
 
     @Operation("get-game-details")
-    public NotYetImplementedResponse getGameDetails(BaseSplendorRequest request) {
-        return new NotYetImplementedResponse("get-game-details");
+    public GetGameDetailsResponse getGameDetails(GetGameDetailsRequest request) {
+        SplendorService service = getService(request);
+
+        Game game = service.getGameByID(request.getGameID());
+
+        return new GetGameDetailsResponse(game);
     }
 
     @Operation("join-game")
