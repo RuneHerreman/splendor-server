@@ -135,6 +135,17 @@ public class Game {
 //                " pickNobleRequired=" + pickNobleRequired;
 //    }
 
+
+    public void joinGame(String playerName) {
+        Player newPlayer = new Player(playerName);
+        players.add(newPlayer);
+
+        if (players.size() == numberOfPlayers) {
+            started = true;
+            gameState = GameState.TurnAction;
+        }
+    }
+
     public boolean isPickNobleRequired() {
         return pickNobleRequired;
     }
