@@ -3,7 +3,6 @@ package be.howest.ti.game.logic;
 import be.howest.ti.game.logic.gameTools.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -96,7 +95,7 @@ public class Game {
     }
 
     public void addPlayer(Player player){
-        if(players.size() > numberOfPlayers && !started && !players.contains(player)){
+        if(players.size() < numberOfPlayers && !started && !players.contains(player)){
             players.add(player);
         }
     }
@@ -104,6 +103,7 @@ public class Game {
     public void switchTurn(){
         int nextIndex = (players.indexOf(activePlayer) + 1) % numberOfPlayers;
         activePlayer = players.get(nextIndex);
+
     }
 
     public boolean isReturnExcessTokensRequired() {
@@ -128,7 +128,7 @@ public class Game {
     }
 
     public boolean handleTokenReturn(Map<Token, Integer> tokens) {
-        boolean success = areValidTokensToReturn(tokens) && activePlayer.hasEnoughTokensToRemove(tokens);
+        boolean success = areValidTokensToReturn(tokens) && activePlayer.checkValidTokensToReturn(tokens);
         if (success) {
             activePlayer.removeTokens(tokens , false);
             market.addTokens(tokens);
@@ -149,6 +149,7 @@ public class Game {
 
             activePlayer.removeTokens(tokensToBeRemovedFromPlayer , true);
             market.removeCardFromMarket(developmentCard);
+            activePlayer.updatePrestigePoints(developmentCard.getPrestigePoints());
 
             if (!reserved) {
                 market.addRandomCardToTheMarket(cardLevel, cardIndexInMarket);
@@ -161,6 +162,19 @@ public class Game {
         }
 
         return success;
+    }
+
+    public Noble handleNobleVisit(Noble noble ) {
+        Map<Token , Integer> nobleNeededBonus = noble.getNeededBonuses();
+        if(activePlayer.hasEnoughBonusesForNoble(nobleNeededBonus)){
+            activePlayer.addNoble(noble);
+            activePlayer.updatePrestigePoints(noble.getPrestigePoints());
+            return noble;
+        }
+
+        return null;
+
+
     }
 
     private Map<Token, Integer> calculateTokensToRemove(Map<Token, Integer> costCard, Map<Token, Integer> tokensProvided, int availableGoldTokens) {
@@ -185,7 +199,6 @@ public class Game {
 
         return tokensToDeduct;
     }
-
 
     public void joinGame(String playerName) {
         if (numberOfPlayers != players.size()) {

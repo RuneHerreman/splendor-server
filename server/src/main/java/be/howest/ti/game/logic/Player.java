@@ -116,16 +116,24 @@ public class Player {
         tokens.put(token, tokens.getOrDefault(token, 0) - amountToRemove);
     }
 
-
-
-
     public void removeTokens(Map<Token, Integer> toRemove , boolean cardPurchase) {
         for (Map.Entry<Token, Integer> entry : toRemove.entrySet()) {
             removeToken(entry.getKey(), entry.getValue() , cardPurchase);
         }
     }
 
-    public boolean hasEnoughTokensToRemove(Map<Token, Integer> toRemove) {
+    public boolean hasEnoughBonusesForNoble(Map<Token , Integer> nobleNeededBonuses){
+        for(Map.Entry<Token , Integer> entry : nobleNeededBonuses.entrySet()){
+            Token token = entry.getKey();
+            int amount = entry.getValue();
+
+            if(bonuses.get(token) < amount){
+                return false;
+            }
+        }
+    }
+
+    public boolean checkValidTokensToReturn(Map<Token, Integer> toRemove) {
         for (Map.Entry<Token, Integer> token : toRemove.entrySet()) {
             Token toRemoveToken = token.getKey();
             int toRemoveAmount = token.getValue();
@@ -139,5 +147,4 @@ public class Player {
         }
         return true;
     }
-
 }
