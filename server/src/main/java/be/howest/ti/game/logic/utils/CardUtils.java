@@ -23,6 +23,7 @@ public class CardUtils {
         return costMap;
     }
 
+
     public static Map<Token, Integer> getCostTokenSetFromLetters(String tokensString) {
         Map<Token, Integer> tokenCounts = new HashMap<>();
         char[] tokens = tokensString.toCharArray();
