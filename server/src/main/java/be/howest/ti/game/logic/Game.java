@@ -161,4 +161,15 @@ public class Game {
     public void startGame() {
         started = true;
     }
+
+    public String gameEnd(){
+        String result;
+        if(!active && started){
+            result = "This game is ended. The winner is " + getWinner();
+
+        } else{
+            result = "This game has not ended.";
+        }
+        return result;
+    }
 }
