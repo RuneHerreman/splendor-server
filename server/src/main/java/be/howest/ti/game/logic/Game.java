@@ -139,4 +139,8 @@ public class Game {
     public boolean getActive() {
         return active;
     }
+
+    public void startGame() {
+        started = true;
+    }
 }

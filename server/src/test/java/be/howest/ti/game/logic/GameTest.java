@@ -1,9 +1,9 @@
 package be.howest.ti.game.logic;
 
+import be.howest.ti.game.logic.gameTools.GameState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -12,19 +12,11 @@ class GameTest {
 
     private Game game;
     private Player player1;
-    private Player player2;
-    private List<Player> players;
 
     @BeforeEach
     void setUp() {
         player1 = new Player("Alice");
-        player2 = new Player("Bob");
-        players = new ArrayList<>();
-        players.add(player1);
-        players.add(player2);
-
-
-        game = new Game("TestGame", 1 , 2 , player1);
+        game = new Game("TestGame", 1, 2, player1);
     }
 
     @Test
@@ -34,47 +26,59 @@ class GameTest {
         assertFalse(game.isStarted());
         assertEquals(2, game.getNumberOfPlayers());
         assertEquals(player1, game.getActivePlayer());
-        assertEquals(players, game.getPlayers());
+        assertEquals(1, game.getPlayers().size());
+        assertEquals(player1, game.getPlayers().get(0));
         assertNotNull(game.getMarket());
         assertNull(game.getWinner());
     }
 
     @Test
-    void testAddPlayerDoesNotAddWhenGameIsFull() {
-        Player newPlayer = new Player("Charlie");
-        game.addPlayer(newPlayer);
-        // The players list should not be modified because it's already full
+    void testAddPlayerDoesNotAddWhenGameIsFullOrAlreadyStarted() {
+        Player player2 = new Player("Bob");
+        game.joinGame("Bob");
+        assertTrue(game.isStarted());
+        Player player3 = new Player("Charlie");
+
+        game.addPlayer(player3);
+
         assertEquals(2, game.getPlayers().size());
-        assertFalse(game.getPlayers().contains(newPlayer));
+        assertFalse(game.getPlayers().contains(player3));
     }
 
     @Test
     void testSwitchTurnCyclesBetweenPlayers() {
+        game.joinGame("Bob");
         assertEquals(player1, game.getActivePlayer());
         game.switchTurn();
-        assertEquals(player2, game.getActivePlayer());
+        assertEquals("Bob", game.getActivePlayer().getName());
         game.switchTurn();
-        assertEquals(player1, game.getActivePlayer()); // back to player1
+        assertEquals("Alice", game.getActivePlayer().getName());
     }
 
     @Test
-    void testToStringContainsImportantInfo() {
-        String result = game.toString();
-        assertTrue(result.contains("TestGame"));
-        assertTrue(result.contains("gameId=1"));
-        assertTrue(result.contains("Alice") || result.contains("Bob"));
+    void testStartGameSetsStartedToTrue() {
+        assertFalse(game.isStarted());
+        game.startGame();
+        assertTrue(game.isStarted());
     }
 
     @Test
     void testGettersReturnExpectedDefaults() {
         assertNull(game.getGameState());
-        assertNull(game.getUnclaimedTokens());
-        assertNull(game.getUnclaimedNobles());
+        assertNotNull(game.getUnclaimedTokens());
+        assertNotNull(game.getUnclaimedNobles());
+        assertFalse(game.isReturnExcessTokensRequired());
+        assertFalse(game.isPickNobleRequired());
+        assertTrue(game.getActive());
     }
 
     @Test
-    void testJoinGame() {
+    void testJoinGameAddsPlayerAndStartsGame() {
+        assertEquals(1, game.getPlayers().size());
         game.joinGame("Charlie");
+        assertEquals(2, game.getPlayers().size());
+        assertTrue(game.isStarted());
+        assertEquals(GameState.TurnAction, game.getGameState());
         assertEquals("Charlie", game.getPlayers().get(1).getName());
     }
 }
