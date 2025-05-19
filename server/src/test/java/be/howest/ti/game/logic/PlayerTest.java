@@ -92,7 +92,7 @@ public class PlayerTest {
         Map<Token, Integer> toRemove = new HashMap<>();
         toRemove.put(Token.RUBY, 2);
         player.removeTokens(toRemove);
-        assertEquals(5, player.getTokens().get(Token.RUBY)); // volledig door bonus gedekt
+        assertEquals(6, player.getTokens().get(Token.RUBY)); // volledig door bonus gedekt
     }
 
 

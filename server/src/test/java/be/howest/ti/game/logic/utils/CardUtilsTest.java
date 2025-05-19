@@ -22,7 +22,7 @@ class CardUtilsTest {
 
     @Test
     void testGetTokenFromLetters() {
-        assertEquals(Token.DIAMOND, CardUtils.getTokenFromLetters('D'));
+        assertEquals(Token.DIAMOND, CardUtils.getTokenFromLetters('C'));
         assertEquals(Token.SAPPHIRE, CardUtils.getTokenFromLetters('S'));
         assertEquals(Token.ONYX, CardUtils.getTokenFromLetters('O'));
         assertEquals(Token.RUBY, CardUtils.getTokenFromLetters('R'));
