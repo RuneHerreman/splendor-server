@@ -2,6 +2,7 @@ package be.howest.ti.game.web;
 
 import be.howest.ti.game.logic.Game;
 import be.howest.ti.game.logic.Player;
+import be.howest.ti.game.logic.gameTools.Development;
 import be.howest.ti.game.logic.service.SplendorService;
 import be.howest.ti.game.logic.service.SplendorServiceImpl;
 import be.howest.ti.game.logic.utils.CardUtils;
@@ -154,17 +155,26 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
     @Operation("buy-development")
     public BuyDevelopmentResponse buyDevelopment(BuyDevelopmentRequest request) {
         SplendorService service = getService(request);
+
         Game game = service.getGameByID(request.getGameId());
+
         if (game.getActivePlayer().getName().equals(request.getPlayerName())){
-            game.handleDevelopmentCardPurchase(CardUtils.getDevelopmentCardByName(request.getDevelopment(), game.getMarket().getCardsAvailableInMarket()), false);
+            Development development = CardUtils.getDevelopmentCardByName(
+                                        request.getDevelopment(),
+                                        game.getMarket().getCardsAvailableInMarket()
+                                        );
+
+            game.handleDevelopmentCardPurchase(
+                    development,
+                    false,
+                    request.getPayment()
+            );
+
         } else{
-            try {
-                throw new IllegalAccessException("You are not the active player.");
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException("You are not the active player.");
-            }
+            throw new IllegalArgumentException("You are not the current player");
         }
-        return new BuyDevelopmentResponse(game);
+
+        return new BuyDevelopmentResponse(game, request.getPayment());
     }
 
     @Operation("reserve-development")

@@ -1,7 +1,11 @@
 package be.howest.ti.game.web.views.request;
 
+import be.howest.ti.game.logic.gameTools.Token;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class BuyDevelopmentRequest extends BaseSplendorRequest{
     public BuyDevelopmentRequest(RoutingContext context){
@@ -12,8 +16,17 @@ public class BuyDevelopmentRequest extends BaseSplendorRequest{
         return params.body().getJsonObject().getJsonObject("development").getString("name");
     }
 
-    public JsonObject getPayment(){
-        return params.body().getJsonObject().getJsonObject("payment");
+    public Map<Token, Integer> getPayment(){
+        Map<Token, Integer> tokenMap = new HashMap<>();
+        JsonObject payment = params.body().getJsonObject().getJsonObject("payment");
+
+        payment.forEach(pair -> {
+            Token token = Token.valueOf(pair.getKey());
+            int amount = Integer.parseInt(pair.getValue().toString());
+            tokenMap.put(token, amount);
+        });
+
+        return tokenMap;
     }
 
     public int getGameId(){
