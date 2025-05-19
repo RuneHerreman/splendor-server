@@ -1,10 +1,8 @@
 package be.howest.ti.game.logic;
 
-import be.howest.ti.game.logic.gameTools.GameState;
+import be.howest.ti.game.logic.gametools.GameState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
