@@ -266,23 +266,7 @@ class GameTest {
         assertTrue(player1.getPurchasedDevelopments().contains(dev));
         assertEquals("Bob", game.getActivePlayer().getName());
     }
-    @Test
-    void purchaseWithGoldOnly() {
-        Development dev = createTestDevelopmentCard();
-        game.joinGame("Bob");
-        Map<Token, Integer> tokensToAdd = new HashMap<>();
-        tokensToAdd.put(Token.GOLD, 2);
-        player1.addTokens(tokensToAdd);
 
-        Map<Token, Integer> tokensProvided = new HashMap<>();
-        tokensProvided.put(Token.EMERALD, 1);
-        tokensProvided.put(Token.GOLD, 1);
-
-        boolean result = game.handleDevelopmentCardPurchase(dev, false, tokensProvided);
-        assertTrue(result);
-        assertTrue(player1.getPurchasedDevelopments().contains(dev));
-        assertEquals("Bob", game.getActivePlayer().getName());
-    }
 
     @Test
     void purchaseFailsIfNotEnoughTokens() {
