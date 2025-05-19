@@ -13,9 +13,9 @@ import java.util.*;
 public class Market {
     private static List<List<Development>> allCards;
     private static List<Noble> allNobles;
-    private List<List<Development>> cardsAvailableInMarket;
-    private List<Noble> noblesAvailableInMarket;
-    private Map<Token , Integer> unclaimedTokens;
+    private final List<List<Development>> cardsAvailableInMarket;
+    private final List<Noble> noblesAvailableInMarket;
+    private final Map<Token , Integer> unclaimedTokens;
 
     public Market(int amountOfPlayers) {
         allCards = createAllCards();
