@@ -1,9 +1,6 @@
 package be.howest.ti.game.web.views.response;
 
 import be.howest.ti.game.logic.Game;
-import be.howest.ti.game.logic.Player;
-
-import java.util.List;
 
 public class CreateGameResponse extends AbstractResponseWithHiddenStatus {
     private final int gameId;
