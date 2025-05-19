@@ -41,7 +41,6 @@ public class CardUtils {
     }
 
     public static Development getDevelopmentCardByName(String name , List<List<Development>> cardsInMarket) {
-
         for(List<Development> card : cardsInMarket) {
             for(Development development : card) {
                 if(development.getName().equals(name)) {

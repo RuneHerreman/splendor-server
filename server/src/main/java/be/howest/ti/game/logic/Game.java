@@ -47,6 +47,9 @@ public class Game {
         return players;
 
 
+
+
+
     }
     public GameState getGameState() {
         return gameState;
@@ -127,7 +130,7 @@ public class Game {
     public boolean handleTokenReturn(Map<Token, Integer> tokens) {
         boolean success = areValidTokensToReturn(tokens) && activePlayer.hasEnoughTokensToRemove(tokens);
         if (success) {
-            activePlayer.removeTokens(tokens);
+            activePlayer.removeTokens(tokens , false);
             market.addTokens(tokens);
             switchTurn();
         }
@@ -144,7 +147,7 @@ public class Game {
             int availableGoldTokens = tokens.getOrDefault(Token.GOLD, 0);
             Map<Token, Integer> tokensToBeRemovedFromPlayer = calculateTokensToRemove(costCard , tokens , availableGoldTokens);
 
-            activePlayer.removeTokens(tokensToBeRemovedFromPlayer);
+            activePlayer.removeTokens(tokensToBeRemovedFromPlayer , true);
             market.removeCardFromMarket(developmentCard);
 
             if (!reserved) {

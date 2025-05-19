@@ -107,15 +107,21 @@ public class Player {
         return name;
     }
 
-    private void removeToken(Token token, int amount) {
-        int amountBonus = bonuses.getOrDefault(token, 0);
-        int amountToRemoveAfterBonus = amount - amountBonus;
-        tokens.put(token, tokens.getOrDefault(token, 0) - amountToRemoveAfterBonus);
+    private void removeToken(Token token, int amount, boolean cardPurchase) {
+        int amountToRemove = amount;
+        if (cardPurchase) {
+            int amountBonus = bonuses.getOrDefault(token, 0);
+            amountToRemove = amount - amountBonus;
+        }
+        tokens.put(token, tokens.getOrDefault(token, 0) - amountToRemove);
     }
 
-    public void removeTokens(Map<Token, Integer> toRemove) {
+
+
+
+    public void removeTokens(Map<Token, Integer> toRemove , boolean cardPurchase) {
         for (Map.Entry<Token, Integer> entry : toRemove.entrySet()) {
-            removeToken(entry.getKey(), entry.getValue());
+            removeToken(entry.getKey(), entry.getValue() , cardPurchase);
         }
     }
 
