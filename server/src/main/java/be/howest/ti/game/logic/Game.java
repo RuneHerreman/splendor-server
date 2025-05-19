@@ -141,8 +141,12 @@ public class Game {
     }
 
     public void joinGame(String playerName) {
-        Player newPlayer = new Player(playerName);
-        players.add(newPlayer);
+        if (numberOfPlayers != players.size()) {
+            Player newPlayer = new Player(playerName);
+            players.add(newPlayer);
+        } else{
+            throw new IllegalStateException("The game is already full!");
+        }
 
         if (players.size() == numberOfPlayers) {
             started = true;
