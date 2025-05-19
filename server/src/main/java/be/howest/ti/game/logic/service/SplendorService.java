@@ -10,10 +10,13 @@ public interface SplendorService {
     Game createGame(int maxPlayers , Player host);
     Game createGame(String gameName,int maxPlayers , Player host);
 
-    void deleteGame(int gameID);
-    void deleteAllGames();
+    Game deleteGame(int gameID);
+    List<Game> deleteAllGames();
 
     List<Game> getAllGames();
     List<Game> getAllGames(boolean started);
     Game getGameByID(int gameID);
+
+    List<Game> getStartedGames();
+    List<Game> getNonStartedGames();
 }

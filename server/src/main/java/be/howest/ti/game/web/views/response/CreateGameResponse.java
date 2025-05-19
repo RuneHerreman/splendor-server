@@ -6,15 +6,13 @@ import be.howest.ti.game.logic.Player;
 import java.util.List;
 
 public class CreateGameResponse extends AbstractResponseWithHiddenStatus {
-
-
-    private final String playerName;
     private final int gameId;
+    private final String playerName;
 
     public CreateGameResponse(Game game, String playerName) {
         super(200);
-        this.playerName = playerName;
         this.gameId = game.getGameId();
+        this.playerName = playerName;
     }
 
     public int getGameId() {

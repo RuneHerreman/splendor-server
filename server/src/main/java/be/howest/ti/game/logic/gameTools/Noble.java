@@ -4,7 +4,6 @@ import be.howest.ti.game.logic.Player;
 
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 public class Noble {
 

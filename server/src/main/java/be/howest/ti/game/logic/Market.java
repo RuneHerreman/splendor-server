@@ -3,7 +3,6 @@ package be.howest.ti.game.logic;
 import be.howest.ti.game.logic.gameTools.Development;
 import be.howest.ti.game.logic.gameTools.Noble;
 import be.howest.ti.game.logic.gameTools.Token;
-import be.howest.ti.game.logic.gameTools.TokenBundle;
 import be.howest.ti.game.logic.utils.*;
 
 import java.io.File;
@@ -152,14 +151,14 @@ public class Market {
             if (token == Token.GOLD) {
                 initTokens.put(token, 5);
             } else {
-                initTokens.put(token, getAmountOfTokenAccourdingToPlayer(totalPlayers));
+                initTokens.put(token, getAmountOfTokenAccordingToPlayer(totalPlayers));
             }
         }
 
         return initTokens;
     }
 
-    private static int getAmountOfTokenAccourdingToPlayer(int totalPlayers) {
+    private static int getAmountOfTokenAccordingToPlayer(int totalPlayers) {
         /*  4 spelers : 7 van elk tokens
             3 : 5
             2 : 4   */
@@ -204,6 +203,7 @@ public class Market {
                 if (!selectedIndexes.contains(index)) {
                     selectedIndexes.add(index);
                     marketCards.add(levelCards.get(index));
+                    levelCards.remove(index);
                 }
             }
 
