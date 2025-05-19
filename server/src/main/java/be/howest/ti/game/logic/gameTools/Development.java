@@ -33,6 +33,31 @@ public class Development {
         }
         return true;
     }
+
+    public  boolean isCardAffordableByPlayerWithGoldToken(Player player) {
+        Map<Token, Integer> playerTokens = player.generateTokensAndBonuses();
+        int availableGoldTokens = playerTokens.getOrDefault(Token.GOLD, 0);
+        int goldTokensNeeded = 0;
+
+        for (Map.Entry<Token, Integer> cardCost : cost.entrySet()) {
+            Token requiredToken = cardCost.getKey();
+            int requiredAmount = cardCost.getValue();
+            int playerTokenAmount = playerTokens.getOrDefault(requiredToken, 0);
+
+            if (playerTokenAmount < requiredAmount) {
+                goldTokensNeeded += (requiredAmount - playerTokenAmount);
+            }
+
+            if (goldTokensNeeded > availableGoldTokens) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

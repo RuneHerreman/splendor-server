@@ -3,7 +3,6 @@ package be.howest.ti.game.logic;
 import be.howest.ti.game.logic.gameTools.Development;
 import be.howest.ti.game.logic.gameTools.Noble;
 import be.howest.ti.game.logic.gameTools.Token;
-import be.howest.ti.game.logic.gameTools.TokenBundle;
 import be.howest.ti.game.logic.utils.*;
 
 import java.io.File;
@@ -212,7 +211,7 @@ public class Market {
 
         return developmentCardsForMarket;
     }
-    private boolean areValidTokensPick(Map<Token, Integer> tokens) {
+    public boolean areValidTokensPick(Map<Token, Integer> tokens) {
         if (tokens.isEmpty() || (tokens.size() != 1 && tokens.size() != 3)) {
             return false;
         }
@@ -286,13 +285,22 @@ public class Market {
     public void addRandomCardToTheMarket(int cardLevel, int cardIndexInMarket) {
         int levelIndex = cardLevel - 1;
         if (levelIndex < 0 || levelIndex >= cardsAvailableInMarket.size()) return;
-        cardsAvailableInMarket.get(levelIndex).add(cardIndexInMarket , getRandomCardFromMarket(cardLevel));
+        cardsAvailableInMarket.get(levelIndex).add(cardIndexInMarket, getRandomCardFromMarket(cardLevel));
     }
 
     private Development getRandomCardFromMarket(int cardLevel) {
         Random random = new Random();
         List<Development> deck = allCards.get(cardLevel - 1);
         return deck.get(random.nextInt(deck.size()));
+    }
+    public void addToken(Token token, int amount) {
+        unclaimedTokens.put(token, unclaimedTokens.getOrDefault(token, 0) + amount);
+    }
+
+    public void addTokens(Map<Token, Integer> tokens) {
+        for (Map.Entry<Token, Integer> entry : tokens.entrySet()) {
+            addToken(entry.getKey(), entry.getValue());
+        }
     }
 }
 

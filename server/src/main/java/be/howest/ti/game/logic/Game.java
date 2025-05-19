@@ -46,6 +46,9 @@ public class Game {
         return players;
 
 
+
+
+
     }
     public GameState getGameState() {
         return gameState;
@@ -92,7 +95,7 @@ public class Game {
     }
 
     public void addPlayer(Player player){
-        if(players.size() > numberOfPlayers && !started && !players.contains(player)){
+        if(players.size() < numberOfPlayers && !started && !players.contains(player)){
             players.add(player);
         }
     }
@@ -100,6 +103,7 @@ public class Game {
     public void switchTurn(){
         int nextIndex = (players.indexOf(activePlayer) + 1) % numberOfPlayers;
         activePlayer = players.get(nextIndex);
+
     }
 
     public boolean isReturnExcessTokensRequired() {
@@ -119,23 +123,44 @@ public class Game {
 
         return success;
     }
-    public boolean handleDevelopmentCardPurchase(Development developmentCard , Boolean reserved) {
-        boolean success = developmentCard.isCardAffordableByPlayer(activePlayer);
+    public boolean areValidTokensToReturn(Map<Token, Integer> tokens) {
+      return   market.areValidTokensPick(tokens);
+    }
+
+    public boolean handleTokenReturn(Map<Token, Integer> tokens) {
+        boolean success = areValidTokensToReturn(tokens) && activePlayer.checkValidTokensToReturn(tokens);
+        if (success) {
+            activePlayer.removeTokens(tokens , false);
+            market.addTokens(tokens);
+            switchTurn();
+        }
+
+        return success;
+    }
+    public boolean handleDevelopmentCardPurchase(Development developmentCard , Boolean reserved , Map<Token, Integer> tokens) {
+        boolean success = developmentCard.isCardAffordableByPlayer(activePlayer) || developmentCard.isCardAffordableByPlayerWithGoldToken(activePlayer);
+
         if (success) {
             int cardLevel = developmentCard.getLevel();
             int cardIndexInMarket = market.getIndexCardFromMarket(developmentCard);
-            Map<Token , Integer> costCard = developmentCard.getCost();
+            Map<Token, Integer> costCard = developmentCard.getCost();
+            int availableGoldTokens = tokens.getOrDefault(Token.GOLD, 0);
+            Map<Token, Integer> tokensToBeRemovedFromPlayer = calculateTokensToRemove(costCard , tokens , availableGoldTokens);
+
+            activePlayer.removeTokens(tokensToBeRemovedFromPlayer , true);
             market.removeCardFromMarket(developmentCard);
-            if(!reserved){
-                market.addRandomCardToTheMarket(cardLevel , cardIndexInMarket);
+            activePlayer.updatePrestigePoints(developmentCard.getPrestigePoints());
+
+            if (!reserved) {
+                market.addRandomCardToTheMarket(cardLevel, cardIndexInMarket);
                 activePlayer.addCard(developmentCard);
-            }else{
+            } else {
                 activePlayer.buyReserved(developmentCard);
             }
-            activePlayer.removeTokens(costCard);
-            switchTurn();
 
+            switchTurn();
         }
+
         return success;
     }
 
@@ -152,9 +177,36 @@ public class Game {
 
     }
 
+    private Map<Token, Integer> calculateTokensToRemove(Map<Token, Integer> costCard, Map<Token, Integer> tokensProvided, int availableGoldTokens) {
+        Map<Token, Integer> tokensToDeduct = new HashMap<>();
+
+        for (Map.Entry<Token, Integer> entry : costCard.entrySet()) {
+            Token requiredToken = entry.getKey();
+            int requiredAmount = entry.getValue();
+            int playerTokenAmount = tokensProvided.getOrDefault(requiredToken, 0);
+
+            if (playerTokenAmount >= requiredAmount) {
+                tokensToDeduct.put(requiredToken, requiredAmount);
+            } else {
+                int missingAmount = requiredAmount - playerTokenAmount;
+                if (missingAmount <= availableGoldTokens) {
+                    tokensToDeduct.put(requiredToken, playerTokenAmount);
+                    tokensToDeduct.put(Token.GOLD, tokensToDeduct.getOrDefault(Token.GOLD, 0) + missingAmount);
+                    availableGoldTokens -= missingAmount;
+                }
+            }
+        }
+
+        return tokensToDeduct;
+    }
+
     public void joinGame(String playerName) {
-        Player newPlayer = new Player(playerName);
-        players.add(newPlayer);
+        if (numberOfPlayers != players.size()) {
+            Player newPlayer = new Player(playerName);
+            players.add(newPlayer);
+        } else{
+            throw new IllegalStateException("The game is already full!");
+        }
 
         if (players.size() == numberOfPlayers) {
             started = true;
@@ -172,5 +224,16 @@ public class Game {
 
     public void startGame() {
         started = true;
+    }
+
+    public String gameEnd(){
+        String result;
+        if(!active && started){
+            result = "This game is ended. The winner is " + getWinner();
+
+        } else{
+            result = "This game has not ended.";
+        }
+        return result;
     }
 }

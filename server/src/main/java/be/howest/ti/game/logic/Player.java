@@ -107,15 +107,18 @@ public class Player {
         return name;
     }
 
-    private void removeToken(Token token, int amount) {
-        int amountBonus = bonuses.getOrDefault(token, 0);
-        int amountToRemoveAfterBonus = amount - amountBonus;
-        tokens.put(token, tokens.getOrDefault(token, 0) - amountToRemoveAfterBonus);
+    private void removeToken(Token token, int amount, boolean cardPurchase) {
+        int amountToRemove = amount;
+        if (cardPurchase) {
+            int amountBonus = bonuses.getOrDefault(token, 0);
+            amountToRemove = amount - amountBonus;
+        }
+        tokens.put(token, tokens.getOrDefault(token, 0) - amountToRemove);
     }
 
-    public void removeTokens(Map<Token, Integer> toRemove) {
+    public void removeTokens(Map<Token, Integer> toRemove , boolean cardPurchase) {
         for (Map.Entry<Token, Integer> entry : toRemove.entrySet()) {
-            removeToken(entry.getKey(), entry.getValue());
+            removeToken(entry.getKey(), entry.getValue() , cardPurchase);
         }
     }
 
@@ -128,7 +131,20 @@ public class Player {
                 return false;
             }
         }
-        return true;
     }
 
+    public boolean checkValidTokensToReturn(Map<Token, Integer> toRemove) {
+        for (Map.Entry<Token, Integer> token : toRemove.entrySet()) {
+            Token toRemoveToken = token.getKey();
+            int toRemoveAmount = token.getValue();
+
+            int inventoryAmount = tokens.getOrDefault(toRemoveToken, 0);
+
+            if(inventoryAmount < toRemoveAmount  ) {
+                return false;
+            }
+
+        }
+        return true;
+    }
 }
