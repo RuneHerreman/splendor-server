@@ -69,4 +69,31 @@ public class PlayerTest {
         assertEquals(5, player.getPrestigePoints());
     }
 
+    @Test
+    public void testGenerateTokensAndBonuses() {
+        player.addToken(Token.RUBY, 2);
+        player.addBonus(Token.RUBY, 3);
+        Map<Token, Integer> combined = player.generateTokensAndBonuses();
+        assertEquals(5, combined.get(Token.RUBY));
+    }
+    @Test
+    public void testRemoveTokens_withBonus() {
+        player.addToken(Token.EMERALD, 5);
+        player.addBonus(Token.EMERALD, 2);
+        Map<Token, Integer> toRemove = new HashMap<>();
+        toRemove.put(Token.EMERALD, 3);
+        player.removeTokens(toRemove);
+        assertEquals(4, player.getTokens().get(Token.EMERALD)); // 3 - 2 (bonus) = 1 verwijderd
+    }
+    @Test
+    public void testRemoveTokens_fullyCoveredByBonus() {
+        player.addToken(Token.RUBY, 5);
+        player.addBonus(Token.RUBY, 3);
+        Map<Token, Integer> toRemove = new HashMap<>();
+        toRemove.put(Token.RUBY, 2);
+        player.removeTokens(toRemove);
+        assertEquals(5, player.getTokens().get(Token.RUBY)); // volledig door bonus gedekt
+    }
+
+
 }
