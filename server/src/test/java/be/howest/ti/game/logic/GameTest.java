@@ -80,5 +80,13 @@ class GameTest {
         assertTrue(game.isStarted());
         assertEquals(GameState.TurnAction, game.getGameState());
         assertEquals("Charlie", game.getPlayers().get(1).getName());
+
+    }
+    @Test
+    void testJoinFullGame(){
+        assertEquals(1, game.getPlayers().size());
+        game.joinGame("Ben");
+        assertEquals(2, game.getPlayers().size());
+        assertThrows(IllegalStateException.class, () -> game.joinGame("Charlie"));
     }
 }
