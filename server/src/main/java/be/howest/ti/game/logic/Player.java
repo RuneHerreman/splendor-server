@@ -119,4 +119,19 @@ public class Player {
         }
     }
 
+    public boolean hasEnoughTokensToRemove(Map<Token, Integer> toRemove) {
+        for (Map.Entry<Token, Integer> token : toRemove.entrySet()) {
+            Token toRemoveToken = token.getKey();
+            int toRemoveAmount = token.getValue();
+
+            int inventoryAmount = tokens.getOrDefault(toRemoveToken, 0);
+
+            if(inventoryAmount < toRemoveAmount  ) {
+                return false;
+            }
+
+        }
+        return true;
+    }
+
 }

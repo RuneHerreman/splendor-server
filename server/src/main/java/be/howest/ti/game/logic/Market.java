@@ -212,7 +212,7 @@ public class Market {
 
         return developmentCardsForMarket;
     }
-    private boolean areValidTokensPick(Map<Token, Integer> tokens) {
+    public boolean areValidTokensPick(Map<Token, Integer> tokens) {
         if (tokens.isEmpty() || (tokens.size() != 1 && tokens.size() != 3)) {
             return false;
         }
@@ -293,6 +293,15 @@ public class Market {
         Random random = new Random();
         List<Development> deck = allCards.get(cardLevel - 1);
         return deck.get(random.nextInt(deck.size()));
+    }
+    public void addToken(Token token, int amount) {
+        unclaimedTokens.put(token, unclaimedTokens.getOrDefault(token, 0) + amount);
+    }
+
+    public void addTokens(Map<Token, Integer> tokens) {
+        for (Map.Entry<Token, Integer> entry : tokens.entrySet()) {
+            addToken(entry.getKey(), entry.getValue());
+        }
     }
 }
 
