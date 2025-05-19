@@ -248,6 +248,7 @@ class GameTest {
         assertTrue(result);
         assertTrue(player1.getPurchasedDevelopments().contains(dev));
         assertEquals("Bob", game.getActivePlayer().getName());
+        assertEquals(dev.getPrestigePoints(), player1.getPrestigePoints());
     }
 
     @Test
@@ -265,6 +266,7 @@ class GameTest {
         assertTrue(result);
         assertTrue(player1.getPurchasedDevelopments().contains(dev));
         assertEquals("Bob", game.getActivePlayer().getName());
+        assertEquals(dev.getPrestigePoints(), player1.getPrestigePoints());
     }
 
 
