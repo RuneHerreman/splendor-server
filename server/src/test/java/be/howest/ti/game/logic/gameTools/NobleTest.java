@@ -33,6 +33,23 @@ public class NobleTest {
         assertEquals(3, noble.getPrestigePoints());
     }
 
+    @Test
+    void testIsNobleClaimableByPlayerTrue() {
+        Map<Token, Integer> needed = new HashMap<>();
+        needed.put(Token.DIAMOND, 2);
+        needed.put(Token.RUBY, 1);
+
+        Noble noble = new Noble("Queen", 2, needed);
+
+        Map<Token, Integer> playerBonuses = new HashMap<>();
+        playerBonuses.put(Token.DIAMOND, 2);
+        playerBonuses.put(Token.RUBY, 1);
+
+        DummyPlayer player = new DummyPlayer(playerBonuses);
+
+        assertTrue(noble.isNobleClaimableByPlayer(player));
+    }
+
 
 }
 
