@@ -96,7 +96,7 @@ public class Game {
     }
 
     public void addPlayer(Player player){
-        if(players.size() > numberOfPlayers && !started && !players.contains(player)){
+        if(players.size() < numberOfPlayers && !started && !players.contains(player)){
             players.add(player);
         }
     }
@@ -104,6 +104,7 @@ public class Game {
     public void switchTurn(){
         int nextIndex = (players.indexOf(activePlayer) + 1) % numberOfPlayers;
         activePlayer = players.get(nextIndex);
+
     }
 
     public boolean isReturnExcessTokensRequired() {
@@ -128,7 +129,7 @@ public class Game {
     }
 
     public boolean handleTokenReturn(Map<Token, Integer> tokens) {
-        boolean success = areValidTokensToReturn(tokens) && activePlayer.hasEnoughTokensToRemove(tokens);
+        boolean success = areValidTokensToReturn(tokens) && activePlayer.checkValidTokensToReturn(tokens);
         if (success) {
             activePlayer.removeTokens(tokens , false);
             market.addTokens(tokens);
@@ -149,6 +150,7 @@ public class Game {
 
             activePlayer.removeTokens(tokensToBeRemovedFromPlayer , true);
             market.removeCardFromMarket(developmentCard);
+            activePlayer.updatePrestigePoints(developmentCard.getPrestigePoints());
 
             if (!reserved) {
                 market.addRandomCardToTheMarket(cardLevel, cardIndexInMarket);

@@ -125,7 +125,7 @@ public class Player {
         }
     }
 
-    public boolean hasEnoughTokensToRemove(Map<Token, Integer> toRemove) {
+    public boolean checkValidTokensToReturn(Map<Token, Integer> toRemove) {
         for (Map.Entry<Token, Integer> token : toRemove.entrySet()) {
             Token toRemoveToken = token.getKey();
             int toRemoveAmount = token.getValue();
@@ -139,5 +139,7 @@ public class Player {
         }
         return true;
     }
+
+
 
 }
