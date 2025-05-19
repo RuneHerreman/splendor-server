@@ -3,7 +3,6 @@ package be.howest.ti.game.logic;
 import be.howest.ti.game.logic.gameTools.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -138,6 +137,19 @@ public class Game {
 
         }
         return success;
+    }
+
+    public Noble handleNobleVisit(Noble noble ) {
+        Map<Token , Integer> nobleNeededBonus = noble.getNeededBonuses();
+        if(activePlayer.hasEnoughBonusesForNoble(nobleNeededBonus)){
+            activePlayer.addNoble(noble);
+            activePlayer.updatePrestigePoints(noble.getPrestigePoints());
+            return noble;
+        }
+
+        return null;
+
+
     }
 
     public void joinGame(String playerName) {

@@ -119,4 +119,16 @@ public class Player {
         }
     }
 
+    public boolean hasEnoughBonusesForNoble(Map<Token , Integer> nobleNeededBonuses){
+        for(Map.Entry<Token , Integer> entry : nobleNeededBonuses.entrySet()){
+            Token token = entry.getKey();
+            int amount = entry.getValue();
+
+            if(bonuses.get(token) < amount){
+                return false;
+            }
+        }
+        return true;
+    }
+
 }
