@@ -82,7 +82,7 @@ public class PlayerTest {
         player.addBonus(Token.Emerald, 2);
         Map<Token, Integer> toRemove = new HashMap<>();
         toRemove.put(Token.Emerald, 3);
-        player.removeTokens(toRemove , false);
+        player.removeTokens(toRemove , true);
         assertEquals(4, player.getTokens().get(Token.Emerald)); // 3 - 2 (bonus) = 1 verwijderd
     }
     @Test
@@ -91,7 +91,7 @@ public class PlayerTest {
         player.addBonus(Token.Ruby, 3);
         Map<Token, Integer> toRemove = new HashMap<>();
         toRemove.put(Token.Ruby, 2);
-        player.removeTokens(toRemove , false);
+        player.removeTokens(toRemove , true);
         assertEquals(6, player.getTokens().get(Token.Ruby)); // volledig door bonus gedekt
     }
 
