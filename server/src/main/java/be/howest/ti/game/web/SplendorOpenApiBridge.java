@@ -151,7 +151,7 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
         SplendorService service = getService(request);
         Game game = service.getGameByID(request.getGameId());
         if (game.getActivePlayer().getName().equals(request.getPlayerName())){
-            game.handleDevelopmentCardPurchase(CardUtils.getDevelopmentCardByName(request.getDevelopment(), game.getMarket().getCardsAvailableInMarket()), false);
+          //  game.handleDevelopmentCardPurchase(CardUtils.getDevelopmentCardByName(request.getDevelopment(), game.getMarket().getCardsAvailableInMarket()), false);
         } else{
             try {
                 throw new IllegalAccessException("You are not the active player.");
