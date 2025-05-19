@@ -52,7 +52,7 @@ class DevelopmentTest {
         Player player = new Player("TestPlayer");
         player.addToken(Token.DIAMOND, 1);
         player.addToken(Token.RUBY, 1);
-        player.addBonus(Token.DIAMOND, 1); // Total DIAMOND = 2
+        player.addBonus(Token.DIAMOND, 1);
 
         assertTrue(development.isCardAffordableByPlayer(player));
     }
@@ -60,7 +60,7 @@ class DevelopmentTest {
     @Test
     void testIsCardAffordableByPlayer_NotAffordable() {
         Player player = new Player("TestPlayer");
-        player.addToken(Token.DIAMOND, 1); // only 1 DIAMOND
+        player.addToken(Token.DIAMOND, 1);
         player.addToken(Token.RUBY, 0);
 
         assertFalse(development.isCardAffordableByPlayer(player));
