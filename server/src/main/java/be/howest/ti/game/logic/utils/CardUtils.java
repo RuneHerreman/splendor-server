@@ -1,5 +1,6 @@
 package be.howest.ti.game.logic.utils;
 
+import be.howest.ti.game.logic.gameTools.Noble;
 import be.howest.ti.game.logic.gameTools.Token;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,5 +47,12 @@ public class CardUtils {
             }
         }
         return null;
+    }
+    public static Noble getNobleCardByName(String name , List<Noble> noblesInMarket) {
+        for(Noble noble : noblesInMarket) {
+            if(noble.getName().equals(name)) {
+                return noble;
+            }
+        }
     }
 }
