@@ -22,6 +22,17 @@ public class NobleTest {
             }
         }
 
+    @Test
+    void testGetNameAndPrestigePoints() {
+        Map<Token, Integer> needed = new HashMap<>();
+        needed.put(Token.DIAMOND, 3);
+
+        Noble noble = new Noble("King", 3, needed);
+
+        assertEquals("King", noble.getName());
+        assertEquals(3, noble.getPrestigePoints());
+    }
+
 
 }
 
