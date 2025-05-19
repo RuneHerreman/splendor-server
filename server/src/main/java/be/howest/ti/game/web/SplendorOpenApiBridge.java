@@ -168,8 +168,10 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
     }
 
     @Operation("buy-reserved-development")
-    public NotYetImplementedResponse buyReserveDevelopment(BaseSplendorRequest request) {
-        return new NotYetImplementedResponse("buy-reserved-development");
+    public BuyReservedDevelopmentResponse buyReserveDevelopment(BuyReservedDevelopmentRequest request) {
+        SplendorService service = getService(request);
+        Game game = service.getGameByID(request.getGameId());
+        return new BuyReservedDevelopmentResponse(game);
     }
 
     @Operation("choose-noble")
