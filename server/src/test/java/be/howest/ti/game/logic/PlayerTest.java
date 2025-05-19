@@ -47,4 +47,26 @@ public class PlayerTest {
         assertTrue(player.getPurchasedDevelopments().contains(dev));
     }
 
+    @Test
+    public void testReserveAndBuyReserved() {
+        Development dev = new Development("Dev2", 0, new HashMap<>(), Token.EMERALD, 1);
+        player.reserveCard(dev);
+        assertTrue(player.getReserved().contains(dev));
+
+        player.buyReserved(dev);
+        assertTrue(player.getPurchasedDevelopments().contains(dev));
+        assertFalse(player.getReserved().contains(dev));
+    }
+    @Test
+    public void testAddNoble() {
+        Noble noble = new Noble("Noble1", 3, new HashMap<>());
+        player.addNoble(noble);
+        assertTrue(player.getNobles().contains(noble));
+    }
+    @Test
+    public void testUpdatePrestigePoints() {
+        player.updatePrestigePoints(5);
+        assertEquals(5, player.getPrestigePoints());
+    }
+
 }
