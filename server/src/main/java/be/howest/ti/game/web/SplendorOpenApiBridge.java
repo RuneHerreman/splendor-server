@@ -1,6 +1,7 @@
 package be.howest.ti.game.web;
 
 import be.howest.ti.game.logic.Game;
+import be.howest.ti.game.logic.Market;
 import be.howest.ti.game.logic.Player;
 import be.howest.ti.game.logic.gameTools.Development;
 import be.howest.ti.game.logic.gameTools.Noble;
@@ -169,8 +170,15 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
     }
 
     @Operation("reserve-development")
-    public NotYetImplementedResponse reserveDevelopment(BaseSplendorRequest request) {
-        return new NotYetImplementedResponse("reserve-development");
+    public ReserveDevelopmentResponse reserveDevelopment(ReserveDevelopmentRequest request) {
+        SplendorService service = getService(request);
+        Game game = service.reserveCard(
+                request.getPlayerName(),
+                request.getGameID(),
+                request.getDevelopmentName()
+        );
+
+        return new ReserveDevelopmentResponse(game.getActivePlayer());
     }
 
     @Operation("buy-reserved-development")
