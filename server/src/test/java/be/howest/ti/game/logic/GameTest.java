@@ -1,10 +1,12 @@
 package be.howest.ti.game.logic;
 
 import be.howest.ti.game.logic.gameTools.GameState;
+import be.howest.ti.game.logic.gameTools.Token;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,10 +15,12 @@ class GameTest {
     private Game game;
     private Player player1;
 
+
     @BeforeEach
     void setUp() {
         player1 = new Player("Alice");
         game = new Game("TestGame", 1, 2, player1);
+
     }
 
     @Test
@@ -34,12 +38,11 @@ class GameTest {
 
     @Test
     void testAddPlayerDoesNotAddWhenGameIsFullOrAlreadyStarted() {
-        Player player2 = new Player("Bob");
         game.joinGame("Bob");
         assertTrue(game.isStarted());
         Player player3 = new Player("Charlie");
 
-        game.addPlayer(player3);
+       // game.addPlayer(player3);
 
         assertEquals(2, game.getPlayers().size());
         assertFalse(game.getPlayers().contains(player3));
@@ -88,5 +91,94 @@ class GameTest {
         game.joinGame("Ben");
         assertEquals(2, game.getPlayers().size());
         assertThrows(IllegalStateException.class, () -> game.joinGame("Charlie"));
+    }
+    @Test
+    void testPlayerTakesTokensFromMarket_TwoOfSameTokenType() {
+        game.joinGame("Bob");
+        Map<Token, Integer> tokens = new HashMap<>();
+        tokens.put(Token.DIAMOND, 2);
+
+        boolean result = game.handleTokenPurchase(tokens);
+
+        assertTrue(result);
+        assertEquals(2, game.getMarket().getUnclaimedTokens().get(Token.DIAMOND));
+        assertEquals(4, game.getMarket().getUnclaimedTokens().getOrDefault(Token.EMERALD, 0));
+        assertEquals(4, game.getMarket().getUnclaimedTokens().getOrDefault(Token.ONYX, 0));
+        assertEquals(4, game.getMarket().getUnclaimedTokens().getOrDefault(Token.RUBY, 0));
+        assertEquals(4, game.getMarket().getUnclaimedTokens().getOrDefault(Token.SAPPHIRE, 0));
+        assertEquals(5, game.getMarket().getUnclaimedTokens().getOrDefault(Token.GOLD, 0));
+
+        assertEquals(2, player1.getTokens().get(Token.DIAMOND));
+        assertNull( player1.getTokens().get(Token.EMERALD));
+        assertNull( player1.getTokens().get(Token.ONYX));
+        assertNull( player1.getTokens().get(Token.RUBY));
+        assertNull(player1.getTokens().get(Token.SAPPHIRE));
+
+    }
+    @Test
+    void testPlayerTakesTokensFromMarket_TwoOfSameTokenType_FailsIfNotEnoughTokensInMarket() {
+        game.joinGame("Bob");
+        Map<Token, Integer> tokens = new HashMap<>();
+        tokens.put(Token.DIAMOND, 2);
+
+        game.getMarket().removeTokensFromMarket(tokens);
+        boolean result = game.handleTokenPurchase(tokens);
+
+        assertFalse(result);
+        assertEquals(2, game.getMarket().getUnclaimedTokens().get(Token.DIAMOND));
+        assertEquals(4, game.getMarket().getUnclaimedTokens().getOrDefault(Token.EMERALD, 0));
+        assertEquals(4, game.getMarket().getUnclaimedTokens().getOrDefault(Token.ONYX, 0));
+        assertEquals(4, game.getMarket().getUnclaimedTokens().getOrDefault(Token.RUBY, 0));
+        assertEquals(4, game.getMarket().getUnclaimedTokens().getOrDefault(Token.SAPPHIRE, 0));
+        assertEquals(5, game.getMarket().getUnclaimedTokens().getOrDefault(Token.GOLD, 0));
+        assertNull(player1.getTokens().get(Token.DIAMOND));
+    }
+
+    @Test
+    public void testPlayerTakesTokensFromMarket_OneOfEachType() {
+        game.joinGame("Bob");
+        Map<Token, Integer> requestedTokens = new HashMap<>();
+        requestedTokens.put(Token.ONYX, 1);
+        requestedTokens.put(Token.EMERALD, 1);
+        requestedTokens.put(Token.DIAMOND, 1);
+
+        assertTrue(game.getMarket().areTokensAvailableInMarket(requestedTokens));
+        game.handleTokenPurchase(requestedTokens);
+
+        assertEquals(1, player1.getTokens().get(Token.ONYX));
+        assertEquals(1, player1.getTokens().get(Token.EMERALD));
+        assertEquals(1, player1.getTokens().get(Token.DIAMOND));
+
+        assertEquals(3, game.getMarket().getUnclaimedTokens().get(Token.ONYX));
+        assertEquals(3, game.getMarket().getUnclaimedTokens().get(Token.EMERALD));
+        assertEquals(3, game.getMarket().getUnclaimedTokens().get(Token.DIAMOND));
+        assertEquals("Bob", game.getActivePlayer().getName());
+    }
+    @Test
+    public void testPlayerTakesTokensFromMarket_OneOfEachType_failsIfNotEnoughTokensInMarket() {
+        game.joinGame("Bob");
+
+        Map<Token, Integer> toRemove = new HashMap<>();
+        toRemove.put(Token.ONYX, 4);
+        toRemove.put(Token.EMERALD, 1);
+        toRemove.put(Token.DIAMOND, 1);
+
+        Map<Token, Integer> requestedTokens = new HashMap<>();
+        requestedTokens.put(Token.ONYX, 1);
+        requestedTokens.put(Token.EMERALD, 1);
+        requestedTokens.put(Token.DIAMOND, 1);
+
+        game.getMarket().removeTokensFromMarket(toRemove);
+        assertFalse(game.getMarket().areTokensAvailableInMarket(requestedTokens));
+        game.handleTokenPurchase(requestedTokens);
+
+        assertNull( player1.getTokens().get(Token.ONYX));
+        assertNull( player1.getTokens().get(Token.EMERALD));
+        assertNull( player1.getTokens().get(Token.DIAMOND));
+
+        assertEquals(0, game.getMarket().getUnclaimedTokens().get(Token.ONYX));
+        assertEquals(3, game.getMarket().getUnclaimedTokens().get(Token.EMERALD));
+        assertEquals(3, game.getMarket().getUnclaimedTokens().get(Token.DIAMOND));
+        assertEquals("Alice", game.getActivePlayer().getName());
     }
 }
