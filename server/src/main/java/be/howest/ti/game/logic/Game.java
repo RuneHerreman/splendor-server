@@ -127,10 +127,15 @@ public class Game {
             int cardIndexInMarket = market.getIndexCardFromMarket(developmentCard);
             Map<Token , Integer> costCard = developmentCard.getCost();
             market.removeCardFromMarket(developmentCard);
-            if(!reserved){ market.addRandomCardToTheMarket(cardLevel , cardIndexInMarket);}
+            if(!reserved){
+                market.addRandomCardToTheMarket(cardLevel , cardIndexInMarket);
+                activePlayer.addCard(developmentCard);
+            }else{
+                activePlayer.buyReserved(developmentCard);
+            }
             activePlayer.removeTokens(costCard);
-            activePlayer.addCard(developmentCard);
             switchTurn();
+
         }
         return success;
     }
