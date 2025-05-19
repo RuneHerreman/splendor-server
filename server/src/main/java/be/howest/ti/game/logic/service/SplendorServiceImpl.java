@@ -3,10 +3,14 @@ package be.howest.ti.game.logic.service;
 
 import be.howest.ti.game.logic.Game;
 import be.howest.ti.game.logic.Player;
+import be.howest.ti.game.logic.gameTools.Development;
+import be.howest.ti.game.logic.gameTools.Token;
+import be.howest.ti.game.logic.utils.CardUtils;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class SplendorServiceImpl implements SplendorService {
     private final List<Game> games;
@@ -104,5 +108,27 @@ public class SplendorServiceImpl implements SplendorService {
             }
         }
         return nonStartedGames;
+    }
+
+    public Game buyDevelopment(int gameID, String playerName, String developmentName, boolean reserved, Map<Token, Integer> payment) {
+        Game game = getGameByID(gameID);
+        boolean isActivePlayer = game.getActivePlayer().getName().equals(playerName);
+
+        if (isActivePlayer) {
+            Development development = CardUtils
+                    .getDevelopmentCardByName(
+                            developmentName,
+                            game.getMarket().getCardsAvailableInMarket()
+                    );
+            game.handleDevelopmentCardPurchase(
+                    development,
+                    reserved,
+                    payment
+            );
+        } else{
+            throw new IllegalArgumentException("You are not the current player");
+        }
+
+        return game;
     }
 }
