@@ -131,6 +131,7 @@ public class Player {
                 return false;
             }
         }
+        return true;
     }
 
     public boolean checkValidTokensToReturn(Map<Token, Integer> toRemove) {
