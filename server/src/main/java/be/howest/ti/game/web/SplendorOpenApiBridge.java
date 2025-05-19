@@ -56,13 +56,13 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
     }
 
     @Operation("get-nobles")
-    public NotYetImplementedResponse getNobles(BaseSplendorRequest request) {
-        return new NotYetImplementedResponse("get-nobles");
+    public GetNoblesResponse getNobles(GetNoblesRequest request) {
+        return new GetNoblesResponse();
     }
 
     @Operation("get-developments")
-    public NotYetImplementedResponse getDevelopments(BaseSplendorRequest request) {
-        return new NotYetImplementedResponse("get-developments");
+    public GetDevelopmentsResponse getDevelopments(GetDevelopmentsRequest request) {
+        return new GetDevelopmentsResponse();
     }
 
     //endregion
