@@ -150,6 +150,7 @@ public class Game {
 
             activePlayer.removeTokens(tokensToBeRemovedFromPlayer , true);
             market.removeCardFromMarket(developmentCard);
+            activePlayer.updatePrestigePoints(developmentCard.getPrestigePoints());
 
             if (!reserved) {
                 market.addRandomCardToTheMarket(cardLevel, cardIndexInMarket);

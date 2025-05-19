@@ -286,7 +286,7 @@ public class Market {
     public void addRandomCardToTheMarket(int cardLevel, int cardIndexInMarket) {
         int levelIndex = cardLevel - 1;
         if (levelIndex < 0 || levelIndex >= cardsAvailableInMarket.size()) return;
-        cardsAvailableInMarket.get(levelIndex).add(cardIndexInMarket , getRandomCardFromMarket(cardLevel));
+        cardsAvailableInMarket.get(levelIndex).add(cardIndexInMarket, getRandomCardFromMarket(cardLevel));
     }
 
     private Development getRandomCardFromMarket(int cardLevel) {

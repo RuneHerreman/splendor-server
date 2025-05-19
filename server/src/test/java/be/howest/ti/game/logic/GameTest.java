@@ -1,5 +1,6 @@
 package be.howest.ti.game.logic;
 
+import be.howest.ti.game.logic.gameTools.Development;
 import be.howest.ti.game.logic.gameTools.GameState;
 import be.howest.ti.game.logic.gameTools.Token;
 import org.junit.jupiter.api.BeforeEach;
@@ -181,4 +182,127 @@ class GameTest {
         assertEquals(3, game.getMarket().getUnclaimedTokens().get(Token.DIAMOND));
         assertEquals("Alice", game.getActivePlayer().getName());
     }
+    @Test
+    void testHandleTokenReturn_Success() {
+        game.joinGame("Bob");
+
+        Map<Token, Integer> tokensToAdd = new HashMap<>();
+        tokensToAdd.put(Token.EMERALD, 3);
+        player1.addTokens(tokensToAdd);
+
+        Map<Token, Integer> tokensToReturn = new HashMap<>();
+        tokensToReturn.put(Token.EMERALD, 2);
+
+        boolean result = game.handleTokenReturn(tokensToReturn);
+
+        assertTrue(result);
+        assertEquals(1, player1.getTokens().getOrDefault(Token.EMERALD, 0));
+        assertEquals(6, game.getMarket().getUnclaimedTokens().get(Token.EMERALD));
+    }
+    @Test
+    void testHandleTokenReturn_Fails_PlayerDoesNotHaveTokens() {
+        game.joinGame("Bob");
+
+        Map<Token, Integer> tokensToReturn = new HashMap<>();
+        tokensToReturn.put(Token.RUBY, 2);
+
+        boolean result = game.handleTokenReturn(tokensToReturn);
+
+        assertFalse(result);
+        assertNull(player1.getTokens().get(Token.RUBY));
+        assertEquals(4, game.getMarket().getUnclaimedTokens().getOrDefault(Token.RUBY, 0));
+    }
+
+    @Test
+    void testHandleTokenReturn_SwitchesTurn() {
+        game.joinGame("Bob");
+
+        Map<Token, Integer> tokensToAdd = new HashMap<>();
+        tokensToAdd.put(Token.ONYX, 2);
+        player1.addTokens(tokensToAdd);
+
+        Map<Token, Integer> tokensToReturn = new HashMap<>();
+        tokensToReturn.put(Token.ONYX, 2);
+
+        assertEquals("Alice", game.getActivePlayer().getName());
+        game.handleTokenReturn(tokensToReturn);
+        assertEquals("Bob", game.getActivePlayer().getName());
+    }
+    private Development createTestDevelopmentCard() {
+      return game.getMarket().getCardsAvailableInMarket().get(0).get(0);
+
+    }
+
+    @Test
+    void purchaseWithExactTokensSucceeds() {
+        Development dev = createTestDevelopmentCard();
+        game.joinGame("Bob");
+        Map<Token, Integer> tokensToAdd = dev.getCost();
+        player1.addTokens(tokensToAdd);
+
+        Map<Token, Integer> tokensProvided = new HashMap<>();
+        tokensProvided.put(Token.DIAMOND, 1);
+        tokensProvided.put(Token.EMERALD, 1);
+
+        boolean result = game.handleDevelopmentCardPurchase(dev, false, tokensProvided);
+        assertTrue(result);
+        assertTrue(player1.getPurchasedDevelopments().contains(dev));
+        assertEquals("Bob", game.getActivePlayer().getName());
+    }
+
+    @Test
+    void purchaseWithGoldTokensSucceeds() {
+        Development dev = createTestDevelopmentCard();
+        game.joinGame("Bob");
+        Map<Token, Integer> tokensToAdd = dev.getCost();
+
+        player1.addTokens(tokensToAdd);
+
+        Map<Token, Integer> tokensProvided = new HashMap<>();
+        tokensProvided.put(Token.EMERALD, 1);
+        tokensProvided.put(Token.GOLD, 1);
+        boolean result = game.handleDevelopmentCardPurchase(dev, false, tokensProvided);
+        assertTrue(result);
+        assertTrue(player1.getPurchasedDevelopments().contains(dev));
+        assertEquals("Bob", game.getActivePlayer().getName());
+    }
+    @Test
+    void purchaseWithGoldOnly() {
+        Development dev = createTestDevelopmentCard();
+        game.joinGame("Bob");
+        Map<Token, Integer> tokensToAdd = new HashMap<>();
+        tokensToAdd.put(Token.GOLD, 2);
+        player1.addTokens(tokensToAdd);
+
+        Map<Token, Integer> tokensProvided = new HashMap<>();
+        tokensProvided.put(Token.EMERALD, 1);
+        tokensProvided.put(Token.GOLD, 1);
+
+        boolean result = game.handleDevelopmentCardPurchase(dev, false, tokensProvided);
+        assertTrue(result);
+        assertTrue(player1.getPurchasedDevelopments().contains(dev));
+        assertEquals("Bob", game.getActivePlayer().getName());
+    }
+
+    @Test
+    void purchaseFailsIfNotEnoughTokens() {
+        Development dev = createTestDevelopmentCard();
+        player1.addTokens(new HashMap<>());
+
+        Map<Token, Integer> tokensProvided = new HashMap<>();
+        tokensProvided.put(Token.DIAMOND, 1);
+        tokensProvided.put(Token.EMERALD, 1);
+
+        boolean result = game.handleDevelopmentCardPurchase(dev, false, tokensProvided);
+        assertFalse(result);
+        assertFalse(player1.getPurchasedDevelopments().contains(dev));
+        assertEquals(player1, game.getActivePlayer());
+    }
+
 }
+
+
+
+
+
+
