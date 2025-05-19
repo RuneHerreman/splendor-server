@@ -50,6 +50,20 @@ public class NobleTest {
         assertTrue(noble.isNobleClaimableByPlayer(player));
     }
 
+    @Test
+    void testIsNobleClaimableByPlayerFalse_NotEnoughBonuses() {
+        Map<Token, Integer> needed = new HashMap<>();
+        needed.put(Token.DIAMOND, 3);
+
+        Noble noble = new Noble("Duke", 1, needed);
+
+        Map<Token, Integer> playerBonuses = new HashMap<>();
+        playerBonuses.put(Token.DIAMOND, 2); // Niet genoeg
+
+        DummyPlayer player = new DummyPlayer(playerBonuses);
+
+        assertFalse(noble.isNobleClaimableByPlayer(player));
+    }
 
 }
 
