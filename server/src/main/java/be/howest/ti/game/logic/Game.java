@@ -21,8 +21,8 @@ public class Game {
     private List<Noble> unclaimedNobles;
     private Player winner;
     private GameState gameState;
-    private boolean returnExcessTokensRequired;
-    private boolean pickNobleRequired;
+    private final boolean returnExcessTokensRequired;
+    private final boolean pickNobleRequired;
 
     public Game(String gameName, int gameId  , int maxPlayer , Player host) {
         this.gameName = gameName;
