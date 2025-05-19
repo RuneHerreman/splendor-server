@@ -1,9 +1,15 @@
 package be.howest.ti.game.logic.utils;
 
 import be.howest.ti.game.logic.gameTools.Token;
+import be.howest.ti.game.logic.gameTools.TokenBundle;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.List;
+import be.howest.ti.game.logic.gameTools.Development;
+
 
 public class CardUtils {
 
@@ -32,5 +38,17 @@ public class CardUtils {
 
     public static Token getTokenFromLetters(char letter) {
         return costMap.get(letter);
+    }
+
+    public static Development getDevelopmentCardByName(String name , List<List<Development>> cardsInMarket) {
+
+        for(List<Development> card : cardsInMarket) {
+            for(Development development : card) {
+                if(development.getName().equals(name)) {
+                    return development;
+                }
+            }
+        }
+        return null;
     }
 }

@@ -1,10 +1,9 @@
 package be.howest.ti.game.logic;
 
-import be.howest.ti.game.logic.gameTools.GameState;
-import be.howest.ti.game.logic.gameTools.Noble;
-import be.howest.ti.game.logic.gameTools.Token;
+import be.howest.ti.game.logic.gameTools.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,10 +16,10 @@ public class Game {
     private final int numberOfPlayers;
     private Player activePlayer;
     private final List<Player> players;
-    private final Market market;
-    private final Map<Token, Integer> unclaimedTokens;
-    private final List<Noble> unclaimedNobles;
-    private final Player winner;
+    private Market market;
+    private Map<Token, Integer> unclaimedTokens;
+    private List<Noble> unclaimedNobles;
+    private Player winner;
     private GameState gameState;
     private final boolean returnExcessTokensRequired;
     private final boolean pickNobleRequired;
@@ -119,6 +118,25 @@ public class Game {
             switchTurn();
         }
 
+        return success;
+    }
+    public boolean handleDevelopmentCardPurchase(Development developmentCard , Boolean reserved) {
+        boolean success = developmentCard.isCardAffordableByPlayer(activePlayer);
+        if (success) {
+            int cardLevel = developmentCard.getLevel();
+            int cardIndexInMarket = market.getIndexCardFromMarket(developmentCard);
+            Map<Token , Integer> costCard = developmentCard.getCost();
+            market.removeCardFromMarket(developmentCard);
+            if(!reserved){
+                market.addRandomCardToTheMarket(cardLevel , cardIndexInMarket);
+                activePlayer.addCard(developmentCard);
+            }else{
+                activePlayer.buyReserved(developmentCard);
+            }
+            activePlayer.removeTokens(costCard);
+            switchTurn();
+
+        }
         return success;
     }
 

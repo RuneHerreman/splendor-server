@@ -3,6 +3,7 @@ package be.howest.ti.game.logic;
 import be.howest.ti.game.logic.gameTools.Development;
 import be.howest.ti.game.logic.gameTools.Noble;
 import be.howest.ti.game.logic.gameTools.Token;
+import be.howest.ti.game.logic.gameTools.TokenBundle;
 import be.howest.ti.game.logic.utils.*;
 
 import java.io.File;
@@ -151,14 +152,14 @@ public class Market {
             if (token == Token.GOLD) {
                 initTokens.put(token, 5);
             } else {
-                initTokens.put(token, getAmountOfTokenAccordingToPlayer(totalPlayers));
+                initTokens.put(token, getAmountOfTokenAccourdingToPlayer(totalPlayers));
             }
         }
 
         return initTokens;
     }
 
-    private static int getAmountOfTokenAccordingToPlayer(int totalPlayers) {
+    private static int getAmountOfTokenAccourdingToPlayer(int totalPlayers) {
         /*  4 spelers : 7 van elk tokens
             3 : 5
             2 : 4   */
@@ -203,7 +204,6 @@ public class Market {
                 if (!selectedIndexes.contains(index)) {
                     selectedIndexes.add(index);
                     marketCards.add(levelCards.get(index));
-                    levelCards.remove(index);
                 }
             }
 
@@ -213,8 +213,12 @@ public class Market {
         return developmentCardsForMarket;
     }
     private boolean areValidTokensPick(Map<Token, Integer> tokens) {
-        if (tokens.isEmpty() || (tokens.size() != 1 && tokens.size() != 3)) {return false;}
-        if (tokens.containsKey(Token.GOLD)) {return false;}
+        if (tokens.isEmpty() || (tokens.size() != 1 && tokens.size() != 3)) {
+            return false;
+        }
+        if (tokens.containsKey(Token.GOLD)) {
+            return false;
+        }
 
         if (tokens.size() == 3) {
             for (int count : tokens.values()) {
@@ -230,7 +234,6 @@ public class Market {
                 return count == 2;
             }
         }
-
 
         return false;
     }
@@ -265,8 +268,32 @@ public class Market {
         unclaimedTokens.replace(token , tempAmount - amount);
     }
 
+    public Development getDevelopmentCardByName(String name) {
+        return CardUtils.getDevelopmentCardByName(name, this.getCardsAvailableInMarket());
+    }
+
     @Override public String toString() { return "Market{" + "allCards=" + allCards + ", allNobles=" + allNobles + ", cardsAvailableInMarket=" + cardsAvailableInMarket + ", noblesAvailableInMarket=" + noblesAvailableInMarket + ", unclaimedTokens=" + unclaimedTokens + '}'; }
 
+    public int getIndexCardFromMarket(Development developmentCard) {
+        for (List<Development> levelCards : cardsAvailableInMarket) {
+            if (levelCards.contains(developmentCard)) {
+                return levelCards.indexOf(developmentCard);
+            }
+        }
+        return -1;
+    }
+
+    public void addRandomCardToTheMarket(int cardLevel, int cardIndexInMarket) {
+        int levelIndex = cardLevel - 1;
+        if (levelIndex < 0 || levelIndex >= cardsAvailableInMarket.size()) return;
+        cardsAvailableInMarket.get(levelIndex).add(cardIndexInMarket , getRandomCardFromMarket(cardLevel));
+    }
+
+    private Development getRandomCardFromMarket(int cardLevel) {
+        Random random = new Random();
+        List<Development> deck = allCards.get(cardLevel - 1);
+        return deck.get(random.nextInt(deck.size()));
+    }
 }
 
 

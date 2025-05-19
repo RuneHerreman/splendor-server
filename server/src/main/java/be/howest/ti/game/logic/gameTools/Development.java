@@ -3,6 +3,7 @@ package be.howest.ti.game.logic.gameTools;
 import be.howest.ti.game.logic.Player;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class Development {
     private final String name;
@@ -32,8 +33,17 @@ public class Development {
         }
         return true;
     }
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Development that = (Development) o;
+        return level == that.level && prestigePoints == that.prestigePoints && Objects.equals(name, that.name) && Objects.equals(cost, that.cost) && bonus == that.bonus;
+    }
 
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, level, prestigePoints, cost, bonus);
+    }
 
     public String getName() {
         return name;
