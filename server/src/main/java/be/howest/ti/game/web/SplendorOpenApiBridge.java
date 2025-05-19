@@ -156,25 +156,15 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
     public BuyDevelopmentResponse buyDevelopment(BuyDevelopmentRequest request) {
         SplendorService service = getService(request);
 
-        Game game = service.getGameByID(request.getGameId());
+        Game game = service.buyDevelopment(
+                request.getGameId(),
+                request.getPlayerName(),
+                request.getDevelopment(),
+                false,
+                request.getPayment()
+        );
 
-        if (game.getActivePlayer().getName().equals(request.getPlayerName())){
-            Development development = CardUtils.getDevelopmentCardByName(
-                                        request.getDevelopment(),
-                                        game.getMarket().getCardsAvailableInMarket()
-                                        );
-
-            game.handleDevelopmentCardPurchase(
-                    development,
-                    false,
-                    request.getPayment()
-            );
-
-        } else{
-            throw new IllegalArgumentException("You are not the current player");
-        }
-
-        return new BuyDevelopmentResponse(game, request.getPayment());
+        return new BuyDevelopmentResponse(game);
     }
 
     @Operation("reserve-development")
@@ -183,8 +173,18 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
     }
 
     @Operation("buy-reserved-development")
-    public NotYetImplementedResponse buyReserveDevelopment(BaseSplendorRequest request) {
-        return new NotYetImplementedResponse("buy-reserved-development");
+    public BuyReservedDevelopmentResponse buyReserveDevelopment(BuyReservedDevelopmentRequest request) {
+        SplendorService service = getService(request);
+
+        Game game = service.buyDevelopment(
+                request.getGameId(),
+                request.getPlayerName(),
+                request.getDevelopment(),
+                true,
+                request.getPayment()
+        );
+
+        return new BuyReservedDevelopmentResponse(game);
     }
 
     @Operation("choose-noble")
