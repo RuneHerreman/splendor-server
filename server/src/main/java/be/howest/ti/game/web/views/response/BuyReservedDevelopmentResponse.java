@@ -7,18 +7,19 @@ import be.howest.ti.game.logic.gameTools.Token;
 import java.util.List;
 import java.util.Map;
 
-public class BuyReservedDevelopmentResponse extends AbstractResponseWithHiddenStatus{
+public class BuyReservedDevelopmentResponse extends AbstractResponseWithHiddenStatus {
     private final Game game;
-    public BuyReservedDevelopmentResponse(Game game){
+
+    public BuyReservedDevelopmentResponse(Game game) {
         super(200);
         this.game = game;
     }
 
-    public List<Development> getDevelopments(){
-        return game.getActivePlayer().getPurchasedDevelopments();
+    public Map<Token, Integer> getToken() {
+        return game.getActivePlayer().getTokens();
     }
 
-    public Map<Token, Integer> getTokens(){
-        return game.getActivePlayer().getTokens();
+    public List<Development> getDeveloments() {
+        return game.getActivePlayer().getPurchasedDevelopments();
     }
 }

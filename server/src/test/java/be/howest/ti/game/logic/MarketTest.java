@@ -34,7 +34,7 @@ class MarketTest {
         Map<Token, Integer> tokens = market.getUnclaimedTokens();
 
         for (Map.Entry<Token, Integer> entry : tokens.entrySet()) {
-            if (entry.getKey() == Token.GOLD) {
+            if (entry.getKey() == Token.Gold) {
                 assertEquals(5, entry.getValue(), "Gold tokens should always be 5");
             } else {
                 assertEquals(5, entry.getValue(), "Non-gold tokens should be 5 for 3 players");

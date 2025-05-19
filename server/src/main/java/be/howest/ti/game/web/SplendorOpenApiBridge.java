@@ -2,6 +2,7 @@ package be.howest.ti.game.web;
 
 import be.howest.ti.game.logic.Game;
 import be.howest.ti.game.logic.Player;
+import be.howest.ti.game.logic.gameTools.Development;
 import be.howest.ti.game.logic.service.SplendorService;
 import be.howest.ti.game.logic.service.SplendorServiceImpl;
 import be.howest.ti.game.logic.utils.CardUtils;
@@ -44,10 +45,13 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
     //end region
 
     //region General operations
-
+    /**
+     *
+     * Finished Endpoints
+     * */
     @Operation("get-info")
-    public NotYetImplementedResponse getInfo(BaseSplendorRequest request) {
-        return new NotYetImplementedResponse("get-info");
+    public GetInfoResponse getInfo(GetInfoRequest request) {
+        return new GetInfoResponse();
     }
 
     @Operation("get-gems")
@@ -68,7 +72,9 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
     //endregion
 
     //region Game Management operations
-
+    /**
+     * Finished Endpoints
+     * */
     @Operation("get-games")
     public GetGamesResponse getGames(GetGamesRequest request) {
         SplendorService service = getService(request);
@@ -149,16 +155,15 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
     @Operation("buy-development")
     public BuyDevelopmentResponse buyDevelopment(BuyDevelopmentRequest request) {
         SplendorService service = getService(request);
-        Game game = service.getGameByID(request.getGameId());
-        if (game.getActivePlayer().getName().equals(request.getPlayerName())){
-          //  game.handleDevelopmentCardPurchase(CardUtils.getDevelopmentCardByName(request.getDevelopment(), game.getMarket().getCardsAvailableInMarket()), false);
-        } else{
-            try {
-                throw new IllegalAccessException("You are not the active player.");
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException("You are not the active player.");
-            }
-        }
+
+        Game game = service.buyDevelopment(
+                request.getGameId(),
+                request.getPlayerName(),
+                request.getDevelopment(),
+                false,
+                request.getPayment()
+        );
+
         return new BuyDevelopmentResponse(game);
     }
 
@@ -170,7 +175,15 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
     @Operation("buy-reserved-development")
     public BuyReservedDevelopmentResponse buyReserveDevelopment(BuyReservedDevelopmentRequest request) {
         SplendorService service = getService(request);
-        Game game = service.getGameByID(request.getGameId());
+
+        Game game = service.buyDevelopment(
+                request.getGameId(),
+                request.getPlayerName(),
+                request.getDevelopment(),
+                true,
+                request.getPayment()
+        );
+
         return new BuyReservedDevelopmentResponse(game);
     }
 

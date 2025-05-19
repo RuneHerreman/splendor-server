@@ -9,6 +9,7 @@ import java.util.Map;
 
 public class BuyDevelopmentResponse extends AbstractResponseWithHiddenStatus{
     private final Game game;
+
     public BuyDevelopmentResponse(Game game){
         super(200);
         this.game = game;
@@ -20,5 +21,9 @@ public class BuyDevelopmentResponse extends AbstractResponseWithHiddenStatus{
 
     public Map<Token, Integer> getTokens(){
         return game.getActivePlayer().getTokens();
+    }
+
+    public int getGameId() {
+        return game.getGameId();
     }
 }

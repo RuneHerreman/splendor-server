@@ -25,7 +25,7 @@ public class NobleTest {
     @Test
     void testGetNameAndPrestigePoints() {
         Map<Token, Integer> needed = new HashMap<>();
-        needed.put(Token.DIAMOND, 3);
+        needed.put(Token.Diamond, 3);
 
         Noble noble = new Noble("King", 3, needed);
 
@@ -36,14 +36,14 @@ public class NobleTest {
     @Test
     void testIsNobleClaimableByPlayerTrue() {
         Map<Token, Integer> needed = new HashMap<>();
-        needed.put(Token.DIAMOND, 2);
-        needed.put(Token.RUBY, 1);
+        needed.put(Token.Diamond, 2);
+        needed.put(Token.Ruby, 1);
 
         Noble noble = new Noble("Queen", 2, needed);
 
         Map<Token, Integer> playerBonuses = new HashMap<>();
-        playerBonuses.put(Token.DIAMOND, 2);
-        playerBonuses.put(Token.RUBY, 1);
+        playerBonuses.put(Token.Diamond, 2);
+        playerBonuses.put(Token.Ruby, 1);
 
         DummyPlayer player = new DummyPlayer(playerBonuses);
 
@@ -53,12 +53,12 @@ public class NobleTest {
     @Test
     void testIsNobleClaimableByPlayerFalse_NotEnoughBonuses() {
         Map<Token, Integer> needed = new HashMap<>();
-        needed.put(Token.DIAMOND, 3);
+        needed.put(Token.Diamond, 3);
 
         Noble noble = new Noble("Duke", 1, needed);
 
         Map<Token, Integer> playerBonuses = new HashMap<>();
-        playerBonuses.put(Token.DIAMOND, 2); // Niet genoeg
+        playerBonuses.put(Token.Diamond, 2); // Niet genoeg
 
         DummyPlayer player = new DummyPlayer(playerBonuses);
 
