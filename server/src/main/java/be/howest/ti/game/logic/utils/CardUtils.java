@@ -1,8 +1,6 @@
 package be.howest.ti.game.logic.utils;
 
 import be.howest.ti.game.logic.gameTools.Token;
-import be.howest.ti.game.logic.gameTools.TokenBundle;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -24,6 +22,7 @@ public class CardUtils {
         costMap.put('E', Token.EMERALD);
         return costMap;
     }
+
 
     public static Map<Token, Integer> getCostTokenSetFromLetters(String tokensString) {
         Map<Token, Integer> tokenCounts = new HashMap<>();
