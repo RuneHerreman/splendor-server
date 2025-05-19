@@ -17,10 +17,10 @@ class DevelopmentTest {
     @BeforeEach
     void setUp() {
         cost = new EnumMap<>(Token.class);
-        cost.put(Token.DIAMOND, 2);
-        cost.put(Token.RUBY, 1);
+        cost.put(Token.Diamond, 2);
+        cost.put(Token.Ruby, 1);
 
-        development = new Development("Card1", 3, cost, Token.SAPPHIRE, 2);
+        development = new Development("Card1", 3, cost, Token.Sapphire, 2);
     }
 
     @Test
@@ -28,7 +28,7 @@ class DevelopmentTest {
         assertEquals("Card1", development.getName());
         assertEquals(3, development.getPrestigePoints());
         assertEquals(2, development.getLevel());
-        assertEquals(Token.SAPPHIRE, development.getBonus());
+        assertEquals(Token.Sapphire, development.getBonus());
         assertEquals(cost, development.getCost());
     }
 
@@ -39,8 +39,8 @@ class DevelopmentTest {
 
     @Test
     void testEqualsAndHashCode() {
-        Development same = new Development("Card1", 3, cost, Token.SAPPHIRE, 2);
-        Development different = new Development("Card2", 1, cost, Token.GOLD, 1);
+        Development same = new Development("Card1", 3, cost, Token.Sapphire, 2);
+        Development different = new Development("Card2", 1, cost, Token.Gold, 1);
 
         assertEquals(development, same);
         assertEquals(development.hashCode(), same.hashCode());
@@ -50,9 +50,9 @@ class DevelopmentTest {
     @Test
     void testIsCardAffordableByPlayer_Affordable() {
         Player player = new Player("TestPlayer");
-        player.addToken(Token.DIAMOND, 1);
-        player.addToken(Token.RUBY, 1);
-        player.addBonus(Token.DIAMOND, 1);
+        player.addToken(Token.Diamond, 1);
+        player.addToken(Token.Ruby, 1);
+        player.addBonus(Token.Diamond, 1);
 
         assertTrue(development.isCardAffordableByPlayer(player));
     }
@@ -60,8 +60,8 @@ class DevelopmentTest {
     @Test
     void testIsCardAffordableByPlayer_NotAffordable() {
         Player player = new Player("TestPlayer");
-        player.addToken(Token.DIAMOND, 1);
-        player.addToken(Token.RUBY, 0);
+        player.addToken(Token.Diamond, 1);
+        player.addToken(Token.Ruby, 0);
 
         assertFalse(development.isCardAffordableByPlayer(player));
     }

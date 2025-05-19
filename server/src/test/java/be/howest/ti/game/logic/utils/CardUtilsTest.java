@@ -14,29 +14,29 @@ class CardUtilsTest {
     void testGetCostTokenSetFromLetters() {
         Map<Token, Integer> result = CardUtils.getCostTokenSetFromLetters("CCSSR");
 
-        assertEquals(2, result.get(Token.DIAMOND));
-        assertEquals(2, result.get(Token.SAPPHIRE));
-        assertEquals(1, result.get(Token.RUBY));
-        assertFalse(result.containsKey(Token.ONYX)); // Not in string
+        assertEquals(2, result.get(Token.Diamond));
+        assertEquals(2, result.get(Token.Sapphire));
+        assertEquals(1, result.get(Token.Ruby));
+        assertFalse(result.containsKey(Token.Onyx)); // Not in string
     }
 
     @Test
     void testGetTokenFromLetters() {
-        assertEquals(Token.DIAMOND, CardUtils.getTokenFromLetters('C'));
-        assertEquals(Token.SAPPHIRE, CardUtils.getTokenFromLetters('S'));
-        assertEquals(Token.ONYX, CardUtils.getTokenFromLetters('O'));
-        assertEquals(Token.RUBY, CardUtils.getTokenFromLetters('R'));
-        assertEquals(Token.EMERALD, CardUtils.getTokenFromLetters('E'));
+        assertEquals(Token.Diamond, CardUtils.getTokenFromLetters('C'));
+        assertEquals(Token.Sapphire, CardUtils.getTokenFromLetters('S'));
+        assertEquals(Token.Onyx, CardUtils.getTokenFromLetters('O'));
+        assertEquals(Token.Ruby, CardUtils.getTokenFromLetters('R'));
+        assertEquals(Token.Emerald, CardUtils.getTokenFromLetters('E'));
         assertNull(CardUtils.getTokenFromLetters('Z')); // Invalid letter
     }
 
     @Test
     void testGetDevelopmentCardByNameReturnsCorrectCard() {
         Map<Token, Integer> cost = new HashMap<>();
-        cost.put(Token.DIAMOND, 2);
+        cost.put(Token.Diamond, 2);
 
-        Development dev1 = new Development("CardA", 1, cost, Token.DIAMOND, 1);
-        Development dev2 = new Development("CardB", 2, cost, Token.SAPPHIRE, 2);
+        Development dev1 = new Development("CardA", 1, cost, Token.Diamond, 1);
+        Development dev2 = new Development("CardB", 2, cost, Token.Sapphire, 2);
 
         List<Development> level1 = new ArrayList<>();
         level1.add(dev1);
@@ -57,9 +57,9 @@ class CardUtilsTest {
     @Test
     void testGetDevelopmentCardByNameReturnsNullIfNotFound() {
         Map<Token, Integer> cost = new HashMap<>();
-        cost.put(Token.DIAMOND, 1);
+        cost.put(Token.Diamond, 1);
 
-        Development dev1 = new Development("CardA", 1, cost, Token.DIAMOND, 1);
+        Development dev1 = new Development("CardA", 1, cost, Token.Diamond, 1);
         List<Development> level1 = new ArrayList<>();
         level1.add(dev1);
         List<List<Development>> market = new ArrayList<>();

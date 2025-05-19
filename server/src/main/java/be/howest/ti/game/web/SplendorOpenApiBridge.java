@@ -44,10 +44,13 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
     //end region
 
     //region General operations
-
+    /**
+     *
+     * Finished Endpoints
+     * */
     @Operation("get-info")
-    public NotYetImplementedResponse getInfo(BaseSplendorRequest request) {
-        return new NotYetImplementedResponse("get-info");
+    public GetInfoResponse getInfo(GetInfoRequest request) {
+        return new GetInfoResponse();
     }
 
     @Operation("get-gems")
@@ -68,7 +71,9 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
     //endregion
 
     //region Game Management operations
-
+    /**
+     * Finished Endpoints
+     * */
     @Operation("get-games")
     public GetGamesResponse getGames(GetGamesRequest request) {
         SplendorService service = getService(request);
@@ -151,7 +156,7 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
         SplendorService service = getService(request);
         Game game = service.getGameByID(request.getGameId());
         if (game.getActivePlayer().getName().equals(request.getPlayerName())){
-          //  game.handleDevelopmentCardPurchase(CardUtils.getDevelopmentCardByName(request.getDevelopment(), game.getMarket().getCardsAvailableInMarket()), false);
+            game.handleDevelopmentCardPurchase(CardUtils.getDevelopmentCardByName(request.getDevelopment(), game.getMarket().getCardsAvailableInMarket()), false);
         } else{
             try {
                 throw new IllegalAccessException("You are not the active player.");

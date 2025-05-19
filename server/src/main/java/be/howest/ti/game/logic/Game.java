@@ -144,7 +144,7 @@ public class Game {
             int cardLevel = developmentCard.getLevel();
             int cardIndexInMarket = market.getIndexCardFromMarket(developmentCard);
             Map<Token, Integer> costCard = developmentCard.getCost();
-            int availableGoldTokens = tokens.getOrDefault(Token.GOLD, 0);
+            int availableGoldTokens = tokens.getOrDefault(Token.Gold, 0);
             Map<Token, Integer> tokensToBeRemovedFromPlayer = calculateTokensToRemove(costCard , tokens , availableGoldTokens);
 
             activePlayer.removeTokens(tokensToBeRemovedFromPlayer , true);
@@ -177,7 +177,7 @@ public class Game {
                 int missingAmount = requiredAmount - playerTokenAmount;
                 if (missingAmount <= availableGoldTokens) {
                     tokensToDeduct.put(requiredToken, playerTokenAmount);
-                    tokensToDeduct.put(Token.GOLD, tokensToDeduct.getOrDefault(Token.GOLD, 0) + missingAmount);
+                    tokensToDeduct.put(Token.Gold, tokensToDeduct.getOrDefault(Token.Gold, 0) + missingAmount);
                     availableGoldTokens -= missingAmount;
                 }
             }
