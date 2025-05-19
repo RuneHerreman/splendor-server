@@ -3,6 +3,7 @@ package be.howest.ti.game.web;
 import be.howest.ti.game.logic.Game;
 import be.howest.ti.game.logic.Player;
 import be.howest.ti.game.logic.gameTools.Development;
+import be.howest.ti.game.logic.gameTools.Noble;
 import be.howest.ti.game.logic.service.SplendorService;
 import be.howest.ti.game.logic.service.SplendorServiceImpl;
 import be.howest.ti.game.logic.utils.CardUtils;
@@ -188,8 +189,16 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
     }
 
     @Operation("choose-noble")
-    public NotYetImplementedResponse chooseNoble(BaseSplendorRequest request) {
-        return new NotYetImplementedResponse("choose-noble");
+    public ChooseNobleResponse chooseNoble(ChooseNobleRequest request) {
+        SplendorService service = getService(request);
+        Game game = service.getGameByID(request.getGameID());
+        Noble noble;
+        boolean isActivePlayer = game.getActivePlayer().getName().equals(request.getPlayerName());
+        if (isActivePlayer) {
+            noble = game.handleNobleVisit(request.getNoble());
+        }
+
+        return new ChooseNobleResponse(noble);
     }
     //endregion
 
