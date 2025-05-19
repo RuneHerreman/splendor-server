@@ -22,6 +22,13 @@ public class SplendorServiceImpl implements SplendorService {
         return game;
     }
 
+    public Game createGame(int maxPlayers , Player host) {
+        int gameID = getRandomID();
+        Game game = new Game(null, gameID, maxPlayers, host);
+        games.add(game);
+        return game;
+    }
+
     private boolean gameIDisUnique(int randomID) {
         for (Game game : games) {
             if (game.getGameId() == randomID) {
@@ -29,13 +36,6 @@ public class SplendorServiceImpl implements SplendorService {
             }
         }
         return true;
-    }
-
-    public Game createGame(int maxPlayers , Player host) {
-        int gameID = getRandomID();
-        Game game = new Game(null, gameID, maxPlayers, host);
-        games.add(game);
-        return game;
     }
 
     private int getRandomID() {
@@ -49,12 +49,18 @@ public class SplendorServiceImpl implements SplendorService {
         return randomID;
     }
 
-    public void deleteGame(int gameID){
-        games.remove(getGameByID(gameID));
+    public Game deleteGame(int gameID){
+        Game deletedGame = getGameByID(gameID);
+        games.remove(deletedGame);
+
+        return deletedGame;
     }
 
-    public void deleteAllGames(){
+    public List<Game> deleteAllGames(){
+        List<Game> deletedGames = new ArrayList<>(games);
         games.clear();
+
+        return deletedGames;
     }
 
     public Game getGameByID(int gameID){
@@ -78,5 +84,25 @@ public class SplendorServiceImpl implements SplendorService {
             }
         }
         return filteredGames;
+    }
+
+    public ArrayList<Game> getStartedGames(){
+        ArrayList<Game> startedGames = new ArrayList<>();
+        for (Game game : games) {
+            if (game.isStarted()) {
+                startedGames.add(game);
+            }
+        }
+        return startedGames;
+    }
+
+    public ArrayList<Game> getNonStartedGames(){
+        ArrayList<Game> nonStartedGames = new ArrayList<>();
+        for (Game game : games) {
+            if (!game.isStarted()) {
+                nonStartedGames.add(game);
+            }
+        }
+        return nonStartedGames;
     }
 }

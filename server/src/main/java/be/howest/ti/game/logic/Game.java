@@ -23,6 +23,7 @@ public class Game {
     private GameState gameState;
     private final boolean returnExcessTokensRequired;
     private final boolean pickNobleRequired;
+    private final boolean active;
 
     public Game(String gameName, int gameId  , int maxPlayer , Player host) {
         this.gameName = gameName;
@@ -30,19 +31,22 @@ public class Game {
         this.numberOfPlayers = maxPlayer;
         this.started = false;
         this.players = getHostPlayerOnGameInititalization(host) ;
-        this.activePlayer = players.getFirst();
+        this.activePlayer = players.get(0);
         this.market = new Market(numberOfPlayers);
         this.unclaimedTokens = market.getUnclaimedTokens();
         this.unclaimedNobles = market.getNoblesAvailableInMarket();
         this.winner = null;
         this.returnExcessTokensRequired = false;
         this.pickNobleRequired = false;
+        this.active = true;
     }
 
     private List<Player> getHostPlayerOnGameInititalization(Player host ) {
         List<Player> players = new ArrayList<>();
         players.add(host);
         return players;
+
+
     }
     public GameState getGameState() {
         return gameState;
@@ -89,7 +93,7 @@ public class Game {
     }
 
     public void addPlayer(Player player){
-        if(players.size() < numberOfPlayers && !started && !players.contains(player)){
+        if(players.size() > numberOfPlayers && !started && !players.contains(player)){
             players.add(player);
         }
     }
@@ -99,6 +103,9 @@ public class Game {
         activePlayer = players.get(nextIndex);
     }
 
+    public boolean isReturnExcessTokensRequired() {
+        return returnExcessTokensRequired;
+    }
     public boolean areTokensAvailableInMarket(Map<Token, Integer> tokens) {
         return market.areTokensAvailableInMarket(tokens);
     }
@@ -129,29 +136,20 @@ public class Game {
     }
 
     public void joinGame(String playerName) {
-        Player player = new Player(playerName);
-        players.add(player);
+        Player newPlayer = new Player(playerName);
+        players.add(newPlayer);
 
         if (players.size() == numberOfPlayers) {
-            startGame();
+            started = true;
+            gameState = GameState.TurnAction;
         }
     }
 
+    public boolean isPickNobleRequired() {
+        return pickNobleRequired;
+    }
 
-//    @Override
-//    public String toString() {
-//        return
-//                "gameName='" + gameName +
-//                " gameId=" + gameId +
-//                " started=" + started +
-//                " numberOfPlayers=" + numberOfPlayers +
-//                " players=" + players +
-//                " returnExcessTokensRequired=" + returnExcessTokensRequired +
-//                " pickNobleRequired=" + pickNobleRequired;
-//    }
-
-
-    public void startGame() {
-        started = true;
+    public boolean getActive() {
+        return active;
     }
 }

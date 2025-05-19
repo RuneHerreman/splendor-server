@@ -237,7 +237,6 @@ public class Market {
 
         return false;
     }
-
     public boolean areTokensAvailableInMarket(Map<Token , Integer> tokens) {
         if (!areValidTokensPick(tokens)) {return false;}
 
@@ -245,18 +244,12 @@ public class Market {
             Token token = entry.getKey();
             int requestedTokenAmount = entry.getValue();
 
-            if (token == Token.GOLD) {
-                return false;
-            }
+            if (token == Token.GOLD) {return false;}
 
-            if (tokens.size() == 1 && !checkTakeDoubleTokenPossibility(token)) {
-                return false;
-            }
+            if (tokens.size() == 1 && !checkTakeDoubleTokenPossibility(token)) {return false;}
 
             int available = unclaimedTokens.getOrDefault(token, 0);
-            if (available < requestedTokenAmount) {
-                return false;
-            }
+            if (available < requestedTokenAmount) {return false;}
         }
 
         return true;
