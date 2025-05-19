@@ -191,12 +191,12 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
     @Operation("choose-noble")
     public ChooseNobleResponse chooseNoble(ChooseNobleRequest request) {
         SplendorService service = getService(request);
-        Game game = service.getGameByID(request.getGameID());
-        Noble noble;
-        boolean isActivePlayer = game.getActivePlayer().getName().equals(request.getPlayerName());
-        if (isActivePlayer) {
-            noble = game.handleNobleVisit(request.getNoble());
-        }
+
+        Noble noble = service.chooseNoble(
+                request.getPlayerName(),
+                request.getGameID(),
+                request.getNoble()
+        );
 
         return new ChooseNobleResponse(noble);
     }

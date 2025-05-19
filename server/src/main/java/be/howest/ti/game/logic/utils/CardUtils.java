@@ -54,5 +54,6 @@ public class CardUtils {
                 return noble;
             }
         }
+        return null;
     }
 }

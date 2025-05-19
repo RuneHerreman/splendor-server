@@ -4,6 +4,7 @@ package be.howest.ti.game.logic.service;
 import be.howest.ti.game.logic.Game;
 import be.howest.ti.game.logic.Player;
 import be.howest.ti.game.logic.gameTools.Development;
+import be.howest.ti.game.logic.gameTools.Noble;
 import be.howest.ti.game.logic.gameTools.Token;
 import be.howest.ti.game.logic.utils.CardUtils;
 
@@ -130,5 +131,21 @@ public class SplendorServiceImpl implements SplendorService {
         }
 
         return game;
+    }
+
+    public Noble chooseNoble(String playerName, int gameID, Noble noble) {
+        Game game = getGameByID(gameID);
+
+        if (noble == null) {
+            throw new IllegalArgumentException("Noble is not available");
+
+        }
+
+        boolean isActivePlayer = game.getActivePlayer().getName().equals(playerName);
+        if (isActivePlayer) {
+            return game.handleNobleVisit(noble);
+        } else {
+            throw new IllegalArgumentException("You are not the current player");
+        }
     }
 }
