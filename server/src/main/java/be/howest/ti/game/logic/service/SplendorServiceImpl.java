@@ -2,11 +2,14 @@ package be.howest.ti.game.logic.service;
 
 
 import be.howest.ti.game.logic.Game;
+import be.howest.ti.game.logic.Market;
 import be.howest.ti.game.logic.Player;
 import be.howest.ti.game.logic.gameTools.Development;
+import be.howest.ti.game.logic.gameTools.Noble;
 import be.howest.ti.game.logic.gameTools.Token;
 import be.howest.ti.game.logic.utils.CardUtils;
 
+import javax.smartcardio.Card;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
@@ -129,6 +132,38 @@ public class SplendorServiceImpl implements SplendorService {
             throw new IllegalArgumentException("You are not the current player");
         }
 
+        return game;
+    }
+
+    public Noble chooseNoble(String playerName, int gameID, Noble noble) {
+        Game game = getGameByID(gameID);
+
+        if (noble == null) {
+            throw new IllegalArgumentException("Noble is not available");
+
+        }
+
+        boolean isActivePlayer = game.getActivePlayer().getName().equals(playerName);
+        if (isActivePlayer) {
+            return game.handleNobleVisit(noble);
+        } else {
+            throw new IllegalArgumentException("You are not the current player");
+        }
+    }
+
+    public Game reserveCard(String playerName, int gameID, String developmentName) {
+        Game game = getGameByID(gameID);
+        boolean active = playerName.equals(game.getActivePlayer().getName());
+        Development development = CardUtils.getDevelopmentCardByName(developmentName, Market.createAllCards());
+
+        if (development == null) {
+            throw new IllegalArgumentException("Development card is not available");
+        }
+        if (active) {
+            game.getActivePlayer().reserveCard(development);
+        } else {
+            throw new IllegalArgumentException("You are not the current player");
+        }
         return game;
     }
 }
