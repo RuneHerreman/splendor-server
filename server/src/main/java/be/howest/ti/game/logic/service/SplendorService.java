@@ -26,4 +26,6 @@ public interface SplendorService {
     Game buyDevelopment(int gameID, String playerName, String developmentName, boolean reserved, Map<Token, Integer> payment);
     Noble chooseNoble(String playerName, int gameID, Noble noble);
     Game reserveCard(String playerName, int gameID, String developmentName);
+
+    Game getTokens(String playerName, int gameID, Map<Token, Integer> tokens);
 }

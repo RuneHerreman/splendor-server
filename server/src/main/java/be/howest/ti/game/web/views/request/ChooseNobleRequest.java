@@ -11,7 +11,7 @@ public class ChooseNobleRequest extends BaseSplendorRequest{
     }
 
     public int getGameID(){
-       return params.pathParameter("gameID").getInteger();
+       return params.pathParameter("gameId").getInteger();
     }
     public String getPlayerName(){
         return params.pathParameter("playerName").getString();

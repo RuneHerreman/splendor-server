@@ -2,7 +2,7 @@ package be.howest.ti.game.web.views.response;
 
 import be.howest.ti.game.logic.Game;
 import be.howest.ti.game.logic.gameTools.Development;
-import be.howest.ti.game.logic.gameTools.Token;
+import be.howest.ti.game.logic.utils.TokenMapConvertor;
 
 import java.util.List;
 import java.util.Map;
@@ -15,8 +15,8 @@ public class BuyReservedDevelopmentResponse extends AbstractResponseWithHiddenSt
         this.game = game;
     }
 
-    public Map<Token, Integer> getToken() {
-        return game.getActivePlayer().getTokens();
+    public Map<String, Integer> getToken() {
+        return TokenMapConvertor.convertToStringMap(game.getActivePlayer().getTokens());
     }
 
     public List<Development> getDeveloments() {

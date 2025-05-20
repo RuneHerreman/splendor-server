@@ -2,6 +2,7 @@ package be.howest.ti.game.web.views.response;
 
 import be.howest.ti.game.logic.Market;
 import be.howest.ti.game.logic.gameTools.Development;
+import be.howest.ti.game.web.views.DevelopmentInListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,14 +12,15 @@ public class GetDevelopmentsResponse extends AbstractResponseWithHiddenStatus {
         super(200);
     }
 
-    public List<Development> getDevelopments() {
-        List<Development> developments = new ArrayList<>();
+    public List<DevelopmentInListView> getDevelopments() {
+        List<DevelopmentInListView> listView = new ArrayList<>();
 
         for (List<Development> level: Market.createAllCards()){
-            developments.addAll(level);
+            for (Development development: level){
+                listView.add(new DevelopmentInListView(development));
+            }
         }
 
-        return developments;
+        return listView;
     }
-
 }

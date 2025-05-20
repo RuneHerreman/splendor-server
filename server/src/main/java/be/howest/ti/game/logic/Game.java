@@ -13,10 +13,10 @@ public class Game {
     private final int numberOfPlayers;
     private Player activePlayer;
     private final List<Player> players;
-    private Market market;
-    private Map<Token, Integer> unclaimedTokens;
-    private List<Noble> unclaimedNobles;
-    private Player winner;
+    private final Market market;
+    private final Map<Token, Integer> unclaimedTokens;
+    private final List<Noble> unclaimedNobles;
+    private final Player winner;
     private GameState gameState;
     private final boolean returnExcessTokensRequired;
     private final boolean pickNobleRequired;
@@ -38,16 +38,18 @@ public class Game {
         this.active = true;
     }
 
+    private List<Player> getHostPlayerOnGameInititalization(Player host) {
+        List<Player> players = new ArrayList<>();
+        players.add(host);
+        return players;
+    }
+
     private List<Player> getHostPlayerOnGameInitialization(Player host ) {
         List<Player> playerList = new ArrayList<>();
         playerList.add(host);
         return playerList;
-
-
-
-
-
     }
+
     public GameState getGameState() {
         return gameState;
     }

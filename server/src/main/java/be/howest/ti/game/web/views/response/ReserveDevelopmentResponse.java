@@ -3,6 +3,7 @@ package be.howest.ti.game.web.views.response;
 import be.howest.ti.game.logic.Player;
 import be.howest.ti.game.logic.gameTools.Development;
 import be.howest.ti.game.logic.gameTools.Token;
+import be.howest.ti.game.logic.utils.TokenMapConvertor;
 
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,7 @@ public class ReserveDevelopmentResponse extends AbstractResponseWithHiddenStatus
         return reserve;
     }
 
-    public Map<Token, Integer> getTokens() {
-        return tokens;
+    public Map<String, Integer> getTokens() {
+        return TokenMapConvertor.convertToStringMap(tokens);
     }
 }
