@@ -44,6 +44,7 @@ public class Player {
 
     public void addCard(Development development) {
         purchasedDevelopments.add(development);
+        bonuses.put(development.getBonus() , bonuses.getOrDefault(development.getBonus() , 0) + 1);
     }
 
     public void reserveCard(Development development) {
@@ -51,7 +52,7 @@ public class Player {
     }
 
     public void buyReserved(Development development) {
-        purchasedDevelopments.add(development);
+        addCard(development);
         reserved.remove(development);
     }
 

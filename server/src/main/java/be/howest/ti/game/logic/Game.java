@@ -225,17 +225,7 @@ public class Game {
         started = true;
     }
 
-    //front-end
-    public String gameEnd(){
-        String result;
-        if(!active && started){
-            result = "This game is ended. The winner is " + getWinner();
-
-        } else{
-            result = "This game has not ended.";
-        }
-        return result;
+    public void endGame() {
+        active = false;
     }
-
-
 }
