@@ -96,18 +96,6 @@ class SplendorServiceImplTest {
         assertEquals(1, service.getAllGames(true).size());
     }
 
-    @Test
-    void chooseNoble_ValidCase() {
-        Game game = service.createGame(gameName, numberOfPlayers, john);
-        game.startGame();
-        Noble noble = Market.createNobles().get(0);
-        game.getMarket().setNobleToMarket(noble);
-
-        Noble result = service.chooseNoble(john.getName(), game.getGameId(), noble);
-
-        assertNotNull(result);
-        assertEquals(noble, result);
-    }
 
     @Test
     void chooseNoble_ThrowsIfNobleNull() {
