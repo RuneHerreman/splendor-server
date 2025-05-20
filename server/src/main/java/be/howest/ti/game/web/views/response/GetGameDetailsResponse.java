@@ -5,7 +5,7 @@ import be.howest.ti.game.logic.Player;
 import be.howest.ti.game.logic.gameTools.Development;
 import be.howest.ti.game.logic.gameTools.GameState;
 import be.howest.ti.game.logic.gameTools.Noble;
-import be.howest.ti.game.logic.gameTools.Token;
+import be.howest.ti.game.logic.utils.TokenMapConvertor;
 import be.howest.ti.game.web.views.CardLevelsInListView;
 
 import java.util.ArrayList;
@@ -54,8 +54,8 @@ public class GetGameDetailsResponse extends AbstractResponseWithHiddenStatus{
         return listView;
     }
 
-    public Map<Token, Integer> getUnclaimedTokens() {
-        return game.getUnclaimedTokens();
+    public Map<String, Integer> getUnclaimedTokens() {
+        return TokenMapConvertor.convertToStringMap(game.getUnclaimedTokens());
     }
 
     public List<Noble> getUnclaimedNobles() {
