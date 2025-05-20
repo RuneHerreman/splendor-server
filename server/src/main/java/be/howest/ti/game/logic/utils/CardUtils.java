@@ -14,11 +14,11 @@ public class CardUtils {
 
     private static Map<Character, Token> costLetterToTokenMap() {
         Map<Character, Token> costMap = new HashMap<>();
-        costMap.put('C', Token.Diamond);
-        costMap.put('S', Token.Sapphire);
-        costMap.put('O', Token.Onyx);
-        costMap.put('R', Token.Ruby);
-        costMap.put('E', Token.Emerald);
+        costMap.put('C', Token.DIAMOND);
+        costMap.put('S', Token.SAPPHIRE);
+        costMap.put('O', Token.ONYX);
+        costMap.put('R', Token.RUBY);
+        costMap.put('E', Token.EMERALD);
         return costMap;
     }
 

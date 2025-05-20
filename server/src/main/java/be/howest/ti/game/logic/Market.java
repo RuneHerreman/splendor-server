@@ -148,7 +148,7 @@ public class Market {
         Map<Token, Integer> initTokens = new HashMap<>();
 
         for (Token token : Token.values()) {
-            if (token == Token.Gold) {
+            if (token == Token.GOLD) {
                 initTokens.put(token, 5);
             } else {
                 initTokens.put(token, getAmountOfTokenAccourdingToPlayer(totalPlayers));
@@ -210,7 +210,7 @@ public class Market {
         if (tokens.isEmpty() || (tokens.size() != 1 && tokens.size() != 3)) {
             return false;
         }
-        if (tokens.containsKey(Token.Gold)) {
+        if (tokens.containsKey(Token.GOLD)) {
             return false;
         }
 
@@ -239,7 +239,7 @@ public class Market {
             Token token = entry.getKey();
             int requestedTokenAmount = entry.getValue();
 
-            if (token == Token.Gold) { return false; }
+            if (token == Token.GOLD) { return false; }
 
             if (tokens.size() == 1 && !checkTakeDoubleTokenPossibility(token)) { return false; }
 
