@@ -8,9 +8,10 @@ import be.howest.ti.game.logic.utils.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
+import java.security.SecureRandom;
 
 public class Market {
-    private static final Random RANDOM = new Random();
+    private static final SecureRandom RANDOM = new SecureRandom();
 
     private static List<List<Development>> allCards;
     private static List<Noble> allNobles;
