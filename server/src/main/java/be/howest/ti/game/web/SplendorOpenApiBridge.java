@@ -150,9 +150,7 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
     public UpdateTokensResponse updateTokens(UpdateTokensRequest request) {
         SplendorService service = getService(request);
 
-        Game game = service.getGameByID(request.getGameId());
-
-        game = game.getTokens(
+        Game game = service.getGameByID(request.getGameId()).getTokens(
                 request.getPlayerName(),
                 request.getTokens()
         );
@@ -163,9 +161,8 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
     @Operation("buy-development")
     public BuyDevelopmentResponse buyDevelopment(BuyDevelopmentRequest request) {
         SplendorService service = getService(request);
-        Game game = service.getGameByID(request.getGameId());
 
-        game = game.buyDevelopment(
+        Game game = service.getGameByID(request.getGameId()).buyDevelopment(
                 request.getPlayerName(),
                 request.getDevelopment(),
                 false,
@@ -178,9 +175,8 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
     @Operation("reserve-development")
     public ReserveDevelopmentResponse reserveDevelopment(ReserveDevelopmentRequest request) {
         SplendorService service = getService(request);
-        Game game = service.getGameByID(request.getGameID());
 
-        game = game.reserveCard(
+        Game game = service.getGameByID(request.getGameID()).reserveCard(
                 request.getPlayerName(),
                 request.getDevelopmentName()
         );
@@ -191,9 +187,8 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
     @Operation("buy-reserved-development")
     public BuyReservedDevelopmentResponse buyReserveDevelopment(BuyReservedDevelopmentRequest request) {
         SplendorService service = getService(request);
-        Game game = service.getGameByID(request.getGameId());
 
-        game = game.buyDevelopment(
+        Game game = service.getGameByID(request.getGameId()).buyDevelopment(
                 request.getPlayerName(),
                 request.getDevelopment(),
                 true,
