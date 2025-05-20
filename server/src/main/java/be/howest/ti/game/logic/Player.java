@@ -1,10 +1,11 @@
 package be.howest.ti.game.logic;
+
 import be.howest.ti.game.logic.gameTools.Development;
 import be.howest.ti.game.logic.gameTools.Noble;
 import be.howest.ti.game.logic.gameTools.Token;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,17 +16,17 @@ public class Player {
     private final List<Development> purchasedDevelopments;
     private final List<Development> reserved;
     private final List<Noble> nobles;
-    private final Map<Token, Integer> tokens;
-    private final Map<Token, Integer> bonuses;
+    private final EnumMap<Token, Integer> tokens;
+    private final EnumMap<Token, Integer> bonuses;
 
-    public Player(String username){
+    public Player(String username) {
         this.name = username;
         this.prestigePoints = 0;
         this.purchasedDevelopments = new ArrayList<>();
         this.reserved = new ArrayList<>();
         this.nobles = new ArrayList<>();
-        this.tokens = new HashMap<>();
-        this.bonuses = new HashMap<>();
+        this.tokens = new EnumMap<>(Token.class);
+        this.bonuses = new EnumMap<>(Token.class);
     }
 
     public void addToken(Token token, int amount) {
@@ -62,8 +63,9 @@ public class Player {
     public void updatePrestigePoints(int toBeAdded) {
         this.prestigePoints += toBeAdded;
     }
+
     public Map<Token, Integer> generateTokensAndBonuses() {
-        Map<Token, Integer> result = new HashMap<>(tokens);
+        EnumMap<Token, Integer> result = new EnumMap<>(tokens);
 
         for (Map.Entry<Token, Integer> bonus : bonuses.entrySet()) {
             result.put(bonus.getKey(), result.getOrDefault(bonus.getKey(), 0) + bonus.getValue());
@@ -92,15 +94,13 @@ public class Player {
         return nobles;
     }
 
-    public Map<Token , Integer> getTokens() {
+    public Map<Token, Integer> getTokens() {
         return tokens;
     }
 
-    public Map<Token , Integer>  getBonuses() {
+    public Map<Token, Integer> getBonuses() {
         return bonuses;
     }
-
-
 
     @Override
     public String toString() {
@@ -116,18 +116,18 @@ public class Player {
         tokens.put(token, tokens.getOrDefault(token, 0) - amountToRemove);
     }
 
-    public void removeTokens(Map<Token, Integer> toRemove , boolean cardPurchase) {
+    public void removeTokens(Map<Token, Integer> toRemove, boolean cardPurchase) {
         for (Map.Entry<Token, Integer> entry : toRemove.entrySet()) {
-            removeToken(entry.getKey(), entry.getValue() , cardPurchase);
+            removeToken(entry.getKey(), entry.getValue(), cardPurchase);
         }
     }
 
-    public boolean hasEnoughBonusesForNoble(Map<Token , Integer> nobleNeededBonuses){
-        for(Map.Entry<Token , Integer> entry : nobleNeededBonuses.entrySet()){
+    public boolean hasEnoughBonusesForNoble(Map<Token, Integer> nobleNeededBonuses) {
+        for (Map.Entry<Token, Integer> entry : nobleNeededBonuses.entrySet()) {
             Token token = entry.getKey();
             int amount = entry.getValue();
 
-            if(bonuses.get(token) < amount){
+            if (bonuses.getOrDefault(token, 0) < amount) {
                 return false;
             }
         }
@@ -141,10 +141,9 @@ public class Player {
 
             int inventoryAmount = tokens.getOrDefault(toRemoveToken, 0);
 
-            if(inventoryAmount < toRemoveAmount  ) {
+            if (inventoryAmount < toRemoveAmount) {
                 return false;
             }
-
         }
         return true;
     }
