@@ -1,13 +1,10 @@
 package be.howest.ti.game.web;
 
 import be.howest.ti.game.logic.Game;
-import be.howest.ti.game.logic.Market;
 import be.howest.ti.game.logic.Player;
-import be.howest.ti.game.logic.gameTools.Development;
-import be.howest.ti.game.logic.gameTools.Noble;
+import be.howest.ti.game.logic.gametools.Noble;
 import be.howest.ti.game.logic.service.SplendorService;
 import be.howest.ti.game.logic.service.SplendorServiceImpl;
-import be.howest.ti.game.logic.utils.CardUtils;
 import be.howest.ti.game.web.tokens.PlainTextTokens;
 import be.howest.ti.game.web.tokens.TokenManager;
 import be.howest.ti.game.web.views.request.*;
