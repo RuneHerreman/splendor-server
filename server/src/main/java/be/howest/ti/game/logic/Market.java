@@ -10,9 +10,12 @@ import java.io.FileNotFoundException;
 import java.util.*;
 import java.security.SecureRandom;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class Market {
     private static final SecureRandom RANDOM = new SecureRandom();
-
+    private static final Logger LOGGER = Logger.getLogger(Market.class.getName());
     private static List<List<Development>> allCards;
     private static List<Noble> allNobles;
     private final List<List<Development>> cardsAvailableInMarket;
@@ -72,9 +75,9 @@ public class Market {
     public static List<List<Development>> createAllCards() {
         List<List<Development>> allCards = new ArrayList<>();
 
-        List<Development>level1Cards = new ArrayList<>();
-        List<Development> level2Cards = new  ArrayList<>();
-        List<Development> level3Cards = new  ArrayList<>();
+        List<Development> level1Cards = new ArrayList<>();
+        List<Development> level2Cards = new ArrayList<>();
+        List<Development> level3Cards = new ArrayList<>();
 
         try {
             File developmentCards = new File("src/main/resources/data/developments.txt");
@@ -90,9 +93,9 @@ public class Market {
                 char tokenSymbol = token[2].charAt(0);
                 Token cardType = CardUtils.getTokenFromLetters(tokenSymbol);
                 int points = Integer.parseInt(token[4]);
-                Map<Token , Integer> tokenBundles = CardUtils.getCostTokenSetFromLetters(token[5]);
+                Map<Token, Integer> tokenBundles = CardUtils.getCostTokenSetFromLetters(token[5]);
 
-                Development development = new Development(cardName , points , tokenBundles ,  cardType  , level);
+                Development development = new Development(cardName, points, tokenBundles, cardType, level);
 
                 switch (level) {
                     case 1 -> level1Cards.add(development);
@@ -100,13 +103,12 @@ public class Market {
                     case 3 -> level3Cards.add(development);
                     default -> throw new IllegalArgumentException("Unexpected level: " + level);
                 }
-
             }
 
             scanner.close();
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.WARNING, "Failed to load development cards from file.", e);
         }
 
         allCards.add(level1Cards);
