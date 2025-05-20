@@ -154,7 +154,6 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
 
         game = game.getTokens(
                 request.getPlayerName(),
-                request.getGameId(),
                 request.getTokens()
         );
 
@@ -167,7 +166,6 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
         Game game = service.getGameByID(request.getGameId());
 
         game = game.buyDevelopment(
-                request.getGameId(),
                 request.getPlayerName(),
                 request.getDevelopment(),
                 false,
@@ -184,7 +182,6 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
 
         game = game.reserveCard(
                 request.getPlayerName(),
-                request.getGameID(),
                 request.getDevelopmentName()
         );
 
@@ -197,7 +194,6 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
         Game game = service.getGameByID(request.getGameId());
 
         game = game.buyDevelopment(
-                request.getGameId(),
                 request.getPlayerName(),
                 request.getDevelopment(),
                 true,
@@ -214,7 +210,6 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
 
         Noble noble = game.chooseNoble(
                 request.getPlayerName(),
-                request.getGameID(),
                 request.getNoble()
         );
 

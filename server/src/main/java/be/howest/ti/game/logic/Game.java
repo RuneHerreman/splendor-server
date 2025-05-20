@@ -238,7 +238,7 @@ public class Game {
         return result;
     }
 
-    public Game buyDevelopment(int gameID, String playerName, String developmentName, boolean reserved, Map<Token, Integer> payment) {
+    public Game buyDevelopment(String playerName, String developmentName, boolean reserved, Map<Token, Integer> payment) {
         boolean isActivePlayer = this.getActivePlayer().getName().equals(playerName);
 
         if (isActivePlayer) {
@@ -259,7 +259,7 @@ public class Game {
         return this;
     }
 
-    public Noble chooseNoble(String playerName, int gameID, Noble noble) {
+    public Noble chooseNoble(String playerName, Noble noble) {
         if (noble == null) {
             throw new IllegalArgumentException("Noble is not available");
         }
@@ -272,7 +272,7 @@ public class Game {
         }
     }
 
-    public Game reserveCard(String playerName, int gameID, String developmentName) {
+    public Game reserveCard(String playerName, String developmentName) {
         boolean active = playerName.equals(this.getActivePlayer().getName());
         Development development = CardUtils.getDevelopmentCardByName(developmentName, Market.createAllCards());
 
@@ -289,7 +289,7 @@ public class Game {
         return this;
     }
 
-    public Game getTokens(String playerName, int gameID, Map<Token, Integer> tokens) {
+    public Game getTokens(String playerName, Map<Token, Integer> tokens) {
         boolean active = playerName.equals(this.getActivePlayer().getName());
 
         if (active) {
