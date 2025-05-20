@@ -1,7 +1,7 @@
 package be.howest.ti.game.web.views.request;
 
 import be.howest.ti.game.logic.Market;
-import be.howest.ti.game.logic.gameTools.Noble;
+import be.howest.ti.game.logic.gametools.Noble;
 import be.howest.ti.game.logic.utils.CardUtils;
 import io.vertx.ext.web.RoutingContext;
 

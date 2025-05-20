@@ -1,7 +1,7 @@
 package be.howest.ti.game.logic.utils;
 
-import be.howest.ti.game.logic.gameTools.Development;
-import be.howest.ti.game.logic.gameTools.Token;
+import be.howest.ti.game.logic.gametools.Development;
+import be.howest.ti.game.logic.gametools.Token;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;

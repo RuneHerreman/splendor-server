@@ -1,6 +1,6 @@
 package be.howest.ti.game.logic;
 
-import be.howest.ti.game.logic.gameTools.*;
+import be.howest.ti.game.logic.gametools.*;
 
 import java.util.*;
 
