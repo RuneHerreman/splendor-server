@@ -2,10 +2,7 @@ package be.howest.ti.game.logic;
 
 import be.howest.ti.game.logic.gametools.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class Game {
@@ -179,7 +176,7 @@ public class Game {
     }
 
     private Map<Token, Integer> calculateTokensToRemove(Map<Token, Integer> costCard, Map<Token, Integer> tokensProvided, int availableGoldTokens) {
-        Map<Token, Integer> tokensToDeduct = new HashMap<>();
+        Map<Token, Integer> tokensToDeduct = new EnumMap<>(Token.class);
 
         for (Map.Entry<Token, Integer> entry : costCard.entrySet()) {
             Token requiredToken = entry.getKey();
