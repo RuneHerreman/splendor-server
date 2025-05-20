@@ -82,7 +82,7 @@ class GameTest {
         game.joinGame("Charlie");
         assertEquals(2, game.getPlayers().size());
         assertTrue(game.isStarted());
-        assertEquals(GameState.TurnAction, game.getGameState());
+        assertEquals(GameState.TURN_ACTION, game.getGameState());
         assertEquals("Charlie", game.getPlayers().get(1).getName());
 
     }
