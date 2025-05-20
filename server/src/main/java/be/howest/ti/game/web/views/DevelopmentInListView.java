@@ -3,7 +3,6 @@ package be.howest.ti.game.web.views;
 import be.howest.ti.game.logic.gameTools.Development;
 import be.howest.ti.game.logic.utils.TokenMapConvertor;
 
-import java.util.List;
 import java.util.Map;
 
 public class DevelopmentInListView {

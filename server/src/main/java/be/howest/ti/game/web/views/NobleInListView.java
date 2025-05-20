@@ -1,7 +1,6 @@
 package be.howest.ti.game.web.views;
 
 import be.howest.ti.game.logic.gameTools.Noble;
-import be.howest.ti.game.logic.gameTools.Token;
 import be.howest.ti.game.logic.utils.TokenMapConvertor;
 
 import java.util.Map;

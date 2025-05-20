@@ -1,7 +1,6 @@
 package be.howest.ti.game.web.views.request;
 
 import be.howest.ti.game.logic.gameTools.Token;
-import be.howest.ti.game.web.views.response.AbstractResponseWithHiddenStatus;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
 

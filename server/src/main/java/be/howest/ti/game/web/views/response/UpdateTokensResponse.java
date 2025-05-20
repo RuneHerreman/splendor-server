@@ -6,7 +6,7 @@ import be.howest.ti.game.logic.utils.TokenMapConvertor;
 import java.util.Map;
 
 public class UpdateTokensResponse extends AbstractResponseWithHiddenStatus {
-    private Game game;
+    private final Game game;
 
     public UpdateTokensResponse(Game game) {
         super(200);
