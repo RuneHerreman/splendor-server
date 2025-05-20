@@ -93,13 +93,13 @@ public class Market {
 
                 Development development = new Development(cardName , points , tokenBundles ,  cardType  , level);
 
-                if(level == 1){
-                    level1Cards.add(development);
-                }else if (level == 2){
-                    level2Cards.add(development);
-                }else{
-                    level3Cards.add(development);
+                switch (level) {
+                    case 1 -> level1Cards.add(development);
+                    case 2 -> level2Cards.add(development);
+                    case 3 -> level3Cards.add(development);
+                    default -> throw new IllegalArgumentException("Unexpected level: " + level);
                 }
+
             }
 
             scanner.close();
