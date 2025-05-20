@@ -1,6 +1,9 @@
 package be.howest.ti.game.logic;
+
 import be.howest.ti.game.logic.gameTools.*;
+
 import java.util.*;
+
 
 public class Game {
 
@@ -10,14 +13,15 @@ public class Game {
     private final int numberOfPlayers;
     private Player activePlayer;
     private final List<Player> players;
-    private Market market;
-    private Map<Token, Integer> unclaimedTokens;
-    private List<Noble> unclaimedNobles;
-    private Player winner;
+    private final Market market;
+    private final Map<Token, Integer> unclaimedTokens;
+    private final List<Noble> unclaimedNobles;
+    private final Player winner;
     private GameState gameState;
     private final boolean returnExcessTokensRequired;
     private final boolean pickNobleRequired;
-    private final boolean active;
+    private boolean active;
+    private static final String NOT_CURRENT_PLAYER_MESSAGE = "You are not the current player";
 
     public Game(String gameName, int gameId  , int maxPlayer , Player host) {
         this.gameName = gameName;
@@ -25,7 +29,7 @@ public class Game {
         this.numberOfPlayers = maxPlayer;
         this.started = false;
         this.players = getHostPlayerOnGameInitialization(host) ;
-        this.activePlayer = players.get(0);
+        this.activePlayer = players.getFirst();
         this.market = new Market(numberOfPlayers);
         this.unclaimedTokens = market.getUnclaimedTokens();
         this.unclaimedNobles = market.getNoblesAvailableInMarket();
@@ -39,6 +43,11 @@ public class Game {
         List<Player> playerList = new ArrayList<>();
         playerList.add(host);
         return playerList;
+
+
+
+
+
     }
     public GameState getGameState() {
         return gameState;
@@ -84,6 +93,11 @@ public class Game {
         return winner;
     }
 
+    public void addPlayer(Player player){
+        if(players.size() < numberOfPlayers && !started && !players.contains(player)){
+            players.add(player);
+        }
+    }
 
     public void switchTurn(){
         int nextPlayerIndex = (players.indexOf(activePlayer) + 1) % numberOfPlayers;
@@ -141,8 +155,10 @@ public class Game {
             } else {
                 activePlayer.buyReserved(developmentCard);
             }
+
             switchTurn();
         }
+
         return success;
     }
 
@@ -153,7 +169,10 @@ public class Game {
             activePlayer.updatePrestigePoints(noble.getPrestigePoints());
             return noble;
         }
+
         return null;
+
+
     }
 
     private Map<Token, Integer> calculateTokensToRemove(Map<Token, Integer> costCard, Map<Token, Integer> tokensProvided, int availableGoldTokens) {
@@ -175,6 +194,7 @@ public class Game {
                 }
             }
         }
+
         return tokensToDeduct;
     }
 

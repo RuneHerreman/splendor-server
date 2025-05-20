@@ -10,7 +10,6 @@ import java.io.FileNotFoundException;
 import java.util.*;
 import java.security.SecureRandom;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Market {
@@ -106,7 +105,6 @@ public class Market {
                 } else {
                     throw new IllegalArgumentException("Unexpected level: " + level);
                 }
-
             }
 
             scanner.close();
@@ -143,6 +141,7 @@ public class Market {
             }
 
             scanner.close();
+
         } catch (FileNotFoundException e) {
             throw new IllegalArgumentException("Could not find nobles file");
         }
@@ -152,6 +151,8 @@ public class Market {
 
     public static Map<Token, Integer> createInitTokens(int totalPlayers) {
         Map<Token, Integer> initTokens = new HashMap<>();
+
+
         for (Token token : Token.values()) {
             if (token == Token.GOLD) {
                 initTokens.put(token, 5);
@@ -159,6 +160,7 @@ public class Market {
                 initTokens.put(token, getTokenCountByPlayer(totalPlayers));
             }
         }
+
         return initTokens;
     }
     private static int getTokenCountByPlayer(int totalPlayers) {

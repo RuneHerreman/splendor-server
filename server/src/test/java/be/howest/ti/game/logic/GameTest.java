@@ -35,7 +35,7 @@ class GameTest {
         assertEquals(2, game.getNumberOfPlayers());
         assertEquals(player1, game.getActivePlayer());
         assertEquals(1, game.getPlayers().size());
-        assertEquals(player1, game.getPlayers().get(0));
+        assertEquals(player1, game.getPlayers().getFirst());
         assertNotNull(game.getMarket());
         assertNull(game.getWinner());
     }
@@ -230,7 +230,7 @@ class GameTest {
         assertEquals("Bob", game.getActivePlayer().getName());
     }
     private Development createTestDevelopmentCard() {
-      return game.getMarket().getCardsAvailableInMarket().get(0).get(0);
+      return game.getMarket().getCardsAvailableInMarket().getFirst().getFirst();
 
     }
 
@@ -284,6 +284,19 @@ class GameTest {
         assertFalse(result);
         assertFalse(player1.getPurchasedDevelopments().contains(dev));
         assertEquals(player1, game.getActivePlayer());
+    }
+    @Test
+    void testEndGame() {
+        game.joinGame("Bob");
+
+        // Call method to end the game
+        game.endGame();
+
+        // Verify the game state
+        assertFalse(game.getActive(), "Game should be inactive after ending.");
+        assertTrue(game.isStarted(), "Game should be marked as started.");
+
+
     }
 
 }

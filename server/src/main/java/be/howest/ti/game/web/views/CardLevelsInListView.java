@@ -3,6 +3,7 @@ package be.howest.ti.game.web.views;
 import be.howest.ti.game.logic.Market;
 import be.howest.ti.game.logic.gameTools.Development;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CardLevelsInListView {
@@ -15,16 +16,20 @@ public class CardLevelsInListView {
     }
 
     public int getLevel() {
-        return cardLevel.get(0).getLevel();
+        return cardLevel.getFirst().getLevel();
     }
 
     public int getCardStackSize() {
         return market.getAllCards().get(getLevel() - 1).size();
     }
 
-    public List<Development> getVisibleCards() {
-        return cardLevel;
+    public List<DevelopmentInListView> getVisibleCards() {
+        List<DevelopmentInListView> listView = new ArrayList<>();
+
+        for (Development card : cardLevel) {
+            listView.add(new DevelopmentInListView(card));
+        }
+
+        return listView;
     }
-
-
 }

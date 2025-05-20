@@ -23,7 +23,4 @@ public interface SplendorService {
     List<Game> getStartedGames();
     List<Game> getNonStartedGames();
 
-    Game buyDevelopment(int gameID, String playerName, String developmentName, boolean reserved, Map<Token, Integer> payment);
-    Noble chooseNoble(String playerName, int gameID, Noble noble);
-    Game reserveCard(String playerName, int gameID, String developmentName);
 }

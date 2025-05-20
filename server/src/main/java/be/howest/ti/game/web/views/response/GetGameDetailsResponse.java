@@ -3,9 +3,12 @@ package be.howest.ti.game.web.views.response;
 import be.howest.ti.game.logic.Game;
 import be.howest.ti.game.logic.Player;
 import be.howest.ti.game.logic.gameTools.Development;
+import be.howest.ti.game.logic.gameTools.GameState;
 import be.howest.ti.game.logic.gameTools.Noble;
-import be.howest.ti.game.logic.gameTools.Token;
+import be.howest.ti.game.logic.utils.TokenMapConvertor;
 import be.howest.ti.game.web.views.CardLevelsInListView;
+import be.howest.ti.game.web.views.NobleInListView;
+import be.howest.ti.game.web.views.PlayerInListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,8 +42,14 @@ public class GetGameDetailsResponse extends AbstractResponseWithHiddenStatus{
         return game.isPickNobleRequired();
     }
 
-    public List<Player> getPlayers() {
-        return game.getPlayers();
+    public List<PlayerInListView> getPlayers() {
+        List<PlayerInListView> listView = new ArrayList<>();
+
+        for (Player player : game.getPlayers()) {
+            listView.add(new PlayerInListView(player));
+        }
+
+        return listView;
     }
 
     public List<CardLevelsInListView> getMarket() {
@@ -53,28 +62,38 @@ public class GetGameDetailsResponse extends AbstractResponseWithHiddenStatus{
         return listView;
     }
 
-    public Map<Token, Integer> getUnclaimedTokens() {
-        return game.getUnclaimedTokens();
+    public Map<String, Integer> getUnclaimedTokens() {
+        return TokenMapConvertor.convertToStringMap(game.getUnclaimedTokens());
     }
 
-    public List<Noble> getUnclaimedNobles() {
-        return game.getUnclaimedNobles();
+    public List<NobleInListView> getUnclaimedNobles() {
+        List<NobleInListView> listView = new ArrayList<>();
+
+        for (Noble noble : game.getUnclaimedNobles()) {
+            listView.add(new NobleInListView(noble));
+        }
+
+        return listView;
     }
 
     public boolean getStarted() {
         return game.isStarted();
     }
 
-    public String getGameState() {
-        return game.getGameState().toString();
+    public GameState getGameState() {
+        return game.getGameState();
     }
 
-    public String getCurrentPlayerIndex() {
+    public String getCurrentPlayer() {
         return game.getActivePlayer().getName();
     }
 
     public String getWinner() {
-        return game.getWinner().getName();
+        Player winner = game.getWinner();
+        if (winner == null) {
+            return null;
+        }
+        return winner.getName();
     }
 
     public boolean getActive() {
