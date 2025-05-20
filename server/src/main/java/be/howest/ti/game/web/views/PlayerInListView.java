@@ -26,6 +26,10 @@ public class PlayerInListView {
         return player.getReserved();
     }
 
+    public List<Development> getBuilt() {
+        return player.getPurchasedDevelopments();
+    }
+
     public List<Noble> getNobles() {
         return player.getNobles();
     }
