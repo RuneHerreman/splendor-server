@@ -14,8 +14,6 @@ import java.util.List;
 import java.util.Map;
 
 public class SplendorServiceImpl implements SplendorService {
-    private static final String NOT_CURRENT_PLAYER_MESSAGE = "You are not the current player";
-
     private final List<Game> games;
 
     public SplendorServiceImpl() {
@@ -109,72 +107,5 @@ public class SplendorServiceImpl implements SplendorService {
             }
         }
         return nonStartedGames;
-    }
-
-    public Game buyDevelopment(int gameID, String playerName, String developmentName, boolean reserved, Map<Token, Integer> payment) {
-        Game game = getGameByID(gameID);
-        boolean isActivePlayer = game.getActivePlayer().getName().equals(playerName);
-
-        if (isActivePlayer) {
-            Development development = CardUtils
-                    .getDevelopmentCardByName(
-                            developmentName,
-                            game.getMarket().getCardsAvailableInMarket()
-                    );
-            game.handleDevelopmentCardPurchase(
-                    development,
-                    reserved,
-                    payment
-            );
-        } else {
-            throw new IllegalArgumentException(NOT_CURRENT_PLAYER_MESSAGE);
-        }
-
-        return game;
-    }
-
-    public Noble chooseNoble(String playerName, int gameID, Noble noble) {
-        Game game = getGameByID(gameID);
-
-        if (noble == null) {
-            throw new IllegalArgumentException("Noble is not available");
-        }
-
-        boolean isActivePlayer = game.getActivePlayer().getName().equals(playerName);
-        if (isActivePlayer) {
-            return game.handleNobleVisit(noble);
-        } else {
-            throw new IllegalArgumentException(NOT_CURRENT_PLAYER_MESSAGE);
-        }
-    }
-
-    public Game reserveCard(String playerName, int gameID, String developmentName) {
-        Game game = getGameByID(gameID);
-        boolean active = playerName.equals(game.getActivePlayer().getName());
-        Development development = CardUtils.getDevelopmentCardByName(developmentName, Market.createAllCards());
-
-        if (development == null) {
-            throw new IllegalArgumentException("Development card is not available");
-        }
-
-        if (active) {
-            game.getActivePlayer().reserveCard(development);
-        } else {
-            throw new IllegalArgumentException(NOT_CURRENT_PLAYER_MESSAGE);
-        }
-
-        return game;
-    }
-
-    public Game getTokens(String playerName, int gameID, Map<Token, Integer> tokens) {
-        Game game = getGameByID(gameID);
-        boolean active = playerName.equals(game.getActivePlayer().getName());
-
-        if (active) {
-            game.handleTokenPurchase(tokens);
-        } else {
-            throw new IllegalArgumentException("You are not the current player");
-        }
-        return game;
     }
 }
