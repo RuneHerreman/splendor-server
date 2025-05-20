@@ -17,40 +17,45 @@ class MarketTest {
 
     @BeforeEach
     void setUp() {
-        market = new Market(3); // 3 players
+        market = new Market(3);
     }
 
     @Test
-    void testInitialMarketSetup() {
-        assertNotNull(market.getAllCards(), "All cards should be initialized");
-        assertNotNull(market.getAllNobles(), "All nobles should be initialized");
-        assertNotNull(market.getCardsAvailableInMarket(), "Market cards should be initialized");
-        assertNotNull(market.getNoblesAvailableInMarket(), "Market nobles should be initialized");
-        assertNotNull(market.getUnclaimedTokens(), "Unclaimed tokens should be initialized");
+    void testInitialMarketSetup_checkSize() {
+        List<List<Development>> allCards = market.getAllCards();
+        assertEquals(3, allCards.size());
+        assertEquals( 40,market.getAllCards().getFirst().size());
+        assertEquals(30 ,market.getAllCards().get(1).size());
+        assertEquals( 20,market.getAllCards().get(2).size());
+        assertEquals(10, market.getAllNobles().size());
+        assertEquals(4 , market.getCardsAvailableInMarket().getFirst().size());
+        assertEquals(4 , market.getCardsAvailableInMarket().get(1).size());
+        assertEquals(4 , market.getCardsAvailableInMarket().get(2).size());
+        assertEquals( 4, market.getNoblesAvailableInMarket().size());
     }
 
     @Test
-    void testTokenCountFor3Players() {
+    void testUnclaimedTokenCountFor3Players() {
         Map<Token, Integer> tokens = market.getUnclaimedTokens();
 
         for (Map.Entry<Token, Integer> entry : tokens.entrySet()) {
             if (entry.getKey() == Token.GOLD) {
-                assertEquals(5, entry.getValue(), "Gold tokens should always be 5");
+                assertEquals(5, entry.getValue());
             } else {
-                assertEquals(5, entry.getValue(), "Non-gold tokens should be 5 for 3 players");
+                assertEquals(5, entry.getValue());
             }
         }
     }
 
     @Test
     void testSetCardToMarket() {
-        List<Development> level1Cards = market.getAllCards().get(0);
+        List<Development> level1Cards = market.getAllCards().getFirst();
         if (!level1Cards.isEmpty()) {
-            Development dev = level1Cards.get(0);
+            Development dev = level1Cards.getFirst();
             market.setCardToMarket(dev);
 
-            assertTrue(market.getCardsAvailableInMarket().get(0).contains(dev), "Card should be added to market");
-            assertFalse(market.getAllCards().get(0).contains(dev), "Card should be removed from allCards");
+            assertTrue(market.getCardsAvailableInMarket().getFirst().contains(dev));
+            assertFalse(market.getAllCards().getFirst().contains(dev));
         }
     }
 
@@ -58,21 +63,21 @@ class MarketTest {
     void testSetNobleToMarket() {
         List<Noble> nobles = market.getAllNobles();
         if (!nobles.isEmpty()) {
-            Noble noble = nobles.get(0);
+            Noble noble = nobles.getFirst();
             market.setNobleToMarket(noble);
 
-            assertTrue(market.getNoblesAvailableInMarket().contains(noble), "Noble should be added to market");
-            assertFalse(market.getAllNobles().contains(noble), "Noble should be removed from allNobles");
+            assertTrue(market.getNoblesAvailableInMarket().contains(noble));
+            assertFalse(market.getAllNobles().contains(noble));
         }
     }
 
     @Test
     void testRemoveCardFromMarket() {
-        List<Development> marketCards = market.getCardsAvailableInMarket().get(0);
+        List<Development> marketCards = market.getCardsAvailableInMarket().getFirst();
         if (!marketCards.isEmpty()) {
-            Development dev = marketCards.get(0);
+            Development dev = marketCards.getFirst();
             market.removeCardFromMarket(dev);
-            assertFalse(market.getCardsAvailableInMarket().get(0).contains(dev), "Card should be removed from market");
+            assertFalse(market.getCardsAvailableInMarket().getFirst().contains(dev));
         }
     }
 
@@ -80,22 +85,11 @@ class MarketTest {
     void testRemoveNobleFromMarket() {
         List<Noble> nobles = market.getNoblesAvailableInMarket();
         if (!nobles.isEmpty()) {
-            Noble noble = nobles.get(0);
+            Noble noble = nobles.getFirst();
             market.removeNobleFromMarket(noble);
-            assertFalse(market.getNoblesAvailableInMarket().contains(noble), "Noble should be removed from market");
+            assertFalse(market.getNoblesAvailableInMarket().contains(noble));
         }
     }
 
-    @Test
-    void testDevelopmentCardLevelsAreSeparated() {
-        List<List<Development>> allCards = market.getAllCards();
-        assertEquals(3, allCards.size(), "There should be 3 levels of development cards");
-    }
 
-    @Test
-    void testNumberOfNoblesInMarketIsCorrect() {
-        int expectedNobles = 3 + 1;
-        assertEquals(expectedNobles, market.getNoblesAvailableInMarket().size(),
-                "Market should have amountOfPlayers + 1 nobles");
-    }
 }

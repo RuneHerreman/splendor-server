@@ -12,7 +12,7 @@ public class GetDevelopmentsResponse extends AbstractResponseWithHiddenStatus {
     }
 
     public List<Development> getDevelopments() {
-        List<Development> developments = new ArrayList<Development>();
+        List<Development> developments = new ArrayList<>();
 
         for (List<Development> level: Market.createAllCards()){
             developments.addAll(level);
