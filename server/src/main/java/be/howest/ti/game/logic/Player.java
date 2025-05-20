@@ -1,10 +1,10 @@
 package be.howest.ti.game.logic;
-import be.howest.ti.game.logic.gametools.Development;
-import be.howest.ti.game.logic.gametools.Noble;
-import be.howest.ti.game.logic.gametools.Token;
+import be.howest.ti.game.logic.gameTools.Development;
+import be.howest.ti.game.logic.gameTools.Noble;
+import be.howest.ti.game.logic.gameTools.Token;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,8 +15,8 @@ public class Player {
     private final List<Development> purchasedDevelopments;
     private final List<Development> reserved;
     private final List<Noble> nobles;
-    private final EnumMap<Token, Integer> tokens;
-    private final EnumMap<Token, Integer> bonuses;
+    private final Map<Token, Integer> tokens;
+    private final Map<Token, Integer> bonuses;
 
     public Player(String username) {
         this.name = username;
@@ -24,8 +24,8 @@ public class Player {
         this.purchasedDevelopments = new ArrayList<>();
         this.reserved = new ArrayList<>();
         this.nobles = new ArrayList<>();
-        this.tokens = new EnumMap<>(Token.class);
-        this.bonuses = new EnumMap<>(Token.class);
+        this.tokens = new HashMap<>();
+        this.bonuses = new HashMap<>();
     }
 
     public void addToken(Token token, int amount) {
@@ -64,7 +64,7 @@ public class Player {
     }
 
     public Map<Token, Integer> generateTokensAndBonuses() {
-        EnumMap<Token, Integer> result = new EnumMap<>(tokens);
+        Map<Token, Integer> result = new HashMap<>(tokens);
 
         for (Map.Entry<Token, Integer> bonus : bonuses.entrySet()) {
             result.put(bonus.getKey(), result.getOrDefault(bonus.getKey(), 0) + bonus.getValue());

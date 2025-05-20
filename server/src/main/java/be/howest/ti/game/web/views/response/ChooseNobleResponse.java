@@ -1,6 +1,6 @@
 package be.howest.ti.game.web.views.response;
 
-import be.howest.ti.game.logic.gametools.Noble;
+import be.howest.ti.game.logic.gameTools.Noble;
 
 public class ChooseNobleResponse extends AbstractResponseWithHiddenStatus{
     private Noble noble;
