@@ -211,6 +211,7 @@ public class Market {
         if (tokens.isEmpty() || (tokens.size() != 1 && tokens.size() != 3)) {
             return false;
         }
+
         if (tokens.containsKey(Token.GOLD)) {
             return false;
         }
@@ -225,13 +226,12 @@ public class Market {
         }
 
         if (tokens.size() == 1) {
-            for (int count : tokens.values()) {
-                return count == 2;
-            }
+            return tokens.values().iterator().next() == 2;
         }
 
         return false;
     }
+
 
     public boolean areTokensAvailableInMarket(Map<Token , Integer> tokens) {
         if (!areValidTokensPick(tokens)) { return false; }
