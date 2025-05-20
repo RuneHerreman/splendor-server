@@ -6,7 +6,6 @@ import be.howest.ti.game.logic.Player;
 import be.howest.ti.game.logic.gameTools.Noble;
 import be.howest.ti.game.logic.gameTools.Token;
 
-import javax.smartcardio.Card;
 import java.util.List;
 import java.util.Map;
 

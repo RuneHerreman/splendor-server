@@ -8,10 +8,14 @@ import be.howest.ti.game.logic.utils.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
+import java.security.SecureRandom;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Market {
-    private static final Random RANDOM = new Random();
-
+    private static final SecureRandom RANDOM = new SecureRandom();
+    private static final Logger LOGGER = Logger.getLogger(Market.class.getName());
     private static List<List<Development>> allCards;
     private static List<Noble> allNobles;
     private final List<List<Development>> cardsAvailableInMarket;
@@ -71,9 +75,9 @@ public class Market {
     public static List<List<Development>> createAllCards() {
         List<List<Development>> allCards = new ArrayList<>();
 
-        List<Development>level1Cards = new ArrayList<>();
-        List<Development> level2Cards = new  ArrayList<>();
-        List<Development> level3Cards = new  ArrayList<>();
+        List<Development> level1Cards = new ArrayList<>();
+        List<Development> level2Cards = new ArrayList<>();
+        List<Development> level3Cards = new ArrayList<>();
 
         try {
             File developmentCards = new File("src/main/resources/data/developments.txt");
@@ -89,23 +93,22 @@ public class Market {
                 char tokenSymbol = token[2].charAt(0);
                 Token cardType = CardUtils.getTokenFromLetters(tokenSymbol);
                 int points = Integer.parseInt(token[4]);
-                Map<Token , Integer> tokenBundles = CardUtils.getCostTokenSetFromLetters(token[5]);
+                Map<Token, Integer> tokenBundles = CardUtils.getCostTokenSetFromLetters(token[5]);
 
-                Development development = new Development(cardName , points , tokenBundles ,  cardType  , level);
+                Development development = new Development(cardName, points, tokenBundles, cardType, level);
 
-                if(level == 1){
-                    level1Cards.add(development);
-                }else if (level == 2){
-                    level2Cards.add(development);
-                }else{
-                    level3Cards.add(development);
+                switch (level) {
+                    case 1 -> level1Cards.add(development);
+                    case 2 -> level2Cards.add(development);
+                    case 3 -> level3Cards.add(development);
+                    default -> throw new IllegalArgumentException("Unexpected level: " + level);
                 }
             }
 
             scanner.close();
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.WARNING, "Failed to load development cards from file.", e);
         }
 
         allCards.add(level1Cards);
@@ -146,6 +149,7 @@ public class Market {
 
     public static Map<Token, Integer> createInitTokens(int totalPlayers) {
         Map<Token, Integer> initTokens = new HashMap<>();
+
 
         for (Token token : Token.values()) {
             if (token == Token.GOLD) {
@@ -210,6 +214,7 @@ public class Market {
         if (tokens.isEmpty() || (tokens.size() != 1 && tokens.size() != 3)) {
             return false;
         }
+
         if (tokens.containsKey(Token.GOLD)) {
             return false;
         }
@@ -224,13 +229,12 @@ public class Market {
         }
 
         if (tokens.size() == 1) {
-            for (int count : tokens.values()) {
-                return count == 2;
-            }
+            return tokens.values().iterator().next() == 2;
         }
 
         return false;
     }
+
 
     public boolean areTokensAvailableInMarket(Map<Token , Integer> tokens) {
         if (!areValidTokensPick(tokens)) { return false; }

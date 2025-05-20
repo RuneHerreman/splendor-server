@@ -2,10 +2,7 @@ package be.howest.ti.game.logic;
 
 import be.howest.ti.game.logic.gameTools.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class Game {
@@ -16,10 +13,10 @@ public class Game {
     private final int numberOfPlayers;
     private Player activePlayer;
     private final List<Player> players;
-    private Market market;
-    private Map<Token, Integer> unclaimedTokens;
-    private List<Noble> unclaimedNobles;
-    private Player winner;
+    private final Market market;
+    private final Map<Token, Integer> unclaimedTokens;
+    private final List<Noble> unclaimedNobles;
+    private final Player winner;
     private GameState gameState;
     private final boolean returnExcessTokensRequired;
     private final boolean pickNobleRequired;
@@ -30,7 +27,7 @@ public class Game {
         this.gameId = gameId;
         this.numberOfPlayers = maxPlayer;
         this.started = false;
-        this.players = getHostPlayerOnGameInititalization(host) ;
+        this.players = getHostPlayerOnGameInitialization(host) ;
         this.activePlayer = players.get(0);
         this.market = new Market(numberOfPlayers);
         this.unclaimedTokens = market.getUnclaimedTokens();
@@ -45,6 +42,12 @@ public class Game {
         List<Player> players = new ArrayList<>();
         players.add(host);
         return players;
+    }
+
+    private List<Player> getHostPlayerOnGameInitialization(Player host ) {
+        List<Player> playerList = new ArrayList<>();
+        playerList.add(host);
+        return playerList;
     }
 
     public GameState getGameState() {
@@ -176,7 +179,6 @@ public class Game {
 
     private Map<Token, Integer> calculateTokensToRemove(Map<Token, Integer> costCard, Map<Token, Integer> tokensProvided, int availableGoldTokens) {
         Map<Token, Integer> tokensToDeduct = new HashMap<>();
-
         for (Map.Entry<Token, Integer> entry : costCard.entrySet()) {
             Token requiredToken = entry.getKey();
             int requiredAmount = entry.getValue();

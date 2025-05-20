@@ -1,5 +1,8 @@
 package be.howest.ti.game.logic;
 
+
+
+
 import be.howest.ti.game.logic.gameTools.Development;
 import be.howest.ti.game.logic.gameTools.GameState;
 import be.howest.ti.game.logic.gameTools.Token;
@@ -42,8 +45,6 @@ class GameTest {
         game.joinGame("Bob");
         assertTrue(game.isStarted());
         Player player3 = new Player("Charlie");
-
-       // game.addPlayer(player3);
 
         assertEquals(2, game.getPlayers().size());
         assertFalse(game.getPlayers().contains(player3));

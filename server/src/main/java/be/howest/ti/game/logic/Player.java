@@ -18,7 +18,7 @@ public class Player {
     private final Map<Token, Integer> tokens;
     private final Map<Token, Integer> bonuses;
 
-    public Player(String username){
+    public Player(String username) {
         this.name = username;
         this.prestigePoints = 0;
         this.purchasedDevelopments = new ArrayList<>();
@@ -62,6 +62,7 @@ public class Player {
     public void updatePrestigePoints(int toBeAdded) {
         this.prestigePoints += toBeAdded;
     }
+
     public Map<Token, Integer> generateTokensAndBonuses() {
         Map<Token, Integer> result = new HashMap<>(tokens);
 
@@ -92,15 +93,13 @@ public class Player {
         return nobles;
     }
 
-    public Map<Token , Integer> getTokens() {
+    public Map<Token, Integer> getTokens() {
         return tokens;
     }
 
-    public Map<Token , Integer>  getBonuses() {
+    public Map<Token, Integer> getBonuses() {
         return bonuses;
     }
-
-
 
     @Override
     public String toString() {
@@ -116,18 +115,18 @@ public class Player {
         tokens.put(token, tokens.getOrDefault(token, 0) - amountToRemove);
     }
 
-    public void removeTokens(Map<Token, Integer> toRemove , boolean cardPurchase) {
+    public void removeTokens(Map<Token, Integer> toRemove, boolean cardPurchase) {
         for (Map.Entry<Token, Integer> entry : toRemove.entrySet()) {
-            removeToken(entry.getKey(), entry.getValue() , cardPurchase);
+            removeToken(entry.getKey(), entry.getValue(), cardPurchase);
         }
     }
 
-    public boolean hasEnoughBonusesForNoble(Map<Token , Integer> nobleNeededBonuses){
-        for(Map.Entry<Token , Integer> entry : nobleNeededBonuses.entrySet()){
+    public boolean hasEnoughBonusesForNoble(Map<Token, Integer> nobleNeededBonuses) {
+        for (Map.Entry<Token, Integer> entry : nobleNeededBonuses.entrySet()) {
             Token token = entry.getKey();
             int amount = entry.getValue();
 
-            if(bonuses.get(token) < amount){
+            if (bonuses.getOrDefault(token, 0) < amount) {
                 return false;
             }
         }
@@ -141,10 +140,9 @@ public class Player {
 
             int inventoryAmount = tokens.getOrDefault(toRemoveToken, 0);
 
-            if(inventoryAmount < toRemoveAmount  ) {
+            if (inventoryAmount < toRemoveAmount) {
                 return false;
             }
-
         }
         return true;
     }
