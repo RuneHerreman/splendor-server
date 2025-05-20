@@ -145,7 +145,8 @@ public class Market {
     }
 
     public static Map<Token, Integer> createInitTokens(int totalPlayers) {
-        Map<Token, Integer> initTokens = new HashMap<>();
+        Map<Token, Integer> initTokens = new EnumMap<>(Token.class);
+
 
         for (Token token : Token.values()) {
             if (token == Token.GOLD) {
