@@ -32,7 +32,6 @@ class GameTest {
 
     @Test
     void testAddPlayerDoesNotAddWhenGameIsFullOrAlreadyStarted() {
-        Player player2 = new Player("Bob");
         game.joinGame("Bob");
         assertTrue(game.isStarted());
         Player player3 = new Player("Charlie");

@@ -230,7 +230,9 @@ public class Market {
 
         if (tokens.size() == 1) {
             for (int count : tokens.values()) {
-                return count == 2;
+                if(count == 2){
+                    return true;
+                }
             }
         }
 

@@ -9,18 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class NobleTest {
 
-        // DummyPlayer die alleen getBonuses() overschrijft
-        static class DummyPlayer extends Player {
-            private final Map<Token, Integer> bonuses;
-            public DummyPlayer(Map<Token, Integer> bonuses) {
-                super("dummy");
-                this.bonuses = bonuses;
-            }
-            @Override
-            public Map<Token, Integer> getBonuses() {
-                return bonuses;
-            }
-        }
+
 
     @Test
     void testGetNameAndPrestigePoints() {

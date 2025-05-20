@@ -194,7 +194,7 @@ public class Game {
 
         if (players.size() == numberOfPlayers) {
             started = true;
-            gameState = GameState.TurnAction;
+            gameState = GameState.TURN_ACTION;
         }
     }
 
