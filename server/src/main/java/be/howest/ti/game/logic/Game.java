@@ -30,7 +30,7 @@ public class Game {
         this.numberOfPlayers = maxPlayer;
         this.started = false;
         this.players = getHostPlayerOnGameInitialization(host) ;
-        this.activePlayer = players.get(0);
+        this.activePlayer = players.getFirst();
         this.market = new Market(numberOfPlayers);
         this.unclaimedTokens = market.getUnclaimedTokens();
         this.unclaimedNobles = market.getNoblesAvailableInMarket();
