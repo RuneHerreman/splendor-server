@@ -141,8 +141,9 @@ public class Market {
             scanner.close();
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        LOGGER.log(Level.WARNING, "Failed to load nobles from file.", e);
+    }
+
 
         return allNobles;
     }

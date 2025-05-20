@@ -16,7 +16,7 @@ public class CardLevelsInListView {
     }
 
     public int getLevel() {
-        return cardLevel.get(0).getLevel();
+        return cardLevel.getFirst().getLevel();
     }
 
     public int getCardStackSize() {
