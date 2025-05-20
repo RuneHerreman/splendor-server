@@ -16,9 +16,9 @@ class NobleTest {
     @BeforeEach
     void setUp() {
         Map<Token,Integer> nobleBonusses = new EnumMap<>(Token.class);
-        nobleBonusses.put(Token.Ruby, 3);
-        nobleBonusses.put(Token.Diamond, 3);
-        nobleBonusses.put(Token.Onyx, 3);
+        nobleBonusses.put(Token.RUBY, 3);
+        nobleBonusses.put(Token.DIAMOND, 3);
+        nobleBonusses.put(Token.ONYX, 3);
         noble = new Noble("Bob",3,nobleBonusses);
 
     }
@@ -27,28 +27,27 @@ class NobleTest {
     void nobleTest() {
         assertEquals("Bob",noble.getName());
         assertEquals(3,noble.getPrestigePoints());
-        assertEquals(3,noble.getNeededBonuses().get(Token.Ruby));
+        assertEquals(3,noble.getNeededBonuses().get(Token.RUBY));
     }
 
     @Test
     void nobleTestIsClaimableByPlayer_succes() {
         Player player = new Player("Test");
-        player.addBonus(Token.Ruby, 3);
-        player.addBonus(Token.Diamond, 3);
-        player.addBonus(Token.Onyx, 3);
+        player.addBonus(Token.RUBY, 3);
+        player.addBonus(Token.DIAMOND, 3);
+        player.addBonus(Token.ONYX, 3);
         assertTrue(noble.isNobleClaimableByPlayer(player));
-
     }
 
     @Test
     void nobleTestIsClaimableByPlayer_failure() {
         Player player = new Player("Test");
-        player.addBonus(Token.Ruby, 3);
-        player.addBonus(Token.Diamond, 3);
-        player.addBonus(Token.Onyx, 2);
+        player.addBonus(Token.RUBY, 3);
+        player.addBonus(Token.DIAMOND, 3);
+        player.addBonus(Token.ONYX, 2);
         assertFalse(noble.isNobleClaimableByPlayer(player));
-
     }
+
 }
 
 

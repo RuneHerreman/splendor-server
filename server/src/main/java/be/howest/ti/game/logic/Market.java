@@ -10,6 +10,8 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 public class Market {
+    private static final Random RANDOM = new Random();
+
     private static List<List<Development>> allCards;
     private static List<Noble> allNobles;
     private final List<List<Development>> cardsAvailableInMarket;
@@ -78,7 +80,6 @@ public class Market {
             Scanner scanner = new Scanner(developmentCards);
             if (scanner.hasNextLine()) scanner.nextLine(); // Skip header
 
-
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 String[] token = line.split("\\t");
@@ -132,7 +133,6 @@ public class Market {
 
                 Noble noble = new Noble(cardName ,point ,  tokenBundles);
                 allNobles.add(noble);
-
             }
 
             scanner.close();
@@ -144,11 +144,11 @@ public class Market {
         return allNobles;
     }
 
-    public static   Map<Token, Integer> createInitTokens(int totalPlayers) {
-        Map<Token, Integer> initTokens = new EnumMap<>(Token.class);
+    public static Map<Token, Integer> createInitTokens(int totalPlayers) {
+        Map<Token, Integer> initTokens = new HashMap<>();
 
         for (Token token : Token.values()) {
-            if (token == Token.Gold) {
+            if (token == Token.GOLD) {
                 initTokens.put(token, 5);
             } else {
                 initTokens.put(token, getAmountOfTokenAccourdingToPlayer(totalPlayers));
@@ -159,10 +159,6 @@ public class Market {
     }
 
     private static int getAmountOfTokenAccourdingToPlayer(int totalPlayers) {
-        /*  4 spelers : 7 van elk tokens
-            3 : 5
-            2 : 4   */
-
         Map<Integer, Integer> tokenAccourding = new HashMap<>();
         tokenAccourding.put(4, 7);
         tokenAccourding.put(3, 5);
@@ -175,11 +171,10 @@ public class Market {
         List<Noble> noblesForMarket = new ArrayList<>();
         int noblesToSelect = amountOfPlayers + 1;
 
-        Random random = new Random();
         List<Integer> selectedIndexes = new ArrayList<>();
 
         while (noblesForMarket.size() < noblesToSelect && selectedIndexes.size() < allNobles.size()) {
-            int index = random.nextInt(allNobles.size());
+            int index = RANDOM.nextInt(allNobles.size());
             if (!selectedIndexes.contains(index)) {
                 selectedIndexes.add(index);
                 noblesForMarket.add(allNobles.get(index));
@@ -191,7 +186,6 @@ public class Market {
 
     public List<List<Development>> getInitDevelopmentCardsForMarket() {
         List<List<Development>> developmentCardsForMarket = new ArrayList<>();
-        Random random = new Random();
 
         for (List<Development> levelCards : allCards) {
             List<Development> marketCards = new ArrayList<>();
@@ -199,7 +193,7 @@ public class Market {
             int cardsToSelect = Math.min(4, levelCards.size());
 
             while (marketCards.size() < cardsToSelect && selectedIndexes.size() < levelCards.size()) {
-                int index = random.nextInt(levelCards.size());
+                int index = RANDOM.nextInt(levelCards.size());
                 if (!selectedIndexes.contains(index)) {
                     selectedIndexes.add(index);
                     marketCards.add(levelCards.get(index));
@@ -211,11 +205,12 @@ public class Market {
 
         return developmentCardsForMarket;
     }
+
     public boolean areValidTokensPick(Map<Token, Integer> tokens) {
         if (tokens.isEmpty() || (tokens.size() != 1 && tokens.size() != 3)) {
             return false;
         }
-        if (tokens.containsKey(Token.Gold)) {
+        if (tokens.containsKey(Token.GOLD)) {
             return false;
         }
 
@@ -230,41 +225,42 @@ public class Market {
 
         if (tokens.size() == 1) {
             for (int count : tokens.values()) {
-                if(count == 2){
-                    return true;
-                }
+                return count == 2;
             }
         }
 
         return false;
     }
+
     public boolean areTokensAvailableInMarket(Map<Token , Integer> tokens) {
-        if (!areValidTokensPick(tokens)) {return false;}
+        if (!areValidTokensPick(tokens)) { return false; }
 
         for (Map.Entry<Token, Integer> entry : tokens.entrySet()) {
             Token token = entry.getKey();
             int requestedTokenAmount = entry.getValue();
 
-            if (token == Token.Gold) {return false;}
+            if (token == Token.GOLD) { return false; }
 
-            if (tokens.size() == 1 && !checkTakeDoubleTokenPossibility(token)) {return false;}
+            if (tokens.size() == 1 && !checkTakeDoubleTokenPossibility(token)) { return false; }
 
             int available = unclaimedTokens.getOrDefault(token, 0);
-            if (available < requestedTokenAmount) {return false;}
+            if (available < requestedTokenAmount) { return false; }
         }
 
         return true;
     }
+
     private boolean checkTakeDoubleTokenPossibility(Token token) {
         return unclaimedTokens.getOrDefault(token, 0) >= 4;
     }
+
     public void removeTokensFromMarket(Map<Token, Integer> tokens) {
         for (Map.Entry<Token , Integer> tokenBundle : tokens.entrySet()) {
             removeTokensFromMarket(tokenBundle.getKey(), tokenBundle.getValue());
         }
     }
 
-    private void removeTokensFromMarket(Token token  , int amount) {
+    private void removeTokensFromMarket(Token token, int amount) {
         int tempAmount = unclaimedTokens.get(token);
         unclaimedTokens.replace(token , tempAmount - amount);
     }
@@ -273,7 +269,16 @@ public class Market {
         return CardUtils.getDevelopmentCardByName(name, this.getCardsAvailableInMarket());
     }
 
-    @Override public String toString() { return "Market{" + "allCards=" + allCards + ", allNobles=" + allNobles + ", cardsAvailableInMarket=" + cardsAvailableInMarket + ", noblesAvailableInMarket=" + noblesAvailableInMarket + ", unclaimedTokens=" + unclaimedTokens + '}'; }
+    @Override
+    public String toString() {
+        return "Market{" +
+                "allCards=" + allCards +
+                ", allNobles=" + allNobles +
+                ", cardsAvailableInMarket=" + cardsAvailableInMarket +
+                ", noblesAvailableInMarket=" + noblesAvailableInMarket +
+                ", unclaimedTokens=" + unclaimedTokens +
+                '}';
+    }
 
     public int getIndexCardFromMarket(Development developmentCard) {
         for (List<Development> levelCards : cardsAvailableInMarket) {
@@ -291,10 +296,10 @@ public class Market {
     }
 
     private Development getRandomCardFromMarket(int cardLevel) {
-        Random random = new Random();
         List<Development> deck = allCards.get(cardLevel - 1);
-        return deck.get(random.nextInt(deck.size()));
+        return deck.get(RANDOM.nextInt(deck.size()));
     }
+
     public void addToken(Token token, int amount) {
         unclaimedTokens.put(token, unclaimedTokens.getOrDefault(token, 0) + amount);
     }
@@ -305,11 +310,3 @@ public class Market {
         }
     }
 }
-
-
-
-
-
-
-
-

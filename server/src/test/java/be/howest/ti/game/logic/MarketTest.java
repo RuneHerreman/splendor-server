@@ -19,6 +19,7 @@ class MarketTest {
     void setUp() {
         market = new Market(3);
     }
+
     @Test
     void testInitialMarketSetup_checkSize() {
         List<List<Development>> allCards = market.getAllCards();
@@ -38,7 +39,7 @@ class MarketTest {
         Map<Token, Integer> tokens = market.getUnclaimedTokens();
 
         for (Map.Entry<Token, Integer> entry : tokens.entrySet()) {
-            if (entry.getKey() == Token.Gold) {
+            if (entry.getKey() == Token.GOLD) {
                 assertEquals(5, entry.getValue());
             } else {
                 assertEquals(5, entry.getValue());

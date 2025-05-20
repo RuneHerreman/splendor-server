@@ -6,7 +6,6 @@ import be.howest.ti.game.logic.gameTools.Token;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +32,7 @@ class GameTest {
         assertEquals(2, game.getNumberOfPlayers());
         assertEquals(player1, game.getActivePlayer());
         assertEquals(1, game.getPlayers().size());
-        assertEquals(player1, game.getPlayers().getFirst());
+        assertEquals(player1, game.getPlayers().get(0));
         assertNotNull(game.getMarket());
         assertNull(game.getWinner());
     }
@@ -44,6 +43,7 @@ class GameTest {
         assertTrue(game.isStarted());
         Player player3 = new Player("Charlie");
 
+       // game.addPlayer(player3);
 
         assertEquals(2, game.getPlayers().size());
         assertFalse(game.getPlayers().contains(player3));
@@ -96,140 +96,140 @@ class GameTest {
     @Test
     void testPlayerTakesTokensFromMarket_TwoOfSameTokenType() {
         game.joinGame("Bob");
-        Map<Token, Integer> tokens = new EnumMap<>(Token.class);
-        tokens.put(Token.Diamond, 2);
+        Map<Token, Integer> tokens = new HashMap<>();
+        tokens.put(Token.DIAMOND, 2);
 
         boolean result = game.handleTokenPurchase(tokens);
 
         assertTrue(result);
-        assertEquals(2, game.getMarket().getUnclaimedTokens().get(Token.Diamond));
-        assertEquals(4, game.getMarket().getUnclaimedTokens().getOrDefault(Token.Emerald, 0));
-        assertEquals(4, game.getMarket().getUnclaimedTokens().getOrDefault(Token.Onyx, 0));
-        assertEquals(4, game.getMarket().getUnclaimedTokens().getOrDefault(Token.Ruby, 0));
-        assertEquals(4, game.getMarket().getUnclaimedTokens().getOrDefault(Token.Sapphire, 0));
-        assertEquals(5, game.getMarket().getUnclaimedTokens().getOrDefault(Token.Gold, 0));
+        assertEquals(2, game.getMarket().getUnclaimedTokens().get(Token.DIAMOND));
+        assertEquals(4, game.getMarket().getUnclaimedTokens().getOrDefault(Token.EMERALD, 0));
+        assertEquals(4, game.getMarket().getUnclaimedTokens().getOrDefault(Token.ONYX, 0));
+        assertEquals(4, game.getMarket().getUnclaimedTokens().getOrDefault(Token.RUBY, 0));
+        assertEquals(4, game.getMarket().getUnclaimedTokens().getOrDefault(Token.SAPPHIRE, 0));
+        assertEquals(5, game.getMarket().getUnclaimedTokens().getOrDefault(Token.GOLD, 0));
 
-        assertEquals(2, player1.getTokens().get(Token.Diamond));
-        assertNull( player1.getTokens().get(Token.Emerald));
-        assertNull( player1.getTokens().get(Token.Onyx));
-        assertNull( player1.getTokens().get(Token.Ruby));
-        assertNull(player1.getTokens().get(Token.Sapphire));
+        assertEquals(2, player1.getTokens().get(Token.DIAMOND));
+        assertNull( player1.getTokens().get(Token.EMERALD));
+        assertNull( player1.getTokens().get(Token.ONYX));
+        assertNull( player1.getTokens().get(Token.RUBY));
+        assertNull(player1.getTokens().get(Token.SAPPHIRE));
 
     }
     @Test
     void testPlayerTakesTokensFromMarket_TwoOfSameTokenType_FailsIfNotEnoughTokensInMarket() {
         game.joinGame("Bob");
-        Map<Token, Integer> tokens = new EnumMap<>(Token.class);
-        tokens.put(Token.Diamond, 2);
+        Map<Token, Integer> tokens = new HashMap<>();
+        tokens.put(Token.DIAMOND, 2);
 
         game.getMarket().removeTokensFromMarket(tokens);
         boolean result = game.handleTokenPurchase(tokens);
 
         assertFalse(result);
-        assertEquals(2, game.getMarket().getUnclaimedTokens().get(Token.Diamond));
-        assertEquals(4, game.getMarket().getUnclaimedTokens().getOrDefault(Token.Emerald, 0));
-        assertEquals(4, game.getMarket().getUnclaimedTokens().getOrDefault(Token.Onyx, 0));
-        assertEquals(4, game.getMarket().getUnclaimedTokens().getOrDefault(Token.Ruby, 0));
-        assertEquals(4, game.getMarket().getUnclaimedTokens().getOrDefault(Token.Sapphire, 0));
-        assertEquals(5, game.getMarket().getUnclaimedTokens().getOrDefault(Token.Gold, 0));
-        assertNull(player1.getTokens().get(Token.Diamond));
+        assertEquals(2, game.getMarket().getUnclaimedTokens().get(Token.DIAMOND));
+        assertEquals(4, game.getMarket().getUnclaimedTokens().getOrDefault(Token.EMERALD, 0));
+        assertEquals(4, game.getMarket().getUnclaimedTokens().getOrDefault(Token.ONYX, 0));
+        assertEquals(4, game.getMarket().getUnclaimedTokens().getOrDefault(Token.RUBY, 0));
+        assertEquals(4, game.getMarket().getUnclaimedTokens().getOrDefault(Token.SAPPHIRE, 0));
+        assertEquals(5, game.getMarket().getUnclaimedTokens().getOrDefault(Token.GOLD, 0));
+        assertNull(player1.getTokens().get(Token.DIAMOND));
     }
 
     @Test
-     void testPlayerTakesTokensFromMarket_OneOfEachType() {
+    public void testPlayerTakesTokensFromMarket_OneOfEachType() {
         game.joinGame("Bob");
-        Map<Token, Integer> requestedTokens = new EnumMap<>(Token.class);
-        requestedTokens.put(Token.Onyx, 1);
-        requestedTokens.put(Token.Emerald, 1);
-        requestedTokens.put(Token.Diamond, 1);
+        Map<Token, Integer> requestedTokens = new HashMap<>();
+        requestedTokens.put(Token.ONYX, 1);
+        requestedTokens.put(Token.EMERALD, 1);
+        requestedTokens.put(Token.DIAMOND, 1);
 
         assertTrue(game.getMarket().areTokensAvailableInMarket(requestedTokens));
         game.handleTokenPurchase(requestedTokens);
 
-        assertEquals(1, player1.getTokens().get(Token.Onyx));
-        assertEquals(1, player1.getTokens().get(Token.Emerald));
-        assertEquals(1, player1.getTokens().get(Token.Diamond));
+        assertEquals(1, player1.getTokens().get(Token.ONYX));
+        assertEquals(1, player1.getTokens().get(Token.EMERALD));
+        assertEquals(1, player1.getTokens().get(Token.DIAMOND));
 
-        assertEquals(3, game.getMarket().getUnclaimedTokens().get(Token.Onyx));
-        assertEquals(3, game.getMarket().getUnclaimedTokens().get(Token.Emerald));
-        assertEquals(3, game.getMarket().getUnclaimedTokens().get(Token.Diamond));
+        assertEquals(3, game.getMarket().getUnclaimedTokens().get(Token.ONYX));
+        assertEquals(3, game.getMarket().getUnclaimedTokens().get(Token.EMERALD));
+        assertEquals(3, game.getMarket().getUnclaimedTokens().get(Token.DIAMOND));
         assertEquals("Bob", game.getActivePlayer().getName());
     }
     @Test
-     void testPlayerTakesTokensFromMarket_OneOfEachType_failsIfNotEnoughTokensInMarket() {
+    public void testPlayerTakesTokensFromMarket_OneOfEachType_failsIfNotEnoughTokensInMarket() {
         game.joinGame("Bob");
 
-        Map<Token, Integer> toRemove = new EnumMap<>(Token.class);
-        toRemove.put(Token.Onyx, 4);
-        toRemove.put(Token.Emerald, 1);
-        toRemove.put(Token.Diamond, 1);
+        Map<Token, Integer> toRemove = new HashMap<>();
+        toRemove.put(Token.ONYX, 4);
+        toRemove.put(Token.EMERALD, 1);
+        toRemove.put(Token.DIAMOND, 1);
 
-        Map<Token, Integer> requestedTokens = new EnumMap<>(Token.class);
-        requestedTokens.put(Token.Onyx, 1);
-        requestedTokens.put(Token.Emerald, 1);
-        requestedTokens.put(Token.Diamond, 1);
+        Map<Token, Integer> requestedTokens = new HashMap<>();
+        requestedTokens.put(Token.ONYX, 1);
+        requestedTokens.put(Token.EMERALD, 1);
+        requestedTokens.put(Token.DIAMOND, 1);
 
         game.getMarket().removeTokensFromMarket(toRemove);
         assertFalse(game.getMarket().areTokensAvailableInMarket(requestedTokens));
         game.handleTokenPurchase(requestedTokens);
 
-        assertNull( player1.getTokens().get(Token.Onyx));
-        assertNull( player1.getTokens().get(Token.Emerald));
-        assertNull( player1.getTokens().get(Token.Diamond));
+        assertNull( player1.getTokens().get(Token.ONYX));
+        assertNull( player1.getTokens().get(Token.EMERALD));
+        assertNull( player1.getTokens().get(Token.DIAMOND));
 
-        assertEquals(0, game.getMarket().getUnclaimedTokens().get(Token.Onyx));
-        assertEquals(3, game.getMarket().getUnclaimedTokens().get(Token.Emerald));
-        assertEquals(3, game.getMarket().getUnclaimedTokens().get(Token.Diamond));
+        assertEquals(0, game.getMarket().getUnclaimedTokens().get(Token.ONYX));
+        assertEquals(3, game.getMarket().getUnclaimedTokens().get(Token.EMERALD));
+        assertEquals(3, game.getMarket().getUnclaimedTokens().get(Token.EMERALD));
         assertEquals("Alice", game.getActivePlayer().getName());
     }
     @Test
     void testHandleTokenReturn_Success() {
         game.joinGame("Bob");
 
-        Map<Token, Integer> tokensToAdd = new EnumMap<>(Token.class);
-        tokensToAdd.put(Token.Emerald, 3);
+        Map<Token, Integer> tokensToAdd = new HashMap<>();
+        tokensToAdd.put(Token.EMERALD, 3);
         player1.addTokens(tokensToAdd);
 
-        Map<Token, Integer> tokensToReturn = new EnumMap<>(Token.class);
-        tokensToReturn.put(Token.Emerald, 2);
+        Map<Token, Integer> tokensToReturn = new HashMap<>();
+        tokensToReturn.put(Token.EMERALD, 2);
 
         boolean result = game.handleTokenReturn(tokensToReturn);
 
         assertTrue(result);
-        assertEquals(1, player1.getTokens().getOrDefault(Token.Emerald, 0));
-        assertEquals(6, game.getMarket().getUnclaimedTokens().get(Token.Emerald));
+        assertEquals(1, player1.getTokens().getOrDefault(Token.EMERALD, 0));
+        assertEquals(6, game.getMarket().getUnclaimedTokens().get(Token.EMERALD));
     }
     @Test
     void testHandleTokenReturn_Fails_PlayerDoesNotHaveTokens() {
         game.joinGame("Bob");
 
-        Map<Token, Integer> tokensToReturn = new EnumMap<>(Token.class);
-        tokensToReturn.put(Token.Ruby, 2);
+        Map<Token, Integer> tokensToReturn = new HashMap<>();
+        tokensToReturn.put(Token.RUBY, 2);
 
         boolean result = game.handleTokenReturn(tokensToReturn);
 
         assertFalse(result);
-        assertNull(player1.getTokens().get(Token.Ruby));
-        assertEquals(4, game.getMarket().getUnclaimedTokens().getOrDefault(Token.Ruby, 0));
+        assertNull(player1.getTokens().get(Token.RUBY));
+        assertEquals(4, game.getMarket().getUnclaimedTokens().getOrDefault(Token.RUBY, 0));
     }
 
     @Test
     void testHandleTokenReturn_SwitchesTurn() {
         game.joinGame("Bob");
 
-        Map<Token, Integer> tokensToAdd = new EnumMap<>(Token.class);
-        tokensToAdd.put(Token.Onyx, 2);
+        Map<Token, Integer> tokensToAdd = new HashMap<>();
+        tokensToAdd.put(Token.ONYX, 2);
         player1.addTokens(tokensToAdd);
 
-        Map<Token, Integer> tokensToReturn = new EnumMap<>(Token.class);
-        tokensToReturn.put(Token.Onyx, 2);
+        Map<Token, Integer> tokensToReturn = new HashMap<>();
+        tokensToReturn.put(Token.ONYX, 2);
 
         assertEquals("Alice", game.getActivePlayer().getName());
         game.handleTokenReturn(tokensToReturn);
         assertEquals("Bob", game.getActivePlayer().getName());
     }
     private Development createTestDevelopmentCard() {
-      return game.getMarket().getCardsAvailableInMarket().getFirst().getFirst();
+      return game.getMarket().getCardsAvailableInMarket().get(0).get(0);
 
     }
 
@@ -240,9 +240,9 @@ class GameTest {
         Map<Token, Integer> tokensToAdd = dev.getCost();
         player1.addTokens(tokensToAdd);
 
-        Map<Token, Integer> tokensProvided = new EnumMap<>(Token.class);
-        tokensProvided.put(Token.Diamond, 1);
-        tokensProvided.put(Token.Emerald, 1);
+        Map<Token, Integer> tokensProvided = new HashMap<>();
+        tokensProvided.put(Token.DIAMOND, 1);
+        tokensProvided.put(Token.EMERALD, 1);
 
         boolean result = game.handleDevelopmentCardPurchase(dev, false, tokensProvided);
         assertTrue(result);
@@ -259,9 +259,9 @@ class GameTest {
 
         player1.addTokens(tokensToAdd);
 
-        Map<Token, Integer> tokensProvided = new EnumMap<>(Token.class);
-        tokensProvided.put(Token.Emerald, 1);
-        tokensProvided.put(Token.Gold, 1);
+        Map<Token, Integer> tokensProvided = new HashMap<>();
+        tokensProvided.put(Token.EMERALD, 1);
+        tokensProvided.put(Token.GOLD, 1);
         boolean result = game.handleDevelopmentCardPurchase(dev, false, tokensProvided);
         assertTrue(result);
         assertTrue(player1.getPurchasedDevelopments().contains(dev));
@@ -273,12 +273,11 @@ class GameTest {
     @Test
     void purchaseFailsIfNotEnoughTokens() {
         Development dev = createTestDevelopmentCard();
-        Map<Token, Integer> tokensToAdd = new EnumMap<>(Token.class);
-        player1.addTokens(tokensToAdd);
+        player1.addTokens(new HashMap<>());
 
-        Map<Token, Integer> tokensProvided = new EnumMap<>(Token.class);
-        tokensProvided.put(Token.Diamond, 1);
-        tokensProvided.put(Token.Emerald, 1);
+        Map<Token, Integer> tokensProvided = new HashMap<>();
+        tokensProvided.put(Token.DIAMOND, 1);
+        tokensProvided.put(Token.EMERALD, 1);
 
         boolean result = game.handleDevelopmentCardPurchase(dev, false, tokensProvided);
         assertFalse(result);

@@ -36,7 +36,7 @@ public class Development {
 
     public  boolean isCardAffordableByPlayerWithGoldToken(Player player) {
         Map<Token, Integer> playerTokens = player.generateTokensAndBonuses();
-        int availableGoldTokens = playerTokens.getOrDefault(Token.Gold, 0);
+        int availableGoldTokens = playerTokens.getOrDefault(Token.GOLD, 0);
         int goldTokensNeeded = 0;
 
         for (Map.Entry<Token, Integer> cardCost : cost.entrySet()) {
