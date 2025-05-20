@@ -285,6 +285,19 @@ class GameTest {
         assertFalse(player1.getPurchasedDevelopments().contains(dev));
         assertEquals(player1, game.getActivePlayer());
     }
+    @Test
+    void testEndGame() {
+        game.joinGame("Bob");
+
+        // Call method to end the game
+        game.endGame();
+
+        // Verify the game state
+        assertFalse(game.getActive(), "Game should be inactive after ending.");
+        assertTrue(game.isStarted(), "Game should be marked as started.");
+
+
+    }
 
 }
 
