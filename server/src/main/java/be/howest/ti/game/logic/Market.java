@@ -145,7 +145,7 @@ public class Market {
     }
 
     public static Map<Token, Integer> createInitTokens(int totalPlayers) {
-        Map<Token, Integer> initTokens = new EnumMap<>(Token.class);
+        Map<Token, Integer> initTokens = new HashMap<>();
 
 
         for (Token token : Token.values()) {
