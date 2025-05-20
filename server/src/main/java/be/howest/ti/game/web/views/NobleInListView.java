@@ -21,6 +21,6 @@ public class NobleInListView {
     }
 
     public Map<String, Integer> getNeededBonuses() {
-        return TokenMapConvertor.convertToStringMap(noble.getNeededBonuses());
+        return TokenMapConvertor.convertToStringMap(noble.getRequiredBonuses());
     }
 }

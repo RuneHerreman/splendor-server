@@ -29,7 +29,7 @@ public class BuyReservedDevelopmentRequest extends BaseSplendorRequest {
         JsonObject payment = params.body().getJsonObject().getJsonObject("payment");
 
         payment.forEach(pair -> {
-            Token token = Token.valueOf(pair.getKey());
+            Token token = Token.valueOf(pair.getKey().toUpperCase());
             int amount = Integer.parseInt(pair.getValue().toString());
             tokenMap.put(token, amount);
         });
