@@ -1,5 +1,8 @@
 package be.howest.ti.game.logic.gameTools;
 
 public enum GameState {
-    TurnAction, ReturnGems, ChooseNoble, WinnerIsFound
+    TURN_ACTION,
+    RETURN_GEMS,
+    CHOOSE_NOBLE,
+    WINNER_IS_FOUND
 }

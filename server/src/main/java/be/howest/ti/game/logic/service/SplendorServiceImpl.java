@@ -1,6 +1,5 @@
 package be.howest.ti.game.logic.service;
 
-
 import be.howest.ti.game.logic.Game;
 import be.howest.ti.game.logic.Market;
 import be.howest.ti.game.logic.Player;
@@ -9,27 +8,28 @@ import be.howest.ti.game.logic.gameTools.Noble;
 import be.howest.ti.game.logic.gameTools.Token;
 import be.howest.ti.game.logic.utils.CardUtils;
 
-import javax.smartcardio.Card;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class SplendorServiceImpl implements SplendorService {
+    private static final String NOT_CURRENT_PLAYER_MESSAGE = "You are not the current player";
+
     private final List<Game> games;
 
     public SplendorServiceImpl() {
         this.games = new ArrayList<>();
     }
 
-    public Game createGame(String gameName, int maxPlayers , Player host) {
+    public Game createGame(String gameName, int maxPlayers, Player host) {
         int gameID = getRandomID();
         Game game = new Game(gameName, gameID, maxPlayers, host);
         games.add(game);
         return game;
     }
 
-    public Game createGame(int maxPlayers , Player host) {
+    public Game createGame(int maxPlayers, Player host) {
         int gameID = getRandomID();
         Game game = new Game(null, gameID, maxPlayers, host);
         games.add(game);
@@ -56,21 +56,19 @@ public class SplendorServiceImpl implements SplendorService {
         return randomID;
     }
 
-    public Game deleteGame(int gameID){
+    public Game deleteGame(int gameID) {
         Game deletedGame = getGameByID(gameID);
         games.remove(deletedGame);
-
         return deletedGame;
     }
 
-    public List<Game> deleteAllGames(){
+    public List<Game> deleteAllGames() {
         List<Game> deletedGames = new ArrayList<>(games);
         games.clear();
-
         return deletedGames;
     }
 
-    public Game getGameByID(int gameID){
+    public Game getGameByID(int gameID) {
         for (Game game : games) {
             if (game.getGameId() == gameID) {
                 return game;
@@ -79,11 +77,11 @@ public class SplendorServiceImpl implements SplendorService {
         return null;
     }
 
-    public ArrayList<Game> getAllGames(){
+    public ArrayList<Game> getAllGames() {
         return new ArrayList<>(games);
     }
 
-    public ArrayList<Game> getAllGames(boolean started){
+    public ArrayList<Game> getAllGames(boolean started) {
         ArrayList<Game> filteredGames = new ArrayList<>();
         for (Game game : games) {
             if (game.isStarted()) {
@@ -93,7 +91,7 @@ public class SplendorServiceImpl implements SplendorService {
         return filteredGames;
     }
 
-    public ArrayList<Game> getStartedGames(){
+    public ArrayList<Game> getStartedGames() {
         ArrayList<Game> startedGames = new ArrayList<>();
         for (Game game : games) {
             if (game.isStarted()) {
@@ -103,7 +101,7 @@ public class SplendorServiceImpl implements SplendorService {
         return startedGames;
     }
 
-    public ArrayList<Game> getNonStartedGames(){
+    public ArrayList<Game> getNonStartedGames() {
         ArrayList<Game> nonStartedGames = new ArrayList<>();
         for (Game game : games) {
             if (!game.isStarted()) {
@@ -128,8 +126,8 @@ public class SplendorServiceImpl implements SplendorService {
                     reserved,
                     payment
             );
-        } else{
-            throw new IllegalArgumentException("You are not the current player");
+        } else {
+            throw new IllegalArgumentException(NOT_CURRENT_PLAYER_MESSAGE);
         }
 
         return game;
@@ -140,14 +138,13 @@ public class SplendorServiceImpl implements SplendorService {
 
         if (noble == null) {
             throw new IllegalArgumentException("Noble is not available");
-
         }
 
         boolean isActivePlayer = game.getActivePlayer().getName().equals(playerName);
         if (isActivePlayer) {
             return game.handleNobleVisit(noble);
         } else {
-            throw new IllegalArgumentException("You are not the current player");
+            throw new IllegalArgumentException(NOT_CURRENT_PLAYER_MESSAGE);
         }
     }
 
@@ -159,11 +156,13 @@ public class SplendorServiceImpl implements SplendorService {
         if (development == null) {
             throw new IllegalArgumentException("Development card is not available");
         }
+
         if (active) {
             game.getActivePlayer().reserveCard(development);
         } else {
-            throw new IllegalArgumentException("You are not the current player");
+            throw new IllegalArgumentException(NOT_CURRENT_PLAYER_MESSAGE);
         }
+
         return game;
     }
 
