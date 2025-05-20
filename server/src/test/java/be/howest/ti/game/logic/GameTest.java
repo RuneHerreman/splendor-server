@@ -35,7 +35,7 @@ class GameTest {
         assertEquals(2, game.getNumberOfPlayers());
         assertEquals(player1, game.getActivePlayer());
         assertEquals(1, game.getPlayers().size());
-        assertEquals(player1, game.getPlayers().get(0));
+        assertEquals(player1, game.getPlayers().getFirst());
         assertNotNull(game.getMarket());
         assertNull(game.getWinner());
     }
@@ -230,7 +230,7 @@ class GameTest {
         assertEquals("Bob", game.getActivePlayer().getName());
     }
     private Development createTestDevelopmentCard() {
-      return game.getMarket().getCardsAvailableInMarket().get(0).get(0);
+      return game.getMarket().getCardsAvailableInMarket().getFirst().getFirst();
 
     }
 
