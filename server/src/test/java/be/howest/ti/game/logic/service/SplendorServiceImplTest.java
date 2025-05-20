@@ -1,12 +1,13 @@
 package be.howest.ti.game.logic.service;
 
 import be.howest.ti.game.logic.Game;
+import be.howest.ti.game.logic.Market;
 import be.howest.ti.game.logic.Player;
+import be.howest.ti.game.logic.gameTools.Noble;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class SplendorServiceImplTest {
     private SplendorServiceImpl service;
@@ -93,5 +94,77 @@ class SplendorServiceImplTest {
         service.createGame(gameName, numberOfPlayers, john);
 
         assertEquals(1, service.getAllGames(true).size());
+    }
+
+    @Test
+    void chooseNoble_ValidCase() {
+        Game game = service.createGame(gameName, numberOfPlayers, john);
+        game.startGame();
+        Noble noble = Market.createNobles().get(0);
+        game.getMarket().setNobleToMarket(noble);
+
+        Noble result = service.chooseNoble(john.getName(), game.getGameId(), noble);
+
+        assertNotNull(result);
+        assertEquals(noble, result);
+    }
+
+    @Test
+    void chooseNoble_ThrowsIfNobleNull() {
+        Game game = service.createGame(gameName, numberOfPlayers, john);
+        game.startGame();
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+                () -> service.chooseNoble(john.getName(), game.getGameId(), null));
+
+        assertEquals("Noble is not available", ex.getMessage());
+    }
+
+    @Test
+    void chooseNoble_ThrowsIfNotActivePlayer() {
+        Game game = service.createGame(gameName, numberOfPlayers, john);
+        game.startGame();
+        Noble noble = Market.createNobles().get(0);
+        game.getMarket().setNobleToMarket(noble);
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+                () -> service.chooseNoble("NotJohn", game.getGameId(), noble));
+
+        assertEquals("You are not the current player", ex.getMessage());
+    }
+
+    @Test
+    void reserveCard_ValidCase() {
+        Game game = service.createGame(gameName, numberOfPlayers, john);
+        game.startGame();
+        String cardName = Market.createAllCards().get(0).get(0).getName();
+
+        Game result = service.reserveCard(john.getName(), game.getGameId(), cardName);
+
+        assertEquals(game, result);
+        assertEquals(1, john.getReserved().size());
+    }
+
+    @Test
+    void reserveCard_ThrowsIfCardNotFound() {
+        Game game = service.createGame(gameName, numberOfPlayers, john);
+        game.startGame();
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+                () -> service.reserveCard(john.getName(), game.getGameId(), "NonexistentCard"));
+
+        assertEquals("Development card is not available", ex.getMessage());
+    }
+
+    @Test
+    void reserveCard_ThrowsIfNotActivePlayer() {
+        Game game = service.createGame(gameName, numberOfPlayers, john);
+        game.startGame();
+        String cardName = Market.createAllCards().get(0).get(0).getName();
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+                () -> service.reserveCard("NotJohn", game.getGameId(), cardName));
+
+        assertEquals("You are not the current player", ex.getMessage());
     }
 }
