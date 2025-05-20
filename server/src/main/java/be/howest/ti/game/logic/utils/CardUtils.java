@@ -1,10 +1,11 @@
 package be.howest.ti.game.logic.utils;
 
-import be.howest.ti.game.logic.gametools.Token;
+import be.howest.ti.game.logic.gameTools.Noble;
+import be.howest.ti.game.logic.gameTools.Token;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
-import be.howest.ti.game.logic.gametools.Development;
+import be.howest.ti.game.logic.gameTools.Development;
 
 
 public class CardUtils {
@@ -13,11 +14,11 @@ public class CardUtils {
 
     private static Map<Character, Token> costLetterToTokenMap() {
         Map<Character, Token> costMap = new HashMap<>();
-        costMap.put('C', Token.DIAMOND);
-        costMap.put('S', Token.SAPPHIRE);
-        costMap.put('O', Token.ONYX);
-        costMap.put('R', Token.RUBY);
-        costMap.put('E', Token.EMERALD);
+        costMap.put('C', Token.Diamond);
+        costMap.put('S', Token.Sapphire);
+        costMap.put('O', Token.Onyx);
+        costMap.put('R', Token.Ruby);
+        costMap.put('E', Token.Emerald);
         return costMap;
     }
 
@@ -38,12 +39,19 @@ public class CardUtils {
     }
 
     public static Development getDevelopmentCardByName(String name , List<List<Development>> cardsInMarket) {
-
         for(List<Development> card : cardsInMarket) {
             for(Development development : card) {
                 if(development.getName().equals(name)) {
                     return development;
                 }
+            }
+        }
+        return null;
+    }
+    public static Noble getNobleCardByName(String name , List<Noble> noblesInMarket) {
+        for(Noble noble : noblesInMarket) {
+            if(noble.getName().equals(name)) {
+                return noble;
             }
         }
         return null;

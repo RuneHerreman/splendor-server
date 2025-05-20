@@ -1,7 +1,7 @@
 package be.howest.ti.game.logic;
-import be.howest.ti.game.logic.gametools.Development;
-import be.howest.ti.game.logic.gametools.Noble;
-import be.howest.ti.game.logic.gametools.Token;
+import be.howest.ti.game.logic.gameTools.Development;
+import be.howest.ti.game.logic.gameTools.Noble;
+import be.howest.ti.game.logic.gameTools.Token;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -107,19 +107,34 @@ public class Player {
         return name;
     }
 
-    private void removeToken(Token token, int amount) {
-        int amountBonus = bonuses.getOrDefault(token, 0);
-        int amountToRemoveAfterBonus = amount - amountBonus;
-        tokens.put(token, tokens.getOrDefault(token, 0) - amountToRemoveAfterBonus);
+    private void removeToken(Token token, int amount, boolean cardPurchase) {
+        int amountToRemove = amount;
+        if (cardPurchase) {
+            int amountBonus = bonuses.getOrDefault(token, 0);
+            amountToRemove = amount - amountBonus;
+        }
+        tokens.put(token, tokens.getOrDefault(token, 0) - amountToRemove);
     }
 
-    public void removeTokens(Map<Token, Integer> toRemove) {
+    public void removeTokens(Map<Token, Integer> toRemove , boolean cardPurchase) {
         for (Map.Entry<Token, Integer> entry : toRemove.entrySet()) {
-            removeToken(entry.getKey(), entry.getValue());
+            removeToken(entry.getKey(), entry.getValue() , cardPurchase);
         }
     }
 
-    public boolean hasEnoughTokensToRemove(Map<Token, Integer> toRemove) {
+    public boolean hasEnoughBonusesForNoble(Map<Token , Integer> nobleNeededBonuses){
+        for(Map.Entry<Token , Integer> entry : nobleNeededBonuses.entrySet()){
+            Token token = entry.getKey();
+            int amount = entry.getValue();
+
+            if(bonuses.get(token) < amount){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean checkValidTokensToReturn(Map<Token, Integer> toRemove) {
         for (Map.Entry<Token, Integer> token : toRemove.entrySet()) {
             Token toRemoveToken = token.getKey();
             int toRemoveAmount = token.getValue();
@@ -133,5 +148,4 @@ public class Player {
         }
         return true;
     }
-
 }

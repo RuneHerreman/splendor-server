@@ -7,13 +7,21 @@ import io.vertx.ext.web.RoutingContext;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BuyDevelopmentRequest extends BaseSplendorRequest{
-    public BuyDevelopmentRequest(RoutingContext context){
-        super(context);
+public class BuyReservedDevelopmentRequest extends BaseSplendorRequest {
+    public BuyReservedDevelopmentRequest(RoutingContext ctx) {
+        super(ctx);
     }
 
-    public String getDevelopment(){
-        return params.body().getJsonObject().getJsonObject("development").getString("name");
+    public int getGameId() {
+        return params.pathParameter("gameId").getInteger();
+    }
+
+    public String getPlayerName() {
+        return params.pathParameter("playerName").getString();
+    }
+
+    public String getDevelopment() {
+        return params.pathParameter("developmentName").getString();
     }
 
     public Map<Token, Integer> getPayment(){
@@ -29,11 +37,4 @@ public class BuyDevelopmentRequest extends BaseSplendorRequest{
         return tokenMap;
     }
 
-    public int getGameId(){
-        return params.pathParameter("gameId").getInteger();
-    }
-
-    public String getPlayerName(){
-        return params.pathParameter("playerName").getString();
-    }
 }

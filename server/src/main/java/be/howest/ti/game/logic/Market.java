@@ -1,8 +1,8 @@
 package be.howest.ti.game.logic;
 
-import be.howest.ti.game.logic.gametools.Development;
-import be.howest.ti.game.logic.gametools.Noble;
-import be.howest.ti.game.logic.gametools.Token;
+import be.howest.ti.game.logic.gameTools.Development;
+import be.howest.ti.game.logic.gameTools.Noble;
+import be.howest.ti.game.logic.gameTools.Token;
 import be.howest.ti.game.logic.utils.*;
 
 import java.io.File;
@@ -145,10 +145,10 @@ public class Market {
     }
 
     public static   Map<Token, Integer> createInitTokens(int totalPlayers) {
-        Map<Token, Integer> initTokens = new HashMap<>();
+        Map<Token, Integer> initTokens = new EnumMap<>(Token.class);
 
         for (Token token : Token.values()) {
-            if (token == Token.GOLD) {
+            if (token == Token.Gold) {
                 initTokens.put(token, 5);
             } else {
                 initTokens.put(token, getAmountOfTokenAccourdingToPlayer(totalPlayers));
@@ -215,7 +215,7 @@ public class Market {
         if (tokens.isEmpty() || (tokens.size() != 1 && tokens.size() != 3)) {
             return false;
         }
-        if (tokens.containsKey(Token.GOLD)) {
+        if (tokens.containsKey(Token.Gold)) {
             return false;
         }
 
@@ -245,7 +245,7 @@ public class Market {
             Token token = entry.getKey();
             int requestedTokenAmount = entry.getValue();
 
-            if (token == Token.GOLD) {return false;}
+            if (token == Token.Gold) {return false;}
 
             if (tokens.size() == 1 && !checkTakeDoubleTokenPossibility(token)) {return false;}
 
@@ -287,7 +287,7 @@ public class Market {
     public void addRandomCardToTheMarket(int cardLevel, int cardIndexInMarket) {
         int levelIndex = cardLevel - 1;
         if (levelIndex < 0 || levelIndex >= cardsAvailableInMarket.size()) return;
-        cardsAvailableInMarket.get(levelIndex).add(cardIndexInMarket , getRandomCardFromMarket(cardLevel));
+        cardsAvailableInMarket.get(levelIndex).add(cardIndexInMarket, getRandomCardFromMarket(cardLevel));
     }
 
     private Development getRandomCardFromMarket(int cardLevel) {

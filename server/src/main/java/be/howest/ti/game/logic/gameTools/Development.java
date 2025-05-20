@@ -1,4 +1,4 @@
-package be.howest.ti.game.logic.gametools;
+package be.howest.ti.game.logic.gameTools;
 
 import be.howest.ti.game.logic.Player;
 
@@ -36,7 +36,7 @@ public class Development {
 
     public  boolean isCardAffordableByPlayerWithGoldToken(Player player) {
         Map<Token, Integer> playerTokens = player.generateTokensAndBonuses();
-        int availableGoldTokens = playerTokens.getOrDefault(Token.GOLD, 0);
+        int availableGoldTokens = playerTokens.getOrDefault(Token.Gold, 0);
         int goldTokensNeeded = 0;
 
         for (Map.Entry<Token, Integer> cardCost : cost.entrySet()) {
@@ -54,8 +54,10 @@ public class Development {
         }
 
         return true;
-
     }
+
+
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
