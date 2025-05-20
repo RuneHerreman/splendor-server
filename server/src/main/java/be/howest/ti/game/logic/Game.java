@@ -41,16 +41,12 @@ public class Game {
         this.active = true;
     }
 
-    private List<Player> getHostPlayerOnGameInititalization(Player host ) {
+    private List<Player> getHostPlayerOnGameInititalization(Player host) {
         List<Player> players = new ArrayList<>();
         players.add(host);
         return players;
-
-
-
-
-
     }
+
     public GameState getGameState() {
         return gameState;
     }

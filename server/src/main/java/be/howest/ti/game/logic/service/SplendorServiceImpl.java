@@ -166,4 +166,16 @@ public class SplendorServiceImpl implements SplendorService {
         }
         return game;
     }
+
+    public Game getTokens(String playerName, int gameID, Map<Token, Integer> tokens) {
+        Game game = getGameByID(gameID);
+        boolean active = playerName.equals(game.getActivePlayer().getName());
+
+        if (active) {
+            game.handleTokenPurchase(tokens);
+        } else {
+            throw new IllegalArgumentException("You are not the current player");
+        }
+        return game;
+    }
 }

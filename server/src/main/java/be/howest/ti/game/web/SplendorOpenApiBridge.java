@@ -151,7 +151,15 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
     //region Game Action operations
     @Operation("update-tokens")
     public UpdateTokensResponse updateTokens(UpdateTokensRequest request) {
-        return new UpdateTokensResponse();
+        SplendorService service = getService(request);
+
+        Game game = service.getTokens(
+                request.getPlayerName(),
+                request.getGameId(),
+                request.getTokens()
+        );
+
+        return new UpdateTokensResponse(game);
     }
 
     @Operation("buy-development")
