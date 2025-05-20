@@ -3,10 +3,7 @@ import be.howest.ti.game.logic.gameTools.Development;
 import be.howest.ti.game.logic.gameTools.Noble;
 import be.howest.ti.game.logic.gameTools.Token;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Player {
 
@@ -29,17 +26,20 @@ public class Player {
     }
 
     public void addToken(Token token, int amount) {
-        tokens.put(token, tokens.getOrDefault(token, 0) + amount);
+        int tempTokenAmountInInventory = tokens.getOrDefault(token ,0);
+        tokens.put(token, tempTokenAmountInInventory+ amount);
     }
 
     public void addTokens(Map<Token, Integer> tokens) {
-        for (Map.Entry<Token, Integer> entry : tokens.entrySet()) {
-            addToken(entry.getKey(), entry.getValue());
+        for(Token token : tokens.keySet()){
+            int tokenAmount = tokens.get(token);
+            addToken(token, tokenAmount);
         }
     }
 
     public void addBonus(Token token, int amount) {
-        bonuses.put(token, bonuses.getOrDefault(token, 0) + amount);
+        int tempBonusAmount = bonuses.getOrDefault(token, 0);
+        bonuses.put(token, tempBonusAmount + amount);
     }
 
     public void addCard(Development development) {
@@ -64,68 +64,55 @@ public class Player {
     }
 
     public Map<Token, Integer> generateTokensAndBonuses() {
-        Map<Token, Integer> result = new HashMap<>(tokens);
+        Map<Token, Integer> collectionTokensAndBonuses = tokens;
 
-        for (Map.Entry<Token, Integer> bonus : bonuses.entrySet()) {
-            result.put(bonus.getKey(), result.getOrDefault(bonus.getKey(), 0) + bonus.getValue());
+        for (Token token : bonuses.keySet()) {
+            int tempTokenCollection = collectionTokensAndBonuses.getOrDefault(token, 0);
+            int tokenCollectionWithBonuses = tempTokenCollection + bonuses.get(token);
+            collectionTokensAndBonuses.put(token, tokenCollectionWithBonuses);
         }
 
-        return result;
+        return collectionTokensAndBonuses;
     }
 
-    public String getName() {
-        return name;
-    }
 
-    public int getPrestigePoints() {
-        return prestigePoints;
-    }
+    public String getName() {return name;}
 
-    public List<Development> getPurchasedDevelopments() {
-        return purchasedDevelopments;
-    }
+    public int getPrestigePoints() {return prestigePoints;}
 
-    public List<Development> getReserved() {
-        return reserved;
-    }
+    public List<Development> getPurchasedDevelopments() {return purchasedDevelopments;}
 
-    public List<Noble> getNobles() {
-        return nobles;
-    }
+    public List<Development> getReserved() {return reserved;}
 
-    public Map<Token, Integer> getTokens() {
-        return tokens;
-    }
+    public List<Noble> getNobles() {return nobles;}
 
-    public Map<Token, Integer> getBonuses() {
-        return bonuses;
-    }
+    public Map<Token, Integer> getTokens() {return tokens;}
+
+    public Map<Token, Integer> getBonuses() {return bonuses;}
 
     @Override
-    public String toString() {
-        return name;
-    }
+    public String toString() {return name;}
 
     private void removeToken(Token token, int amount, boolean cardPurchase) {
-        int amountToRemove = amount;
+        int amountTokenToRemove = amount;
         if (cardPurchase) {
             int amountBonus = bonuses.getOrDefault(token, 0);
-            amountToRemove = amount - amountBonus;
+            amountTokenToRemove = amount - amountBonus;
         }
-        tokens.put(token, tokens.getOrDefault(token, 0) - amountToRemove);
+
+        tokens.put(token, tokens.getOrDefault(token, 0) - amountTokenToRemove);
     }
 
     public void removeTokens(Map<Token, Integer> toRemove, boolean cardPurchase) {
-        for (Map.Entry<Token, Integer> entry : toRemove.entrySet()) {
-            removeToken(entry.getKey(), entry.getValue(), cardPurchase);
+        for(Token token : toRemove.keySet()) {
+            int amountTokenToRemove = toRemove.getOrDefault(token, 0);
+            removeToken(token ,amountTokenToRemove,cardPurchase );
         }
     }
 
     public boolean hasEnoughBonusesForNoble(Map<Token, Integer> nobleNeededBonuses) {
-        for (Map.Entry<Token, Integer> entry : nobleNeededBonuses.entrySet()) {
-            Token token = entry.getKey();
-            int amount = entry.getValue();
-
+        for (Token token : nobleNeededBonuses.keySet()) {
+            int amount = nobleNeededBonuses.get(token);
             if (bonuses.getOrDefault(token, 0) < amount) {
                 return false;
             }
@@ -134,16 +121,25 @@ public class Player {
     }
 
     public boolean checkValidTokensToReturn(Map<Token, Integer> toRemove) {
-        for (Map.Entry<Token, Integer> token : toRemove.entrySet()) {
-            Token toRemoveToken = token.getKey();
-            int toRemoveAmount = token.getValue();
-
+        for (Token toRemoveToken : toRemove.keySet()) {
+            int toRemoveAmount = toRemove.get(toRemoveToken);
             int inventoryAmount = tokens.getOrDefault(toRemoveToken, 0);
-
             if (inventoryAmount < toRemoveAmount) {
                 return false;
             }
         }
         return true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return Objects.equals(name, player.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(name);
     }
 }

@@ -27,7 +27,7 @@ class NobleTest {
     void nobleTest() {
         assertEquals("Bob",noble.getName());
         assertEquals(3,noble.getPrestigePoints());
-        assertEquals(3,noble.getNeededBonuses().get(Token.RUBY));
+        assertEquals(3,noble.getRequiredBonuses().get(Token.RUBY));
     }
 
     @Test

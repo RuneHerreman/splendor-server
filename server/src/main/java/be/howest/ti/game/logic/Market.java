@@ -49,13 +49,13 @@ public class Market {
     public Map<Token , Integer> getUnclaimedTokens() {
         return unclaimedTokens;
     }
-
+    /*
     public void setCardToMarket(Development developmentCard) {
         int cardLevel = developmentCard.getLevel();
         int cardLevelIndex = cardLevel - 1;
         cardsAvailableInMarket.get(cardLevelIndex).add(developmentCard);
         allCards.get(cardLevelIndex).remove(developmentCard);
-    }
+    }*/
 
     public void setNobleToMarket(Noble noble) {
         noblesAvailableInMarket.add(noble);
@@ -82,7 +82,7 @@ public class Market {
         try {
             File developmentCards = new File("src/main/resources/data/developments.txt");
             Scanner scanner = new Scanner(developmentCards);
-            if (scanner.hasNextLine()) scanner.nextLine(); // Skip header
+            if (scanner.hasNextLine()) scanner.nextLine();
 
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
@@ -97,18 +97,22 @@ public class Market {
 
                 Development development = new Development(cardName, points, tokenBundles, cardType, level);
 
-                switch (level) {
-                    case 1 -> level1Cards.add(development);
-                    case 2 -> level2Cards.add(development);
-                    case 3 -> level3Cards.add(development);
-                    default -> throw new IllegalArgumentException("Unexpected level: " + level);
+                if (level == 1) {
+                    level1Cards.add(development);
+                } else if (level == 2) {
+                    level2Cards.add(development);
+                } else if (level == 3) {
+                    level3Cards.add(development);
+                } else {
+                    throw new IllegalArgumentException("Unexpected level: " + level);
                 }
+
             }
 
             scanner.close();
 
         } catch (FileNotFoundException e) {
-            LOGGER.log(Level.WARNING, "Failed to load development cards from file.", e);
+           throw new IllegalArgumentException("Could not find development cards file");
         }
 
         allCards.add(level1Cards);
@@ -131,17 +135,16 @@ public class Market {
                 String[] token = line.split("\\t");
 
                 String cardName = token[0];
-                Map<Token , Integer> tokenBundles = CardUtils.getCostTokenSetFromLetters(token[1]);
+                Map<Token, Integer> tokenBundles = CardUtils.getCostTokenSetFromLetters(token[1]);
                 int point = Integer.parseInt(token[2]);
 
-                Noble noble = new Noble(cardName ,point ,  tokenBundles);
+                Noble noble = new Noble(cardName, point, tokenBundles);
                 allNobles.add(noble);
             }
 
             scanner.close();
-
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Could not find nobles file");
         }
 
         return allNobles;
@@ -149,26 +152,22 @@ public class Market {
 
     public static Map<Token, Integer> createInitTokens(int totalPlayers) {
         Map<Token, Integer> initTokens = new HashMap<>();
-
-
         for (Token token : Token.values()) {
             if (token == Token.GOLD) {
                 initTokens.put(token, 5);
             } else {
-                initTokens.put(token, getAmountOfTokenAccourdingToPlayer(totalPlayers));
+                initTokens.put(token, getTokenCountByPlayer(totalPlayers));
             }
         }
-
         return initTokens;
     }
+    private static int getTokenCountByPlayer(int totalPlayers) {
+        Map<Integer, Integer> getTokenCountByPlayer = new HashMap<>();
+        getTokenCountByPlayer.put(4, 7);
+        getTokenCountByPlayer.put(3, 5);
+        getTokenCountByPlayer.put(2, 4);
 
-    private static int getAmountOfTokenAccourdingToPlayer(int totalPlayers) {
-        Map<Integer, Integer> tokenAccourding = new HashMap<>();
-        tokenAccourding.put(4, 7);
-        tokenAccourding.put(3, 5);
-        tokenAccourding.put(2, 4);
-
-        return tokenAccourding.get(totalPlayers);
+        return getTokenCountByPlayer.get(totalPlayers);
     }
 
     public List<Noble> getInitNoblesForMarket(int amountOfPlayers) {
@@ -214,11 +213,9 @@ public class Market {
         if (tokens.isEmpty() || (tokens.size() != 1 && tokens.size() != 3)) {
             return false;
         }
-
         if (tokens.containsKey(Token.GOLD)) {
             return false;
         }
-
         if (tokens.size() == 3) {
             for (int count : tokens.values()) {
                 if (count != 1) {
@@ -229,7 +226,9 @@ public class Market {
         }
 
         if (tokens.size() == 1) {
-            return tokens.values().iterator().next() == 2;
+            for(int count : tokens.values()){
+                return count == 2;
+            }
         }
 
         return false;
@@ -239,18 +238,13 @@ public class Market {
     public boolean areTokensAvailableInMarket(Map<Token , Integer> tokens) {
         if (!areValidTokensPick(tokens)) { return false; }
 
-        for (Map.Entry<Token, Integer> entry : tokens.entrySet()) {
-            Token token = entry.getKey();
-            int requestedTokenAmount = entry.getValue();
-
+        for (Token token : tokens.keySet()) {
+            int requestedTokenAmount = tokens.get(token);
             if (token == Token.GOLD) { return false; }
-
             if (tokens.size() == 1 && !checkTakeDoubleTokenPossibility(token)) { return false; }
-
             int available = unclaimedTokens.getOrDefault(token, 0);
             if (available < requestedTokenAmount) { return false; }
         }
-
         return true;
     }
 
@@ -259,8 +253,8 @@ public class Market {
     }
 
     public void removeTokensFromMarket(Map<Token, Integer> tokens) {
-        for (Map.Entry<Token , Integer> tokenBundle : tokens.entrySet()) {
-            removeTokensFromMarket(tokenBundle.getKey(), tokenBundle.getValue());
+        for (Token token : tokens.keySet()) {
+            removeTokensFromMarket(token,tokens.get(token));
         }
     }
 
@@ -269,9 +263,7 @@ public class Market {
         unclaimedTokens.replace(token , tempAmount - amount);
     }
 
-    public Development getDevelopmentCardByName(String name) {
-        return CardUtils.getDevelopmentCardByName(name, this.getCardsAvailableInMarket());
-    }
+
 
     @Override
     public String toString() {
@@ -309,8 +301,9 @@ public class Market {
     }
 
     public void addTokens(Map<Token, Integer> tokens) {
-        for (Map.Entry<Token, Integer> entry : tokens.entrySet()) {
-            addToken(entry.getKey(), entry.getValue());
+        for (Token token : tokens.keySet()) {
+            int tokenAmount = tokens.get(token);
+            addToken(token, tokenAmount);
         }
     }
 }
