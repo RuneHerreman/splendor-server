@@ -27,7 +27,7 @@ public class Game {
         this.gameId = gameId;
         this.numberOfPlayers = maxPlayer;
         this.started = false;
-        this.players = getHostPlayerOnGameInititalization(host) ;
+        this.players = getHostPlayerOnGameInitialization(host) ;
         this.activePlayer = players.get(0);
         this.market = new Market(numberOfPlayers);
         this.unclaimedTokens = market.getUnclaimedTokens();
@@ -38,10 +38,10 @@ public class Game {
         this.active = true;
     }
 
-    private List<Player> getHostPlayerOnGameInititalization(Player host ) {
-        List<Player> players = new ArrayList<>();
-        players.add(host);
-        return players;
+    private List<Player> getHostPlayerOnGameInitialization(Player host ) {
+        List<Player> playerList = new ArrayList<>();
+        playerList.add(host);
+        return playerList;
 
 
 
