@@ -22,9 +22,8 @@ public class Development {
     public boolean isCardAffordableByPlayer(Player player) {
         Map<Token, Integer> playerTokens = player.generateTokensAndBonuses();
 
-        for (Map.Entry<Token, Integer> cardCost : this.cost.entrySet()) {
-            Token requiredToken = cardCost.getKey();
-            int requiredAmount = cardCost.getValue();
+        for (Token requiredToken : playerTokens.keySet()) {
+            int requiredAmount = cost.get(requiredToken);
             int playerTokenAmount = playerTokens.getOrDefault(requiredToken, 0);
 
             if (playerTokenAmount < requiredAmount) {
@@ -33,30 +32,27 @@ public class Development {
         }
         return true;
     }
+
 
     public  boolean isCardAffordableByPlayerWithGoldToken(Player player) {
         Map<Token, Integer> playerTokens = player.generateTokensAndBonuses();
         int availableGoldTokens = playerTokens.getOrDefault(Token.GOLD, 0);
-        int goldTokensNeeded = 0;
+        int goldTokensNeededToReplaceOtherToken = 0;
 
-        for (Map.Entry<Token, Integer> cardCost : cost.entrySet()) {
-            Token requiredToken = cardCost.getKey();
-            int requiredAmount = cardCost.getValue();
-            int playerTokenAmount = playerTokens.getOrDefault(requiredToken, 0);
+        for (Token requiredToken :cost.keySet()) {
+            int requiredAmountToPurchaseCard = cost.get(requiredToken);
+            int playerTotalTokenAmount = playerTokens.getOrDefault(requiredToken, 0);
 
-            if (playerTokenAmount < requiredAmount) {
-                goldTokensNeeded += (requiredAmount - playerTokenAmount);
-            }
+            if (playerTotalTokenAmount < requiredAmountToPurchaseCard) {
+                goldTokensNeededToReplaceOtherToken += requiredAmountToPurchaseCard - playerTotalTokenAmount;
 
-            if (goldTokensNeeded > availableGoldTokens) {
-                return false;
+                if (goldTokensNeededToReplaceOtherToken > availableGoldTokens) {
+                    return false;
+                }
             }
         }
-
         return true;
     }
-
-
 
     @Override
     public boolean equals(Object o) {
@@ -69,7 +65,6 @@ public class Development {
     public int hashCode() {
         return Objects.hash(name, level, prestigePoints, cost, bonus);
     }
-
     public String getName() {
         return name;
     }
