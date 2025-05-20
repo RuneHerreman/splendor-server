@@ -1,6 +1,7 @@
 package be.howest.ti.game.logic;
 
 import be.howest.ti.game.logic.gameTools.*;
+import be.howest.ti.game.logic.utils.CardUtils;
 
 import java.util.*;
 
@@ -21,6 +22,7 @@ public class Game {
     private final boolean returnExcessTokensRequired;
     private final boolean pickNobleRequired;
     private final boolean active;
+    private static final String NOT_CURRENT_PLAYER_MESSAGE = "You are not the current player";
 
     public Game(String gameName, int gameId  , int maxPlayer , Player host) {
         this.gameName = gameName;
@@ -236,5 +238,65 @@ public class Game {
         return result;
     }
 
+    public Game buyDevelopment(int gameID, String playerName, String developmentName, boolean reserved, Map<Token, Integer> payment) {
+        boolean isActivePlayer = this.getActivePlayer().getName().equals(playerName);
 
+        if (isActivePlayer) {
+            Development development = CardUtils
+                    .getDevelopmentCardByName(
+                            developmentName,
+                            this.getMarket().getCardsAvailableInMarket()
+                    );
+            this.handleDevelopmentCardPurchase(
+                    development,
+                    reserved,
+                    payment
+            );
+        } else {
+            throw new IllegalArgumentException(NOT_CURRENT_PLAYER_MESSAGE);
+        }
+
+        return this;
+    }
+
+    public Noble chooseNoble(String playerName, int gameID, Noble noble) {
+        if (noble == null) {
+            throw new IllegalArgumentException("Noble is not available");
+        }
+
+        boolean isActivePlayer = this.getActivePlayer().getName().equals(playerName);
+        if (isActivePlayer) {
+            return this.handleNobleVisit(noble);
+        } else {
+            throw new IllegalArgumentException(NOT_CURRENT_PLAYER_MESSAGE);
+        }
+    }
+
+    public Game reserveCard(String playerName, int gameID, String developmentName) {
+        boolean active = playerName.equals(this.getActivePlayer().getName());
+        Development development = CardUtils.getDevelopmentCardByName(developmentName, Market.createAllCards());
+
+        if (development == null) {
+            throw new IllegalArgumentException("Development card is not available");
+        }
+
+        if (active) {
+            this.getActivePlayer().reserveCard(development);
+        } else {
+            throw new IllegalArgumentException(NOT_CURRENT_PLAYER_MESSAGE);
+        }
+
+        return this;
+    }
+
+    public Game getTokens(String playerName, int gameID, Map<Token, Integer> tokens) {
+        boolean active = playerName.equals(this.getActivePlayer().getName());
+
+        if (active) {
+            this.handleTokenPurchase(tokens);
+        } else {
+            throw new IllegalArgumentException("You are not the current player");
+        }
+        return this;
+    }
 }
