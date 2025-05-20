@@ -3,8 +3,8 @@ package be.howest.ti.game.logic.service;
 
 import be.howest.ti.game.logic.Game;
 import be.howest.ti.game.logic.Player;
-import be.howest.ti.game.logic.gametools.Noble;
-import be.howest.ti.game.logic.gametools.Token;
+import be.howest.ti.game.logic.gameTools.Noble;
+import be.howest.ti.game.logic.gameTools.Token;
 
 import java.util.List;
 import java.util.Map;

@@ -3,9 +3,9 @@ package be.howest.ti.game.logic.service;
 import be.howest.ti.game.logic.Game;
 import be.howest.ti.game.logic.Market;
 import be.howest.ti.game.logic.Player;
-import be.howest.ti.game.logic.gametools.Development;
-import be.howest.ti.game.logic.gametools.Noble;
-import be.howest.ti.game.logic.gametools.Token;
+import be.howest.ti.game.logic.gameTools.Development;
+import be.howest.ti.game.logic.gameTools.Noble;
+import be.howest.ti.game.logic.gameTools.Token;
 import be.howest.ti.game.logic.utils.CardUtils;
 
 import java.security.SecureRandom;

@@ -1,4 +1,4 @@
-package be.howest.ti.game.logic.gametools;
+package be.howest.ti.game.logic.gameTools;
 
 import be.howest.ti.game.logic.Player;
 import org.junit.jupiter.api.BeforeEach;

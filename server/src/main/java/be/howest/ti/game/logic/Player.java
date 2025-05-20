@@ -1,7 +1,7 @@
 package be.howest.ti.game.logic;
-import be.howest.ti.game.logic.gametools.Development;
-import be.howest.ti.game.logic.gametools.Noble;
-import be.howest.ti.game.logic.gametools.Token;
+import be.howest.ti.game.logic.gameTools.Development;
+import be.howest.ti.game.logic.gameTools.Noble;
+import be.howest.ti.game.logic.gameTools.Token;
 
 import java.util.ArrayList;
 import java.util.HashMap;

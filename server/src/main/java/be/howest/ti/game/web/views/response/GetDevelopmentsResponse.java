@@ -1,7 +1,7 @@
 package be.howest.ti.game.web.views.response;
 
 import be.howest.ti.game.logic.Market;
-import be.howest.ti.game.logic.gametools.Development;
+import be.howest.ti.game.logic.gameTools.Development;
 
 import java.util.ArrayList;
 import java.util.List;

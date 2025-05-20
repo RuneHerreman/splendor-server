@@ -1,4 +1,4 @@
-package be.howest.ti.game.logic.gametools;
+package be.howest.ti.game.logic.gameTools;
 
 public enum Token {
     GOLD,

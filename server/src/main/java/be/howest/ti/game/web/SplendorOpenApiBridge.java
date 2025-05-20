@@ -2,7 +2,7 @@ package be.howest.ti.game.web;
 
 import be.howest.ti.game.logic.Game;
 import be.howest.ti.game.logic.Player;
-import be.howest.ti.game.logic.gametools.Noble;
+import be.howest.ti.game.logic.gameTools.Noble;
 import be.howest.ti.game.logic.service.SplendorService;
 import be.howest.ti.game.logic.service.SplendorServiceImpl;
 import be.howest.ti.game.web.tokens.PlainTextTokens;
