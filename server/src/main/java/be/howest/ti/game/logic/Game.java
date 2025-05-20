@@ -138,7 +138,7 @@ public class Game {
 
         return success;
     }
-    public boolean handleDevelopmentCardPurchase(Development developmentCard , Boolean reserved , Map<Token, Integer> tokens) {
+    public boolean handleDevelopmentCardPurchase(Development developmentCard , boolean reserved , Map<Token, Integer> tokens) {
         boolean success = developmentCard.isCardAffordableByPlayer(activePlayer) || developmentCard.isCardAffordableByPlayerWithGoldToken(activePlayer);
 
         if (success) {
