@@ -99,7 +99,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
     @Test
     void testHasEnoughBonusesForNoble_trueCase() {
-       // Player has enough bonuses
        player.addBonus(Token.DIAMOND, 2);
        player.addBonus(Token.SAPPHIRE, 1);
 
@@ -113,12 +112,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
     @Test
     void testHasEnoughBonusesForNoble_falseCase() {
-       // Player does not have enough DIAMOND bonuses
        player.addBonus(Token.DIAMOND, 1);
        player.addBonus(Token.SAPPHIRE, 1);
 
        Map<Token, Integer> nobleBonuses = new EnumMap<>(Token.class);
-       nobleBonuses.put(Token.DIAMOND, 2); // Not enough
+       nobleBonuses.put(Token.DIAMOND, 2);
        nobleBonuses.put(Token.SAPPHIRE, 1);
 
        assertFalse(player.hasEnoughBonusesForNoble(nobleBonuses),
