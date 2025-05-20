@@ -2,7 +2,9 @@ package be.howest.ti.game.web.views.response;
 
 import be.howest.ti.game.logic.Market;
 import be.howest.ti.game.logic.gameTools.Noble;
+import be.howest.ti.game.web.views.NobleInListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GetNoblesResponse extends AbstractResponseWithHiddenStatus {
@@ -10,7 +12,13 @@ public class GetNoblesResponse extends AbstractResponseWithHiddenStatus {
         super(200);
     }
 
-    public List<Noble> getNobles() {
-        return Market.createNobles();
+    public List<NobleInListView> getNobles() {
+        List<NobleInListView> listView = new ArrayList<>();
+
+        for (Noble noble : Market.createNobles()) {
+            listView.add(new NobleInListView(noble));
+        }
+
+        return listView;
     }
 }

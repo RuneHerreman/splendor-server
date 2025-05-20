@@ -7,6 +7,8 @@ import be.howest.ti.game.logic.gameTools.GameState;
 import be.howest.ti.game.logic.gameTools.Noble;
 import be.howest.ti.game.logic.utils.TokenMapConvertor;
 import be.howest.ti.game.web.views.CardLevelsInListView;
+import be.howest.ti.game.web.views.NobleInListView;
+import be.howest.ti.game.web.views.PlayerInListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +42,14 @@ public class GetGameDetailsResponse extends AbstractResponseWithHiddenStatus{
         return game.isPickNobleRequired();
     }
 
-    public List<Player> getPlayers() {
-        return game.getPlayers();
+    public List<PlayerInListView> getPlayers() {
+        List<PlayerInListView> listView = new ArrayList<>();
+
+        for (Player player : game.getPlayers()) {
+            listView.add(new PlayerInListView(player));
+        }
+
+        return listView;
     }
 
     public List<CardLevelsInListView> getMarket() {
@@ -58,8 +66,14 @@ public class GetGameDetailsResponse extends AbstractResponseWithHiddenStatus{
         return TokenMapConvertor.convertToStringMap(game.getUnclaimedTokens());
     }
 
-    public List<Noble> getUnclaimedNobles() {
-        return game.getUnclaimedNobles();
+    public List<NobleInListView> getUnclaimedNobles() {
+        List<NobleInListView> listView = new ArrayList<>();
+
+        for (Noble noble : game.getUnclaimedNobles()) {
+            listView.add(new NobleInListView(noble));
+        }
+
+        return listView;
     }
 
     public boolean getStarted() {

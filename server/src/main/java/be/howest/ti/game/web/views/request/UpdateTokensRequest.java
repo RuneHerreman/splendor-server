@@ -26,7 +26,7 @@ public class UpdateTokensRequest extends BaseSplendorRequest {
         Map<Token, Integer> tokenMap = new HashMap<>();
 
         take.forEach(pair -> {
-            Token token = Token.valueOf(pair.getKey());
+            Token token = Token.valueOf(pair.getKey().toUpperCase());
             int amount = Integer.parseInt(pair.getValue().toString());
             tokenMap.put(token, amount);
         });
