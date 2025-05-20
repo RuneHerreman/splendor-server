@@ -20,7 +20,7 @@ public class Game {
     private GameState gameState;
     private final boolean returnExcessTokensRequired;
     private final boolean pickNobleRequired;
-    private final boolean active;
+    private boolean active;
 
     public Game(String gameName, int gameId  , int maxPlayer , Player host) {
         this.gameName = gameName;
@@ -225,15 +225,9 @@ public class Game {
         started = true;
     }
 
-    public String gameEnd(){
-        String result;
-        if(!active && started){
-            result = "This game is ended. The winner is " + getWinner();
-
-        } else{
-            result = "This game has not ended.";
-        }
-        return result;
+    public void endGame(){
+        active = false;
+        started = true;
     }
 
 
