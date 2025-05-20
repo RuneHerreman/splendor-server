@@ -46,8 +46,6 @@ class GameTest {
         assertTrue(game.isStarted());
         Player player3 = new Player("Charlie");
 
-       // game.addPlayer(player3);
-
         assertEquals(2, game.getPlayers().size());
         assertFalse(game.getPlayers().contains(player3));
     }
