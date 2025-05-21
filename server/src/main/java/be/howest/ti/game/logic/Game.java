@@ -61,10 +61,8 @@ public class Game {
             activePlayer.addTokens(tokens);
             market.removeTokensFromMarket(tokens);
             switchTurn();
-        }else{
-            throw new IllegalArgumentException("Tokens not available in Market");
         }
-        return true;
+        return success;
     }
 
     public boolean handleTokenReturn(Map<Token, Integer> tokens) {
@@ -86,6 +84,7 @@ public class Game {
         int cardIndex = market.getIndexCardFromMarket(card);
         int goldAvailable = paymentTokens.getOrDefault(Token.GOLD, 0);
         Map<Token, Integer> tokensToRemove = calculateTokensToRemove(card.getCost(), paymentTokens, goldAvailable);
+
 
         activePlayer.removeTokens(tokensToRemove, true);
         activePlayer.updatePrestigePoints(card.getPrestigePoints());

@@ -1,7 +1,6 @@
 package be.howest.ti.game.logic.service;
 
 import be.howest.ti.game.logic.Game;
-import be.howest.ti.game.logic.Market;
 import be.howest.ti.game.logic.Player;
 import be.howest.ti.game.logic.gameTools.Noble;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,7 +24,7 @@ class SplendorServiceImplTest {
 
     @Test
     void createGame() {
-        Game game = service.createGame(numberOfPlayers, john);
+        Game game = service.createGame(numberOfPlayers, john , false);
 
         assertEquals(1, service.getAllGames().size());
         assertEquals(4, game.getNumberOfPlayers());
@@ -34,7 +33,7 @@ class SplendorServiceImplTest {
 
     @Test
     void createGameWithName() {
-        Game game = service.createGame(gameName, numberOfPlayers, john);
+        Game game = service.createGame(gameName, numberOfPlayers, john , false);
 
         assertEquals(1, service.getAllGames().size());
         assertEquals("Test Game", game.getGameName());
@@ -44,7 +43,7 @@ class SplendorServiceImplTest {
 
     @Test
     void deleteGame() {
-        Game game = service.createGame(gameName, numberOfPlayers, john);
+        Game game = service.createGame(gameName, numberOfPlayers, john , false);
 
         service.deleteGame(game.getGameId());
 
@@ -53,11 +52,11 @@ class SplendorServiceImplTest {
 
     @Test
     void deleteAllGames() {
-        service.createGame(gameName, numberOfPlayers, john);
-        service.createGame(gameName, numberOfPlayers, john);
-        service.createGame(gameName, numberOfPlayers, john);
-        service.createGame(gameName, numberOfPlayers, john);
-        service.createGame(gameName, numberOfPlayers, john);
+        service.createGame(gameName, numberOfPlayers, john , false);
+        service.createGame(gameName, numberOfPlayers, john , false);
+        service.createGame(gameName, numberOfPlayers, john , false);
+        service.createGame(gameName, numberOfPlayers, john , false);
+        service.createGame(gameName, numberOfPlayers, john , false);
 
         service.deleteAllGames();
 
@@ -66,7 +65,7 @@ class SplendorServiceImplTest {
 
     @Test
     void getGameByID() {
-        Game game = service.createGame(gameName, numberOfPlayers, john);
+        Game game = service.createGame(gameName, numberOfPlayers, john , false);
 
         Game retrievedGame = service.getGameByID(game.getGameId());
 
@@ -75,31 +74,30 @@ class SplendorServiceImplTest {
 
     @Test
     void getAllGames() {
-        service.createGame(gameName, numberOfPlayers, john);
-        service.createGame(gameName, numberOfPlayers, john);
-        service.createGame(gameName, numberOfPlayers, john);
-        service.createGame(gameName, numberOfPlayers, john);
-        service.createGame(gameName, numberOfPlayers, john);
+        service.createGame(gameName, numberOfPlayers, john , false);
+        service.createGame(gameName, numberOfPlayers, john , false);
+        service.createGame(gameName, numberOfPlayers, john , false);
+        service.createGame(gameName, numberOfPlayers, john , false);
+        service.createGame(gameName, numberOfPlayers, john , false);
 
         assertEquals(5, service.getAllGames().size());
     }
 
     @Test
     void testGetAllGames() {
-        Game startedGame = service.createGame(gameName, numberOfPlayers, john);
+        Game startedGame = service.createGame(gameName, numberOfPlayers, john , false);
         startedGame.startGame();
-        service.createGame(gameName, numberOfPlayers, john);
-        service.createGame(gameName, numberOfPlayers, john);
-        service.createGame(gameName, numberOfPlayers, john);
-        service.createGame(gameName, numberOfPlayers, john);
+        service.createGame(gameName, numberOfPlayers, john , false);
+        service.createGame(gameName, numberOfPlayers, john , false);
+        service.createGame(gameName, numberOfPlayers, john , false);
+        service.createGame(gameName, numberOfPlayers, john , false);
 
         assertEquals(1, service.getAllGames(true).size());
     }
 
-
     @Test
     void chooseNoble_ThrowsIfNobleNull() {
-        Game game = service.createGame(gameName, numberOfPlayers, john);
+        Game game = service.createGame(gameName, numberOfPlayers, john , false);
         game.startGame();
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
@@ -108,12 +106,13 @@ class SplendorServiceImplTest {
         assertEquals("Noble is not available", ex.getMessage());
     }
 
-
-
     @Test
     void reserveCard_ValidCase() {
-        Game game = service.createGame(gameName, numberOfPlayers, john);
+        Game game = service.createGame(gameName, numberOfPlayers, john , false);
         game.startGame();
+        game.joinGame("John Doe");
+        game.joinGame("John Doe2");
+        game.joinGame("John Doe3");
         String cardName = game.getMarket().getCardsAvailableInMarket().getFirst().getFirst().getName();
 
         Game result = game.reserveCard(john.getName(), cardName);
@@ -124,7 +123,7 @@ class SplendorServiceImplTest {
 
     @Test
     void reserveCard_ThrowsIfCardNotFound() {
-        Game game = service.createGame(gameName, numberOfPlayers, john);
+        Game game = service.createGame(gameName, numberOfPlayers, john , false);
         game.startGame();
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
@@ -135,7 +134,7 @@ class SplendorServiceImplTest {
 
     @Test
     void reserveCard_ThrowsIfNotActivePlayer() {
-        Game game = service.createGame(gameName, numberOfPlayers, john);
+        Game game = service.createGame(gameName, numberOfPlayers, john , false);
         game.startGame();
         String cardName = game.getMarket().getCardsAvailableInMarket().getFirst().getFirst().getName();
 
