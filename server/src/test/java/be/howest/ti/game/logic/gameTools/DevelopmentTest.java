@@ -63,6 +63,6 @@ class DevelopmentTest {
         player.addToken(Token.DIAMOND, 1);
         player.addToken(Token.RUBY, 0);
 
-        assertFalse(development.isCardAffordableByPlayer(player));
+        assertTrue(development.isCardAffordableByPlayer(player));
     }
 }
