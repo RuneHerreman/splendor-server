@@ -10,7 +10,4 @@ public class GetGamesRequest extends BaseSplendorRequest {
     public Boolean getStarted() {
         return params.queryParameter("started").getBoolean();
     }
-
-    public boolean getPrivateStatus() {return params.body().getJsonObject().getBoolean("isPrivateGame");
-}
 }

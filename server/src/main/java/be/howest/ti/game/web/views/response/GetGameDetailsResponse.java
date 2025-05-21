@@ -99,4 +99,8 @@ public class GetGameDetailsResponse extends AbstractResponseWithHiddenStatus{
     public boolean getActive() {
         return game.getActive();
     }
+
+    public boolean getIsPrivateGame() {
+        return game.getPrivateStatus();
+    }
 }

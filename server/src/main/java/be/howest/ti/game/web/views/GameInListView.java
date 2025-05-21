@@ -46,4 +46,8 @@ public class GameInListView {
     public boolean getPickNobleRequired() {
         return game.isPickNobleRequired();
     }
+
+    public boolean getIsPrivateGame() {
+        return game.getPrivateStatus();
+    }
 }
