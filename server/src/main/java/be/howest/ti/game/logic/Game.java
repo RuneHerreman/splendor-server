@@ -17,13 +17,14 @@ public class Game {
     private final Market market;
     private final Map<Token, Integer> unclaimedTokens;
     private final List<Noble> unclaimedNobles;
-    private final Player winner;
+    private Player winner;
     private GameState gameState;
     private final boolean returnExcessTokensRequired;
     private final boolean pickNobleRequired;
     private boolean active;
     private final boolean privateStatus;
     private static final String NOT_CURRENT_PLAYER_MESSAGE = "You are not the current player";
+    private boolean lastRound = false;
 
 
     public Game(String gameName, int gameId, int maxPlayer, Player host, boolean privateStatus) {
@@ -53,6 +54,106 @@ public class Game {
         int currentPlayerIndex = players.indexOf(activePlayer);
         int nextPlayerIndex = (currentPlayerIndex + 1) % numberOfPlayers;
         activePlayer = players.get(nextPlayerIndex);
+
+        winner = checkForWinner();
+
+        if (winner != null) {
+            gameState = GameState.WINNER_IS_FOUND;
+            active = false;
+        }
+    }
+
+    private Player checkForWinner() {
+        List<Player> eligiblePlayers = new ArrayList<>();
+        Player winningplayer = null;
+        for (Player player : players) {
+            if (player.getPrestigePoints() >= 15) {
+                eligiblePlayers.add(player);
+            }
+        }
+
+        if (lastRound && activePlayer.equals(getPlayers().getFirst())) {
+            winningplayer = determineWinner();
+        }
+
+        if (!lastRound && !eligiblePlayers.isEmpty()) {
+            lastRound = true;
+        }
+
+        return winningplayer;
+    }
+
+    public Player determineWinner() {
+        List<List<Player>> playerData = new ArrayList<>(List.of(
+                mostPrestige(),
+                mostDevelopments(),
+                mostNobles()
+        ));
+
+        for (List<Player> playerDataList : playerData) {
+            if (playerDataList.size() == 1) {
+                return playerDataList.getFirst();
+            }
+        }
+
+        return null;
+    }
+
+    public List<Player> mostPrestige() {
+        List<Player> mostPrestige = new ArrayList<>();
+        int max = 0;
+
+        for (Player player : players) {
+            int prestigeCount = player.getPrestigePoints();
+
+            if (prestigeCount > max) {
+                max = prestigeCount;
+                mostPrestige.clear();
+                mostPrestige.add(player);
+            } else if (prestigeCount == max) {
+                mostPrestige.add(player);
+            }
+        }
+
+        return mostPrestige;
+    }
+
+    public List<Player> mostNobles() {
+        List<Player> mostNobles = new ArrayList<>();
+        int max = 0;
+
+        for (Player player : players) {
+            int fieldLength = player.getNobles().size();
+
+            if (fieldLength > max) {
+                max = fieldLength;
+                mostNobles.clear();
+                mostNobles.add(player);
+            } else if (fieldLength == max) {
+                mostNobles.add(player);
+            }
+        }
+
+        return mostNobles;
+    }
+
+    public List<Player> mostDevelopments() {
+        List<Player> mostDevelopments = new ArrayList<>();
+        int max = 0;
+
+        for (Player player : players) {
+            int developmentCount = player.getPurchasedDevelopments().size();
+
+            if (developmentCount > max) {
+                max = developmentCount;
+                mostDevelopments.clear();
+                mostDevelopments.add(player);
+            } else if (developmentCount == max) {
+                mostDevelopments.add(player);
+            }
+        }
+
+        return mostDevelopments;
     }
 
     public boolean handleTokenPurchase(Map<Token, Integer> tokens) {
