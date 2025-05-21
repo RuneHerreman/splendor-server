@@ -20,17 +20,11 @@ public class BuyDevelopmentRequest extends BaseSplendorRequest{
         Map<Token, Integer> tokenMap = new HashMap<>();
         JsonObject payment = params.body().getJsonObject().getJsonObject("payment");
 
-//        payment.forEach(pair -> {
-//            Token token = Token.valueOf(pair.getKey().toUpperCase());
-//            int amount = Integer.parseInt(pair.getValue().toString());
-//            tokenMap.put(token, amount);
-//        });
-//
-        for (Map.Entry<String, Object> paymentToken : payment) {
-            Token token = Token.valueOf(paymentToken.getKey().toUpperCase());
-            int amount = Integer.parseInt(paymentToken.getValue().toString());
+        payment.forEach(pair -> {
+            Token token = Token.valueOf(pair.getKey().toUpperCase());
+            int amount = Integer.parseInt(pair.getValue().toString());
             tokenMap.put(token, amount);
-        }
+        });
 
         System.out.println("Payment: " + tokenMap);
         return tokenMap;
