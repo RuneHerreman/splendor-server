@@ -278,8 +278,14 @@ public class Game {
         }
 
         if (active) {
-            this.getActivePlayer().reserveCard(development);
-            this.getMarket().removeCardFromMarket(development);
+            Development developmentCard = CardUtils.getDevelopmentCardByName(developmentName, this.getMarket().getCardsAvailableInMarket());
+            int cardLevel = developmentCard.getLevel();
+            int cardIndexInMarket = market.getIndexCardFromMarket(developmentCard);
+
+            this.activePlayer.reserveCard(development);
+            this.market.removeCardFromMarket(development);
+            market.addRandomCardToTheMarket(cardLevel, cardIndexInMarket);
+            activePlayer.addCard(developmentCard);
             this.switchTurn();
         } else {
             throw new IllegalArgumentException(NOT_CURRENT_PLAYER_MESSAGE);
