@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 public interface SplendorService {
-    Game createGame(int maxPlayers , Player host);
-    Game createGame(String gameName,int maxPlayers , Player host);
+    Game createGame(int maxPlayers , Player host, boolean privateStatus);
+    Game createGame(String gameName,int maxPlayers , Player host, boolean privateStatus);
 
     Game deleteGame(int gameID);
     List<Game> deleteAllGames();

@@ -20,16 +20,16 @@ public class SplendorServiceImpl implements SplendorService {
         this.games = new ArrayList<>();
     }
 
-    public Game createGame(String gameName, int maxPlayers, Player host) {
+    public Game createGame(String gameName, int maxPlayers, Player host, boolean privateStatus) {
         int gameID = getRandomID();
-        Game game = new Game(gameName, gameID, maxPlayers, host);
+        Game game = new Game(gameName, gameID, maxPlayers, host, privateStatus);
         games.add(game);
         return game;
     }
 
-    public Game createGame(int maxPlayers, Player host) {
+    public Game createGame(int maxPlayers, Player host, boolean privateStatus) {
         int gameID = getRandomID();
-        Game game = new Game(null, gameID, maxPlayers, host);
+        Game game = new Game(null, gameID, maxPlayers, host, privateStatus);
         games.add(game);
         return game;
     }
