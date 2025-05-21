@@ -169,6 +169,8 @@ public class Game {
         return success;
     }
 
+
+
     public Noble handleNobleVisit(Noble noble ) {
         Map<Token , Integer> nobleNeededBonus = noble.getRequiredBonuses();
         if(activePlayer.hasEnoughBonusesForNoble(nobleNeededBonus)){
@@ -190,6 +192,7 @@ public class Game {
 
 
         for (Token requiredToken : costCard.keySet()) {
+            System.out.println("blehhh");
             int requiredAmount = costCard.get(requiredToken);
             int playerTokenAmount = tokensProvided.getOrDefault(requiredToken, 0);
 
