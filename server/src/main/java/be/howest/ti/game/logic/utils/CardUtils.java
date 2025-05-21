@@ -12,10 +12,6 @@ public class CardUtils {
 
     private static final Map<Character, Token> costMap = costLetterToTokenMap();
 
-    private CardUtils(){
-        throw new UnsupportedOperationException("Utility class");
-    }
-
     private static Map<Character, Token> costLetterToTokenMap() {
         Map<Character, Token> costMap = new HashMap<>();
         costMap.put('C', Token.DIAMOND);
@@ -25,7 +21,6 @@ public class CardUtils {
         costMap.put('E', Token.EMERALD);
         return costMap;
     }
-
 
     public static Map<Token, Integer> getCostTokenSetFromLetters(String tokensString) {
         Map<Token, Integer> tokenCounts = new HashMap<>();
