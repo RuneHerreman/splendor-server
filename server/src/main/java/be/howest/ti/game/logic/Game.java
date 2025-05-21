@@ -286,6 +286,11 @@ public class Game {
 
         if (active) {
             Development developmentCard = CardUtils.getDevelopmentCardByName(developmentName, this.getMarket().getCardsAvailableInMarket());
+
+            if (developmentCard == null) {
+                throw new IllegalArgumentException("Development card not found in the current market.");
+            }
+
             int cardLevel = developmentCard.getLevel();
             int cardIndexInMarket = market.getIndexCardFromMarket(developmentCard);
 
