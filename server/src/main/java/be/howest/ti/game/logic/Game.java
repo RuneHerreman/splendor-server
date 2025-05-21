@@ -135,6 +135,9 @@ public class Game {
     public boolean handleDevelopmentCardPurchase(Development developmentCard , boolean reserved , Map<Token, Integer> tokens) {
         boolean success = developmentCard.isCardAffordableByPlayer(activePlayer) || developmentCard.isCardAffordableByPlayerWithGoldToken(activePlayer);
 
+        System.out.println("handleDevelopmentCardPurchase payment" + tokens);
+        System.out.println("handleDevelopmentCardPurchase cardCost" + developmentCard.getCost());
+
         if (success) {
             int cardLevel = developmentCard.getLevel();
             int cardIndexInMarket = market.getIndexCardFromMarket(developmentCard);
@@ -174,6 +177,10 @@ public class Game {
 
     private Map<Token, Integer> calculateTokensToRemove(Map<Token, Integer> costCard, Map<Token, Integer> tokensProvided, int availableGoldTokens) {
         Map<Token, Integer> tokensToDeduct = new HashMap<>();
+
+        System.out.println("calculateTokensToRemove payment" + tokensProvided);
+        System.out.println("calculateTokensToRemove cardCost" + costCard);
+
 
         for (Token requiredToken : costCard.keySet()) {
             int requiredAmount = costCard.get(requiredToken);
@@ -228,6 +235,7 @@ public class Game {
 
     public Game buyDevelopment(String playerName, String developmentName, boolean reserved, Map<Token, Integer> payment) {
         boolean isActivePlayer = this.getActivePlayer().getName().equals(playerName);
+        System.out.println("BuyDevelopment Game payment" + payment);
 
         if (isActivePlayer) {
             Development development = CardUtils
@@ -235,6 +243,7 @@ public class Game {
                             developmentName,
                             this.getMarket().getCardsAvailableInMarket()
                     );
+            System.out.println("BuyDevelopment Game development" + development.getName() + development.getCost() + development.getPrestigePoints());
             this.handleDevelopmentCardPurchase(
                     development,
                     reserved,
@@ -270,6 +279,8 @@ public class Game {
 
         if (active) {
             this.getActivePlayer().reserveCard(development);
+            this.getMarket().removeCardFromMarket(development);
+            this.switchTurn();
         } else {
             throw new IllegalArgumentException(NOT_CURRENT_PLAYER_MESSAGE);
         }
