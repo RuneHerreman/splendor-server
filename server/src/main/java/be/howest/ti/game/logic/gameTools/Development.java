@@ -47,7 +47,7 @@ public class Development {
         int missingTokenAmount = 0;
 
         for (Token token : cost.keySet()) {
-            int requiredTokenAmount = cost.getOrDefault(token, 0);
+            int requiredTokenAmount = cost.get(token);
             int availableTokenAmount = playerTokens.getOrDefault(token, 0);
 
             if (availableTokenAmount < requiredTokenAmount) {

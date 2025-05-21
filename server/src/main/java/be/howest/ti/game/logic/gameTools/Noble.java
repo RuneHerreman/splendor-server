@@ -31,7 +31,7 @@ public class Noble {
     }
 
     private boolean hasRequiredBonusForToken(Token token, int playerBonusAmount) {
-        int requiredAmount = requiredBonuses.getOrDefault(token, 0);
+        int requiredAmount = requiredBonuses.get(token);
         return playerBonusAmount >= requiredAmount;
     }
 

@@ -79,7 +79,6 @@ public class Game {
         if (!card.isCardAffordableByPlayer(activePlayer) && !card.isCardAffordableByPlayerWithGoldToken(activePlayer)) {
             return false;
         }
-
         int cardLevel = card.getLevel();
         int cardIndex = market.getIndexCardFromMarket(card);
         int goldAvailable = paymentTokens.getOrDefault(Token.GOLD, 0);
