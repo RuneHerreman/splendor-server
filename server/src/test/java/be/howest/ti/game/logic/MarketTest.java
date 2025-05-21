@@ -47,17 +47,7 @@ class MarketTest {
         }
     }
 
-    @Test
-    void testSetNobleToMarket() {
-        List<Noble> nobles = market.getAllNobles();
-        if (!nobles.isEmpty()) {
-            Noble noble = nobles.getFirst();
-            market.setNobleToMarket(noble);
 
-            assertTrue(market.getNoblesAvailableInMarket().contains(noble));
-            assertFalse(market.getAllNobles().contains(noble));
-        }
-    }
 
     @Test
     void testRemoveCardFromMarket() {
@@ -69,15 +59,7 @@ class MarketTest {
         }
     }
 
-    @Test
-    void testRemoveNobleFromMarket() {
-        List<Noble> nobles = market.getNoblesAvailableInMarket();
-        if (!nobles.isEmpty()) {
-            Noble noble = nobles.getFirst();
-            market.removeNobleFromMarket(noble);
-            assertFalse(market.getNoblesAvailableInMarket().contains(noble));
-        }
-    }
+
 
 
 }

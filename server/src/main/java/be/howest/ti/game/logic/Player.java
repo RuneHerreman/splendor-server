@@ -49,6 +49,8 @@ public class Player {
 
     public void reserveCard(Development development) {
         reserved.add(development);
+        int goldTokenAmount = tokens.getOrDefault(Token.GOLD, 0) + 1;
+        addToken(Token.GOLD , goldTokenAmount);
     }
 
     public void buyReserved(Development development) {
@@ -75,24 +77,6 @@ public class Player {
 
         return collectionTokensAndBonuses;
     }
-
-
-    public String getName() {return name;}
-
-    public int getPrestigePoints() {return prestigePoints;}
-
-    public List<Development> getPurchasedDevelopments() {return purchasedDevelopments;}
-
-    public List<Development> getReserved() {return reserved;}
-
-    public List<Noble> getNobles() {return nobles;}
-
-    public Map<Token, Integer> getTokens() {return tokens;}
-
-    public Map<Token, Integer> getBonuses() {return bonuses;}
-
-    @Override
-    public String toString() {return name;}
 
     private void removeToken(Token token, int amount, boolean cardPurchase) {
         int amountTokenToRemove = amount;
@@ -143,4 +127,12 @@ public class Player {
     public int hashCode() {
         return Objects.hashCode(name);
     }
+    public String getName() {return name;}
+    public int getPrestigePoints() {return prestigePoints;}
+    public List<Development> getPurchasedDevelopments() {return purchasedDevelopments;}
+    public List<Development> getReserved() {return reserved;}
+    public List<Noble> getNobles() {return nobles;}
+    public Map<Token, Integer> getTokens() {return tokens;}
+    public Map<Token, Integer> getBonuses() {return bonuses;}
+    @Override public String toString() {return name;}
 }

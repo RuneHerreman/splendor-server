@@ -19,34 +19,41 @@ public class Development {
         this.bonus = bonus;
         this.level = level;
     }
+
     public boolean isCardAffordableByPlayer(Player player) {
         Map<Token, Integer> playerTokens = player.generateTokensAndBonuses();
+        return hasEnoughTokens(playerTokens);
+    }
 
-        for (Token requiredToken : cost.keySet()) {
-            int requiredAmount = playerTokens.getOrDefault(requiredToken, 0);
-            int playerTokenAmount = playerTokens.getOrDefault(requiredToken, 0);
+    public boolean isCardAffordableByPlayerWithGoldToken(Player player) {
+        Map<Token, Integer> playerTokens = player.generateTokensAndBonuses();
+        return hasEnoughTokensWithGold(playerTokens);
+    }
 
-            if (playerTokenAmount > requiredAmount) {
+    private boolean hasEnoughTokens(Map<Token, Integer> playerTokens) {
+        for (Token token : cost.keySet()) {
+            int requiredTokenAmount = cost.get(token);
+            int availableTokenAmount = playerTokens.getOrDefault(token, 0);
+
+            if (availableTokenAmount < requiredTokenAmount) {
                 return false;
             }
         }
         return true;
     }
 
+    private boolean hasEnoughTokensWithGold(Map<Token, Integer> playerTokens) {
+        int availableGoldTokenAmount = playerTokens.getOrDefault(Token.GOLD, 0);
+        int missingTokenAmount = 0;
 
-    public  boolean isCardAffordableByPlayerWithGoldToken(Player player) {
-        Map<Token, Integer> playerTokens = player.generateTokensAndBonuses();
-        int availableGoldTokens = playerTokens.getOrDefault(Token.GOLD, 0);
-        int goldTokensNeededToReplaceOtherToken = 0;
+        for (Token token : cost.keySet()) {
+            int requiredTokenAmount = cost.getOrDefault(token, 0);
+            int availableTokenAmount = playerTokens.getOrDefault(token, 0);
 
-        for (Token requiredToken :cost.keySet()) {
-            int requiredAmountToPurchaseCard = cost.get(requiredToken);
-            int playerTotalTokenAmount = playerTokens.getOrDefault(requiredToken, 0);
+            if (availableTokenAmount < requiredTokenAmount) {
+                missingTokenAmount += requiredTokenAmount - availableGoldTokenAmount;
 
-            if (playerTotalTokenAmount < requiredAmountToPurchaseCard) {
-                goldTokensNeededToReplaceOtherToken += requiredAmountToPurchaseCard - playerTotalTokenAmount;
-
-                if (goldTokensNeededToReplaceOtherToken > availableGoldTokens) {
+                if (missingTokenAmount > availableGoldTokenAmount) {
                     return false;
                 }
             }
@@ -62,26 +69,12 @@ public class Development {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(name, level, prestigePoints, cost, bonus);
-    }
-    public String getName() {
-        return name;
-    }
-    public int getPrestigePoints() {
-        return prestigePoints;
-    }
-    public Map<Token, Integer> getCost() {
-        return cost;
-    }
-    public int getLevel() {
-        return level;
-    }
-    public Token getBonus() {
-        return bonus;
-    }
-    public String toString() {
-        return name;
-    }
+    public int hashCode() {return Objects.hash(name, level, prestigePoints, cost, bonus);}
+    public String getName() {return name;}
+    public int getPrestigePoints() {return prestigePoints;}
+    public Map<Token, Integer> getCost() {return cost;}
+    public int getLevel() {return level;}
+    public Token getBonus() {return bonus;}
+    public String toString() {return name;}
 
 }

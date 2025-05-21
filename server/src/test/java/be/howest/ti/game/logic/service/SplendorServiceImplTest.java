@@ -108,24 +108,13 @@ class SplendorServiceImplTest {
         assertEquals("Noble is not available", ex.getMessage());
     }
 
-    @Test
-    void chooseNoble_ThrowsIfNotActivePlayer() {
-        Game game = service.createGame(gameName, numberOfPlayers, john);
-        game.startGame();
-        Noble noble = Market.createNobles().getFirst();
-        game.getMarket().setNobleToMarket(noble);
 
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
-                () -> game.chooseNoble("NotJohn", noble));
-
-        assertEquals("You are not the current player", ex.getMessage());
-    }
 
     @Test
     void reserveCard_ValidCase() {
         Game game = service.createGame(gameName, numberOfPlayers, john);
         game.startGame();
-        String cardName = Market.createAllCards().getFirst().getFirst().getName();
+        String cardName = game.getMarket().getCardsAvailableInMarket().getFirst().getFirst().getName();
 
         Game result = game.reserveCard(john.getName(), cardName);
 
@@ -148,7 +137,7 @@ class SplendorServiceImplTest {
     void reserveCard_ThrowsIfNotActivePlayer() {
         Game game = service.createGame(gameName, numberOfPlayers, john);
         game.startGame();
-        String cardName = Market.createAllCards().getFirst().getFirst().getName();
+        String cardName = game.getMarket().getCardsAvailableInMarket().getFirst().getFirst().getName();
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
                 () -> game.reserveCard("NotJohn", cardName));

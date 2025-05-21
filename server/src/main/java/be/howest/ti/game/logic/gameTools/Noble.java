@@ -16,18 +16,13 @@ public class Noble {
         this.requiredBonuses = requiredBonuses;
     }
 
-    public String getName() {return name;}
-
-    public int getPrestigePoints() {return prestigePoints;}
-
-    public Map<Token, Integer> getRequiredBonuses() {return requiredBonuses;}
-
     public boolean isNobleClaimableByPlayer(Player player) {
         Map<Token, Integer> playerBonuses = player.getBonuses();
 
         for (Token token : requiredBonuses.keySet()) {
             int playerBonusAmount = playerBonuses.getOrDefault(token, 0);
             boolean hasEnoughBonusForToken = hasRequiredBonusForToken(token, playerBonusAmount);
+
             if (!hasEnoughBonusForToken) {
                 return false;
             }
@@ -41,9 +36,6 @@ public class Noble {
     }
 
     @Override
-    public String toString() {return name;}
-
-    @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Noble noble = (Noble) o;
@@ -52,6 +44,9 @@ public class Noble {
                 Objects.equals(requiredBonuses, noble.requiredBonuses);
     }
 
-    @Override
-    public int hashCode() {return Objects.hash(name, prestigePoints, requiredBonuses);}
+    @Override public int hashCode() {return Objects.hash(name, prestigePoints, requiredBonuses);}
+    public String getName() {return name;}
+    public int getPrestigePoints() {return prestigePoints;}
+    public Map<Token, Integer> getRequiredBonuses() {return requiredBonuses;}
+    @Override public String toString() {return name;}
 }
