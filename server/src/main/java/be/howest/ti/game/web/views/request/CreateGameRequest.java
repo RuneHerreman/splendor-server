@@ -18,4 +18,6 @@ public class CreateGameRequest extends BaseSplendorRequest {
     public String getGameName() {
         return params.body().getJsonObject().getString("gameName");
     }
+
+    public boolean getPrivateStatus() {return params.body().getJsonObject().getBoolean("isPrivateGame");}
 }

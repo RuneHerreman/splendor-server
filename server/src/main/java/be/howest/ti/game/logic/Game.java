@@ -22,9 +22,11 @@ public class Game {
     private final boolean returnExcessTokensRequired;
     private final boolean pickNobleRequired;
     private boolean active;
+    private final boolean privateStatus;
     private static final String NOT_CURRENT_PLAYER_MESSAGE = "You are not the current player";
 
-    public Game(String gameName, int gameId  , int maxPlayer , Player host) {
+
+    public Game(String gameName, int gameId, int maxPlayer, Player host, boolean privateStatus) {
         this.gameName = gameName;
         this.gameId = gameId;
         this.numberOfPlayers = maxPlayer;
@@ -38,6 +40,7 @@ public class Game {
         this.returnExcessTokensRequired = false;
         this.pickNobleRequired = false;
         this.active = true;
+        this.privateStatus = privateStatus;
     }
 
     private List<Player> getHostPlayerOnGameInitialization(Player host ) {
@@ -88,6 +91,10 @@ public class Game {
 
     public Player getWinner() {
         return winner;
+    }
+
+    public boolean getPrivateStatus() {
+        return privateStatus;
     }
 
     public void addPlayer(Player player){

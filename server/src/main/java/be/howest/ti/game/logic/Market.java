@@ -48,13 +48,7 @@ public class Market {
     public Map<Token , Integer> getUnclaimedTokens() {
         return unclaimedTokens;
     }
-    /*
-    public void setCardToMarket(Development developmentCard) {
-        int cardLevel = developmentCard.getLevel();
-        int cardLevelIndex = cardLevel - 1;
-        cardsAvailableInMarket.get(cardLevelIndex).add(developmentCard);
-        allCards.get(cardLevelIndex).remove(developmentCard);
-    }*/
+
 
     public void setNobleToMarket(Noble noble) {
         noblesAvailableInMarket.add(noble);
