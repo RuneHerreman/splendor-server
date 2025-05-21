@@ -1,6 +1,7 @@
 package be.howest.ti.game.web.views.request;
 
 import be.howest.ti.game.logic.gameTools.Token;
+import be.howest.ti.game.logic.utils.TokenMapConvertor;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
 
@@ -21,8 +22,8 @@ public class UpdateTokensRequest extends BaseSplendorRequest {
     }
 
     public Map<Token, Integer> getTokens() {
-        JsonObject take = params.body().getJsonObject().getJsonObject("take");
         Map<Token, Integer> tokenMap = new HashMap<>();
+        JsonObject take = params.body().getJsonObject().getJsonObject("take");
 
         take.forEach(pair -> {
             Token token = Token.valueOf(pair.getKey().toUpperCase());

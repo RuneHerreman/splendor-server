@@ -22,11 +22,11 @@ public class Development {
     public boolean isCardAffordableByPlayer(Player player) {
         Map<Token, Integer> playerTokens = player.generateTokensAndBonuses();
 
-        for (Token requiredToken : playerTokens.keySet()) {
-            int requiredAmount = cost.get(requiredToken);
+        for (Token requiredToken : cost.keySet()) {
+            int requiredAmount = playerTokens.getOrDefault(requiredToken, 0);
             int playerTokenAmount = playerTokens.getOrDefault(requiredToken, 0);
 
-            if (playerTokenAmount < requiredAmount) {
+            if (playerTokenAmount > requiredAmount) {
                 return false;
             }
         }

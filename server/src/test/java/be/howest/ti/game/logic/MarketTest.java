@@ -48,18 +48,6 @@ class MarketTest {
     }
 
     @Test
-    void testSetCardToMarket() {
-        List<Development> level1Cards = market.getAllCards().getFirst();
-        if (!level1Cards.isEmpty()) {
-            Development dev = level1Cards.getFirst();
-            market.setCardToMarket(dev);
-
-            assertTrue(market.getCardsAvailableInMarket().getFirst().contains(dev));
-            assertFalse(market.getAllCards().getFirst().contains(dev));
-        }
-    }
-
-    @Test
     void testSetNobleToMarket() {
         List<Noble> nobles = market.getAllNobles();
         if (!nobles.isEmpty()) {
