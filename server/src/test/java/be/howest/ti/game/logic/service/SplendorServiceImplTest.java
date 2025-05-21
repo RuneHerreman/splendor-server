@@ -103,7 +103,7 @@ class SplendorServiceImplTest {
         game.startGame();
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
-                () -> game.chooseNoble(john.getName(), game.getGameId(), null));
+                () -> game.chooseNoble(john.getName(), null));
 
         assertEquals("Noble is not available", ex.getMessage());
     }
@@ -116,7 +116,7 @@ class SplendorServiceImplTest {
         game.getMarket().setNobleToMarket(noble);
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
-                () -> game.chooseNoble("NotJohn", game.getGameId(), noble));
+                () -> game.chooseNoble("NotJohn", noble));
 
         assertEquals("You are not the current player", ex.getMessage());
     }
@@ -127,7 +127,7 @@ class SplendorServiceImplTest {
         game.startGame();
         String cardName = Market.createAllCards().getFirst().getFirst().getName();
 
-        Game result = game.reserveCard(john.getName(), game.getGameId(), cardName);
+        Game result = game.reserveCard(john.getName(), cardName);
 
         assertEquals(game, result);
         assertEquals(1, john.getReserved().size());
@@ -139,7 +139,7 @@ class SplendorServiceImplTest {
         game.startGame();
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
-                () -> game.reserveCard(john.getName(), game.getGameId(), "NonexistentCard"));
+                () -> game.reserveCard(john.getName(), "NonexistentCard"));
 
         assertEquals("Development card is not available", ex.getMessage());
     }
@@ -151,7 +151,7 @@ class SplendorServiceImplTest {
         String cardName = Market.createAllCards().getFirst().getFirst().getName();
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
-                () -> game.reserveCard("NotJohn", game.getGameId(), cardName));
+                () -> game.reserveCard("NotJohn", cardName));
 
         assertEquals("You are not the current player", ex.getMessage());
     }
