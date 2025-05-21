@@ -47,77 +47,16 @@ public class Game {
         List<Player> playerList = new ArrayList<>();
         playerList.add(host);
         return playerList;
-
-    }
-    public GameState getGameState() {
-        return gameState;
-    }
-
-    public String getGameName() {
-        return gameName;
-    }
-
-    public int getGameId() {
-        return gameId;
-    }
-
-    public boolean isStarted() {
-        return started;
-    }
-
-    public int getNumberOfPlayers() {
-        return numberOfPlayers;
-    }
-
-    public Player getActivePlayer() {
-        return activePlayer;
-    }
-
-    public List<Player> getPlayers() {
-        return players;
-    }
-
-    public Market getMarket() {
-        return market;
-    }
-
-    public Map<Token , Integer> getUnclaimedTokens() {
-        return unclaimedTokens;
-    }
-
-    public List<Noble> getUnclaimedNobles() {
-        return unclaimedNobles;
-    }
-
-    public Player getWinner() {
-        return winner;
-    }
-
-    public boolean getPrivateStatus() {
-        return privateStatus;
-    }
-
-    public void addPlayer(Player player){
-        if(players.size() < numberOfPlayers && !started && !players.contains(player)){
-            players.add(player);
-        }
     }
 
     public void switchTurn(){
-        int nextPlayerIndex = (players.indexOf(activePlayer) + 1) % numberOfPlayers;
+        int currentPlayerIndex = players.indexOf(activePlayer);
+        int nextPlayerIndex = (currentPlayerIndex + 1) % numberOfPlayers;
         activePlayer = players.get(nextPlayerIndex);
     }
 
-    public boolean isReturnExcessTokensRequired() {
-        return returnExcessTokensRequired;
-    }
-
-    public boolean areTokensAvailableInMarket(Map<Token, Integer> tokens) {
-        return market.areTokensAvailableInMarket(tokens);
-    }
-
     public boolean handleTokenPurchase(Map<Token, Integer> tokens) {
-        boolean success = areTokensAvailableInMarket(tokens);
+        boolean success = market.areTokensAvailableInMarket(tokens);
         if (success) {
             activePlayer.addTokens(tokens);
             market.removeTokensFromMarket(tokens);
@@ -125,12 +64,9 @@ public class Game {
         }
         return success;
     }
-    public boolean areValidTokensToReturn(Map<Token, Integer> tokens) {
-      return   market.areValidTokensPick(tokens);
-    }
 
     public boolean handleTokenReturn(Map<Token, Integer> tokens) {
-        boolean success = areValidTokensToReturn(tokens) && activePlayer.checkValidTokensToReturn(tokens);
+        boolean success = market.areValidTokensPick(tokens) && activePlayer.checkValidTokensToReturn(tokens);
         if (success) {
             activePlayer.removeTokens(tokens , false);
             market.addTokens(tokens);
@@ -139,60 +75,37 @@ public class Game {
 
         return success;
     }
-    public boolean handleDevelopmentCardPurchase(Development developmentCard , boolean reserved , Map<Token, Integer> tokens) {
-        boolean success = developmentCard.isCardAffordableByPlayer(activePlayer) || developmentCard.isCardAffordableByPlayerWithGoldToken(activePlayer);
-
-        System.out.println("handleDevelopmentCardPurchase payment" + tokens);
-        System.out.println("handleDevelopmentCardPurchase cardCost" + developmentCard.getCost());
-
-        if (success) {
-            int cardLevel = developmentCard.getLevel();
-            int cardIndexInMarket = market.getIndexCardFromMarket(developmentCard);
-            Map<Token, Integer> costCard = developmentCard.getCost();
-            int availableGoldTokens = tokens.getOrDefault(Token.GOLD, 0);
-            Map<Token, Integer> tokensToBeRemovedFromPlayer = calculateTokensToRemove(costCard , tokens , availableGoldTokens);
-
-            activePlayer.removeTokens(tokensToBeRemovedFromPlayer , true);
-            market.removeCardFromMarket(developmentCard);
-            activePlayer.updatePrestigePoints(developmentCard.getPrestigePoints());
-
-            if (!reserved) {
-                market.addRandomCardToTheMarket(cardLevel, cardIndexInMarket);
-                activePlayer.addCard(developmentCard);
-            } else {
-                activePlayer.buyReserved(developmentCard);
-            }
-
-            switchTurn();
+    public boolean handleDevelopmentCardPurchase(Development card, boolean reserved, Map<Token, Integer> paymentTokens) {
+        if (!card.isCardAffordableByPlayer(activePlayer) && !card.isCardAffordableByPlayerWithGoldToken(activePlayer)) {
+            return false;
         }
 
-        return success;
-    }
+        int cardLevel = card.getLevel();
+        int cardIndex = market.getIndexCardFromMarket(card);
+        int goldAvailable = paymentTokens.getOrDefault(Token.GOLD, 0);
+        Map<Token, Integer> tokensToRemove = calculateTokensToRemove(card.getCost(), paymentTokens, goldAvailable);
 
 
+        activePlayer.removeTokens(tokensToRemove, true);
+        activePlayer.updatePrestigePoints(card.getPrestigePoints());
+        market.addTokens(tokensToRemove);
+        market.removeCardFromMarket(card);
 
-    public Noble handleNobleVisit(Noble noble ) {
-        Map<Token , Integer> nobleNeededBonus = noble.getRequiredBonuses();
-        if(activePlayer.hasEnoughBonusesForNoble(nobleNeededBonus)){
-            activePlayer.addNoble(noble);
-            activePlayer.updatePrestigePoints(noble.getPrestigePoints());
-            return noble;
+        if (reserved) {
+            activePlayer.buyReserved(card);
+        } else {
+            activePlayer.addCard(card);
+            market.addRandomCardToTheMarket(cardLevel, cardIndex);
         }
 
-        return null;
-
-
+        switchTurn();
+        return true;
     }
 
     private Map<Token, Integer> calculateTokensToRemove(Map<Token, Integer> costCard, Map<Token, Integer> tokensProvided, int availableGoldTokens) {
         Map<Token, Integer> tokensToDeduct = new HashMap<>();
 
-        System.out.println("calculateTokensToRemove payment" + tokensProvided);
-        System.out.println("calculateTokensToRemove cardCost" + costCard);
-
-
         for (Token requiredToken : costCard.keySet()) {
-            System.out.println("blehhh");
             int requiredAmount = costCard.get(requiredToken);
             int playerTokenAmount = tokensProvided.getOrDefault(requiredToken, 0);
 
@@ -208,52 +121,41 @@ public class Game {
                 }
             }
         }
-
         return tokensToDeduct;
     }
 
-    public void joinGame(String playerName) {
+    public Noble handleNobleVisit(Noble noble ) {
+        Map<Token , Integer> nobleNeededBonus = noble.getRequiredBonuses();
+        if(activePlayer.hasEnoughBonusesForNoble(nobleNeededBonus)){
+            activePlayer.addNoble(noble);
+            activePlayer.updatePrestigePoints(noble.getPrestigePoints());
+            return noble;
+        }
+        return null;
+    }
 
+    public void joinGame(String playerName) {
         if (numberOfPlayers > players.size()) {
             Player newPlayer = new Player(playerName);
             players.add(newPlayer);
+
+            if (players.size() == numberOfPlayers) {
+                started = true;
+                gameState = GameState.TURN_ACTION;
+            }
         } else{
             throw new IllegalStateException("The game is already full!");
         }
-
-        if (players.size() == numberOfPlayers) {
-            started = true;
-            gameState = GameState.TURN_ACTION;
-        }
-    }
-
-    public boolean isPickNobleRequired() {
-        return pickNobleRequired;
-    }
-
-    public boolean getActive() {
-        return active;
-    }
-
-    public void startGame() {
-        started = true;
-    }
-
-    public void endGame() {
-        active = false;
     }
 
     public Game buyDevelopment(String playerName, String developmentName, boolean reserved, Map<Token, Integer> payment) {
-        boolean isActivePlayer = this.getActivePlayer().getName().equals(playerName);
-        System.out.println("BuyDevelopment Game payment" + payment);
-
+        boolean isActivePlayer = activePlayer.getName().equals(playerName);
         if (isActivePlayer) {
             Development development = CardUtils
                     .getDevelopmentCardByName(
                             developmentName,
                             this.getMarket().getCardsAvailableInMarket()
                     );
-            System.out.println("BuyDevelopment Game development" + development.getName() + development.getCost() + development.getPrestigePoints());
             this.handleDevelopmentCardPurchase(
                     development,
                     reserved,
@@ -271,7 +173,7 @@ public class Game {
             throw new IllegalArgumentException("Noble is not available");
         }
 
-        boolean isActivePlayer = this.getActivePlayer().getName().equals(playerName);
+        boolean isActivePlayer = activePlayer.getName().equals(playerName);
         if (isActivePlayer) {
             return this.handleNobleVisit(noble);
         } else {
@@ -281,7 +183,7 @@ public class Game {
 
     public Game reserveCard(String playerName, String developmentName) {
         boolean active = playerName.equals(this.getActivePlayer().getName());
-        Development development = CardUtils.getDevelopmentCardByName(developmentName, Market.createAllCards());
+        Development development = CardUtils.getDevelopmentCardByName(developmentName, market.getCardsAvailableInMarket());
 
         if (development == null) {
             throw new IllegalArgumentException("Development card is not available");
@@ -289,19 +191,14 @@ public class Game {
 
         if (active) {
             Development developmentCard = CardUtils.getDevelopmentCardByName(developmentName, this.getMarket().getCardsAvailableInMarket());
-
-            if (developmentCard == null) {
-                throw new IllegalArgumentException("Development card not found in the current market.");
-            }
-
             int cardLevel = developmentCard.getLevel();
             int cardIndexInMarket = market.getIndexCardFromMarket(developmentCard);
 
-            this.activePlayer.reserveCard(development);
-            this.market.removeCardFromMarket(development);
+            activePlayer.reserveCard(development);
+            market.removeCardFromMarket(development);
             market.addRandomCardToTheMarket(cardLevel, cardIndexInMarket);
-            activePlayer.addCard(developmentCard);
-            this.switchTurn();
+
+            switchTurn();
         } else {
             throw new IllegalArgumentException(NOT_CURRENT_PLAYER_MESSAGE);
         }
@@ -319,4 +216,23 @@ public class Game {
         }
         return this;
     }
+
+    public void startGame() {started = true;}
+    public void endGame() {active = false;}
+
+    public GameState getGameState() {return gameState;}
+    public String getGameName() {return gameName;}
+    public int getGameId() {return gameId;}
+    public boolean isStarted() {return started;}
+    public int getNumberOfPlayers() {return numberOfPlayers;}
+    public Player getActivePlayer() {return activePlayer;}
+    public List<Player> getPlayers() {return players;}
+    public Market getMarket() {return market;}
+    public Map<Token , Integer> getUnclaimedTokens() {return unclaimedTokens;}
+    public List<Noble> getUnclaimedNobles() {return unclaimedNobles;}
+    public Player getWinner() {return winner;}
+    public boolean getPrivateStatus() {return privateStatus;}
+    public boolean isReturnExcessTokensRequired() {return returnExcessTokensRequired;}
+    public boolean isPickNobleRequired() {return pickNobleRequired;}
+    public boolean getActive() {return active;}
 }

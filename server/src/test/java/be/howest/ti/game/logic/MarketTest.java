@@ -24,10 +24,10 @@ class MarketTest {
     void testInitialMarketSetup_checkSize() {
         List<List<Development>> allCards = market.getAllCards();
         assertEquals(3, allCards.size());
-        assertEquals( 40,market.getAllCards().getFirst().size());
-        assertEquals(30 ,market.getAllCards().get(1).size());
-        assertEquals( 20,market.getAllCards().get(2).size());
-        assertEquals(10, market.getAllNobles().size());
+        assertEquals( 36,market.getAllCards().getFirst().size());
+        assertEquals(26 ,market.getAllCards().get(1).size());
+        assertEquals( 16,market.getAllCards().get(2).size());
+        assertEquals(6, market.getAllNobles().size());
         assertEquals(4 , market.getCardsAvailableInMarket().getFirst().size());
         assertEquals(4 , market.getCardsAvailableInMarket().get(1).size());
         assertEquals(4 , market.getCardsAvailableInMarket().get(2).size());
@@ -47,17 +47,7 @@ class MarketTest {
         }
     }
 
-    @Test
-    void testSetNobleToMarket() {
-        List<Noble> nobles = market.getAllNobles();
-        if (!nobles.isEmpty()) {
-            Noble noble = nobles.getFirst();
-            market.setNobleToMarket(noble);
 
-            assertTrue(market.getNoblesAvailableInMarket().contains(noble));
-            assertFalse(market.getAllNobles().contains(noble));
-        }
-    }
 
     @Test
     void testRemoveCardFromMarket() {
@@ -69,15 +59,7 @@ class MarketTest {
         }
     }
 
-    @Test
-    void testRemoveNobleFromMarket() {
-        List<Noble> nobles = market.getNoblesAvailableInMarket();
-        if (!nobles.isEmpty()) {
-            Noble noble = nobles.getFirst();
-            market.removeNobleFromMarket(noble);
-            assertFalse(market.getNoblesAvailableInMarket().contains(noble));
-        }
-    }
+
 
 
 }
