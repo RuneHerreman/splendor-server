@@ -14,17 +14,14 @@ class TokenMapConvertorTest {
     @Test
     void testConvertToStringMap() {
         Map<Token, Integer> tokenMap = new EnumMap<>(Token.class);
-        tokenMap.put(Token.DIAMOND, 2);
-        tokenMap.put(Token.EMERALD, 3);
+        tokenMap.put(Token.GOLD, 3);
+        tokenMap.put(Token.DIAMOND, 5);
 
-        Map<String, Integer> result = TokenMapConvertor.convertToStringMap(tokenMap);
+        Map<String, Integer> stringMap = TokenMapConvertor.convertToStringMap(tokenMap);
 
-        assertNotNull(result);
-        System.out.println(result);
-        assertEquals(2, result.size());
-        assertEquals(2, result.get("DIAMOND"));
-        assertEquals(3, result.get("EMERALD"));
-        assertFalse(result.containsKey("GOLD"));
+        assertEquals(2, stringMap.size());
+        assertEquals(3, stringMap.get("Gold"));
+        assertEquals(5, stringMap.get("Diamond"));
     }
 
     @Test

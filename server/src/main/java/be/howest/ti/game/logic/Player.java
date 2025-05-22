@@ -14,9 +14,11 @@ public class Player {
     private final List<Noble> nobles;
     private final Map<Token, Integer> tokens;
     private final Map<Token, Integer> bonuses;
+    private final String iconPath;
 
-    public Player(String username) {
+    public Player(String username, String iconPath) {
         this.name = username;
+        this.iconPath = iconPath;
         this.prestigePoints = 0;
         this.purchasedDevelopments = new ArrayList<>();
         this.reserved = new ArrayList<>();
@@ -134,5 +136,6 @@ public class Player {
     public List<Noble> getNobles() {return nobles;}
     public Map<Token, Integer> getTokens() {return tokens;}
     public Map<Token, Integer> getBonuses() {return bonuses;}
+    public String getIconPath() {return iconPath;}
     @Override public String toString() {return name;}
 }

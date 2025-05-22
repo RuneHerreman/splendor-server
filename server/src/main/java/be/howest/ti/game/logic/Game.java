@@ -235,9 +235,9 @@ public class Game {
         return null;
     }
 
-    public void joinGame(String playerName) {
+    public void joinGame(String playerName, String iconPath) {
         if (numberOfPlayers > players.size()) {
-            Player newPlayer = new Player(playerName);
+            Player newPlayer = new Player(playerName, iconPath);
             players.add(newPlayer);
 
             if (players.size() == numberOfPlayers) {
@@ -315,7 +315,7 @@ public class Game {
         if (active) {
             this.handleTokenPurchase(tokens);
         } else {
-            throw new IllegalArgumentException("You are not the current player");
+            throw new IllegalArgumentException(NOT_CURRENT_PLAYER_MESSAGE);
         }
         return this;
     }

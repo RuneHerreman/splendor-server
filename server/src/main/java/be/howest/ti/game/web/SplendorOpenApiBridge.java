@@ -30,6 +30,12 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
     private final Map<String, SplendorService> services = new HashMap<>();
 
     private SplendorService getService(ContextBasedRequestView request) {
+        String groupToken = "IkHouVanKoenKoremanEnMattiasDewael";
+
+        if (!request.getGroupSecret().toString().equals(groupToken)) {
+            throw new ForbiddenAccessException("You are not allowed to access this API");
+        }
+
         return services.computeIfAbsent(request.getGroupSecret().toString(),
                 k -> serviceFactory.get());
     }
@@ -100,14 +106,14 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
         if (request.getGameName() == null) {
             game = service.createGame(
                     request.getNumberOfPlayers(),
-                    new Player(request.getPlayerName()),
+                    new Player(request.getPlayerName(), request.getIconPath()),
                     request.getPrivateStatus()
             );
         } else {
             game = service.createGame(
                     request.getGameName(),
                     request.getNumberOfPlayers(),
-                    new Player(request.getPlayerName()),
+                    new Player(request.getPlayerName(), request.getIconPath()),
                     request.getPrivateStatus()
             );
         }
@@ -139,7 +145,7 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
         Game game = service.getGameByID(request.getGameId());
 
         if (game != null) {
-            game.joinGame(request.getPlayerName());
+            game.joinGame(request.getPlayerName(), request.getIconPath());
         }
 
         return new JoinGameResponse(request.getGameId(), request.getPlayerName());
