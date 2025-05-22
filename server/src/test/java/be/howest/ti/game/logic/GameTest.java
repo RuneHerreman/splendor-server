@@ -1,6 +1,7 @@
 package be.howest.ti.game.logic;
 import be.howest.ti.game.logic.gameTools.Development;
 import be.howest.ti.game.logic.gameTools.GameState;
+import be.howest.ti.game.logic.gameTools.Noble;
 import be.howest.ti.game.logic.gameTools.Token;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -305,6 +306,27 @@ class GameTest {
         assertEquals("Bob", winner.getName());
     }
 
+    @Test
+    void testHandleNobleVisit(){
+        game.joinGame("Bob", ".");
+        Player currentPlayer = game.getActivePlayer();
+
+        Noble noble = game.getUnclaimedNobles().getFirst();
+        Map<Token, Integer> requiredBonuses = noble.getRequiredBonuses();
+
+        for (Map.Entry<Token, Integer> entry : requiredBonuses.entrySet()) {
+            currentPlayer.getBonuses().put(entry.getKey(), entry.getValue());
+        }
+
+        int initialPrestige = currentPlayer.getPrestigePoints();
+
+        Noble returnedNoble = game.handleNobleVisit(noble);
+
+        assertNotNull(returnedNoble);
+        assertEquals(noble, returnedNoble);
+        assertTrue(currentPlayer.getNobles().contains(noble));
+        assertEquals(initialPrestige + noble.getPrestigePoints(), currentPlayer.getPrestigePoints());
+    }
 }
 
 
