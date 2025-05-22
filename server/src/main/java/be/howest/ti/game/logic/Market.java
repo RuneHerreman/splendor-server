@@ -9,7 +9,6 @@ import java.io.FileNotFoundException;
 import java.util.*;
 import java.security.SecureRandom;
 
-import java.util.logging.Logger;
 
 public class Market {
     private static final SecureRandom RANDOM = new SecureRandom();
@@ -118,6 +117,7 @@ public class Market {
         return initTokens;
     }
 
+
     private static int getTokenCountByPlayer(int totalPlayers) {
         if(totalPlayers == 2) {
             return 4;
@@ -150,9 +150,8 @@ public class Market {
     private List<List<Development>> getInitDevelopmentCardsForMarket() {
         List<List<Development>> developmentCardsForMarket = new ArrayList<>();
 
-        int indexLevel = 0;
         for (List<Development> cardsByLevel : allCards) {
-            List<Development> marketCardsByLevel= new ArrayList<>();
+            List<Development> marketCardsByLevel = new ArrayList<>();
             Set<Integer> selectedIndexes = new HashSet<>();
             int amountOfCardsByLevel = 4;
 
@@ -163,23 +162,22 @@ public class Market {
                 }
             }
 
-           allCards.get(indexLevel).removeAll(marketCardsByLevel);
+            cardsByLevel.removeAll(marketCardsByLevel);
             developmentCardsForMarket.add(marketCardsByLevel);
-            indexLevel++;
         }
 
         return developmentCardsForMarket;
     }
 
-    public boolean decrementTokenGold(){
-        int tempAmountTokenGold = unclaimedTokens.get(Token.GOLD);
-        if(tempAmountTokenGold > 0){
-            tempAmountTokenGold--;
-            unclaimedTokens.put(Token.GOLD,tempAmountTokenGold);
-            return true;
-        }
-        return false;
+    public boolean canReserveCard(){
+        int availableGoldTokens = unclaimedTokens.getOrDefault(Token.GOLD, 0);
+        return  availableGoldTokens > 0;
+    }
 
+    public void decrementTokenGold(){
+        int amountTokenGold = unclaimedTokens.get(Token.GOLD);
+        int newTokenGold = amountTokenGold - 1;
+        unclaimedTokens.replace(Token.GOLD,newTokenGold);
     }
 
 
@@ -197,6 +195,7 @@ public class Market {
         if (size == 3) {expectedCount = 1;
         } else if (size == 1) {expectedCount = 2;
         } else {return false;}
+
         for (int count : tokens.values()) {
             if (count != expectedCount) {
                 return false;
@@ -224,12 +223,16 @@ public class Market {
 
     public void removeTokensFromMarket(Map<Token, Integer> tokens) {
         for (Token token : tokens.keySet()) {
-            removeTokensFromMarket(token,tokens.get(token));
+            removeTokenFromMarket(token,tokens.get(token));
         }
     }
-    private void removeTokensFromMarket(Token token, int amount) {
+    private void removeTokenFromMarket(Token token, int amount) {
         int tempAmount = unclaimedTokens.get(token);
         unclaimedTokens.replace(token , tempAmount - amount);
+    }
+
+    public void removeNobleFromMarket(Noble noble) {
+        noblesAvailableInMarket.remove(noble);
     }
 
     public int getIndexCardFromMarket(Development developmentCard) {
@@ -252,11 +255,13 @@ public class Market {
     private Development getRandomCardFromMarket(int cardLevel) {
         int cardLevelIndex = cardLevel - 1;
         List<Development> cardsByLevel = allCards.get(cardLevelIndex);
-        return cardsByLevel.get(RANDOM.nextInt(cardsByLevel.size()));
+        int indexNewCard = RANDOM.nextInt(cardsByLevel.size());
+        return cardsByLevel.get(indexNewCard);
     }
 
     public void addToken(Token token, int amount) {
-        unclaimedTokens.put(token, unclaimedTokens.getOrDefault(token, 0) + amount);
+        int tempTokenAmount = unclaimedTokens.getOrDefault(token, 0);
+        unclaimedTokens.replace(token, tempTokenAmount + amount);
     }
 
     public void addTokens(Map<Token, Integer> tokens) {
