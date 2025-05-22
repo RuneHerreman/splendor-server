@@ -234,9 +234,9 @@ public class Game {
         return null;
     }
 
-    public void joinGame(String playerName) {
+    public void joinGame(String playerName, String iconPath) {
         if (numberOfPlayers > players.size()) {
-            Player newPlayer = new Player(playerName);
+            Player newPlayer = new Player(playerName, iconPath);
             players.add(newPlayer);
 
             if (players.size() == numberOfPlayers) {

@@ -18,8 +18,7 @@ class GameTest {
 
     @BeforeEach
     void setUp() {
-        player1 = new Player("Alice");
-
+        player1 = new Player("Alice", ".");
         game = new Game("TestGame", 1, 2, player1,true);
 
     }
@@ -39,9 +38,9 @@ class GameTest {
 
     @Test
     void testAddPlayerDoesNotAddWhenGameIsFullOrAlreadyStarted() {
-        game.joinGame("Bob");
+        game.joinGame("Bob", "/");
         assertTrue(game.isStarted());
-        Player player3 = new Player("Charlie");
+        Player player3 = new Player("Charlie", "/");
 
         assertEquals(2, game.getPlayers().size());
         assertFalse(game.getPlayers().contains(player3));
@@ -49,7 +48,7 @@ class GameTest {
 
     @Test
     void testSwitchTurnCyclesBetweenPlayers() {
-        game.joinGame("Bob");
+        game.joinGame("Bob", "/");
         assertEquals(player1, game.getActivePlayer());
         game.switchTurn();
         assertEquals("Bob", game.getActivePlayer().getName());
@@ -77,7 +76,7 @@ class GameTest {
     @Test
     void testJoinGameAddsPlayerAndStartsGame() {
         assertEquals(1, game.getPlayers().size());
-        game.joinGame("Charlie");
+        game.joinGame("Charlie", ".");
         assertEquals(2, game.getPlayers().size());
         assertTrue(game.isStarted());
         assertEquals(GameState.TURN_ACTION, game.getGameState());
@@ -87,13 +86,13 @@ class GameTest {
     @Test
     void testJoinFullGame(){
         assertEquals(1, game.getPlayers().size());
-        game.joinGame("Ben");
+        game.joinGame("Ben", ".");
         assertEquals(2, game.getPlayers().size());
-        assertThrows(IllegalStateException.class, () -> game.joinGame("Charlie"));
+        assertThrows(IllegalStateException.class, () -> game.joinGame("Charlie", "."));
     }
     @Test
     void testPlayerTakesTokensFromMarket_TwoOfSameTokenType() {
-        game.joinGame("Bob");
+        game.joinGame("Bob", ".");
         Map<Token, Integer> tokens = new EnumMap<>(Token.class);
         tokens.put(Token.DIAMOND, 2);
 
@@ -116,7 +115,7 @@ class GameTest {
     }
     @Test
     void testPlayerTakesTokensFromMarket_TwoOfSameTokenType_FailsIfNotEnoughTokensInMarket() {
-        game.joinGame("Bob");
+        game.joinGame("Bob", ".");
         Map<Token, Integer> tokens = new EnumMap<>(Token.class);
         tokens.put(Token.DIAMOND, 2);
 
@@ -135,7 +134,7 @@ class GameTest {
 
     @Test
      void testPlayerTakesTokensFromMarket_OneOfEachType() {
-        game.joinGame("Bob");
+        game.joinGame("Bob", ".");
         Map<Token, Integer> requestedTokens = new EnumMap<>(Token.class);
         requestedTokens.put(Token.ONYX, 1);
         requestedTokens.put(Token.EMERALD, 1);
@@ -155,7 +154,7 @@ class GameTest {
     }
     @Test
      void testPlayerTakesTokensFromMarket_OneOfEachType_failsIfNotEnoughTokensInMarket() {
-        game.joinGame("Bob");
+        game.joinGame("Bob", ".");
 
         Map<Token, Integer> toRemove = new EnumMap<>(Token.class);
         toRemove.put(Token.ONYX, 4);
@@ -182,7 +181,7 @@ class GameTest {
     }
     @Test
     void testHandleTokenReturn_Success() {
-        game.joinGame("Bob");
+        game.joinGame("Bob", ".");
 
         Map<Token, Integer> tokensToAdd = new EnumMap<>(Token.class);
         tokensToAdd.put(Token.EMERALD, 3);
@@ -199,7 +198,7 @@ class GameTest {
     }
     @Test
     void testHandleTokenReturn_Fails_PlayerDoesNotHaveTokens() {
-        game.joinGame("Bob");
+        game.joinGame("Bob", ".");
 
         Map<Token, Integer> tokensToReturn = new EnumMap<>(Token.class);
         tokensToReturn.put(Token.RUBY, 2);
@@ -213,7 +212,7 @@ class GameTest {
 
     @Test
     void testHandleTokenReturn_SwitchesTurn() {
-        game.joinGame("Bob");
+        game.joinGame("Bob", ".");
 
         Map<Token, Integer> tokensToAdd = new EnumMap<>(Token.class);
         tokensToAdd.put(Token.ONYX, 2);
@@ -234,7 +233,7 @@ class GameTest {
     @Test
     void purchaseWithExactTokensSucceeds() {
         Development dev = createTestDevelopmentCard();
-        game.joinGame("Bob");
+        game.joinGame("Bob", ".");
         Map<Token, Integer> tokensToAdd = dev.getCost();
         player1.addTokens(tokensToAdd);
 
@@ -252,7 +251,7 @@ class GameTest {
     @Test
     void purchaseWithGoldTokensSucceeds() {
         Development dev = createTestDevelopmentCard();
-        game.joinGame("Bob");
+        game.joinGame("Bob", ".");
         Map<Token, Integer> tokensToAdd = dev.getCost();
 
         player1.addTokens(tokensToAdd);
@@ -284,7 +283,7 @@ class GameTest {
 
     @Test
     void testEndGame() {
-        game.joinGame("Bob");
+        game.joinGame("Bob", ".");
 
         game.endGame();
 

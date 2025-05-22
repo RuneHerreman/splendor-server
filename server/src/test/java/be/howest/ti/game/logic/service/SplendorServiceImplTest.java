@@ -20,7 +20,7 @@ class SplendorServiceImplTest {
     void setUp() {
         service = new SplendorServiceImpl();
         gameName = "Test Game";
-        john = new Player("John Doe");
+        john = new Player("John Doe", ".");
         numberOfPlayers = 4;
     }
 
@@ -111,7 +111,7 @@ class SplendorServiceImplTest {
     @Test
     void reserveCard_ValidCase() {
         Game game = service.createGame(gameName, numberOfPlayers, john, true);
-        game.joinGame("Bob");
+        game.joinGame("Bob", ".");
         game.startGame();
 
         assertEquals(john.getName(), game.getActivePlayer().getName());
