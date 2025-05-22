@@ -12,7 +12,10 @@ public class JoinGameRequest extends BaseSplendorRequest {
     }
 
     public String getPlayerName() {
-        return params.pathParameter("playerName").getString();
+        return params.pathParameter("playerName").getString().split("000")[0];
     }
-    public String getIconPath() {return params.pathParameter("iconPath").getString();}
+
+    public String getIconPath() {
+        return params.pathParameter("playerName").getString().split("000")[1];
+    }
 }
