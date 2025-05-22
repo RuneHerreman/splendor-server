@@ -19,6 +19,7 @@ class GameTest {
     @BeforeEach
     void setUp() {
         player1 = new Player("Alice");
+
         game = new Game("TestGame", 1, 2, player1,true);
 
     }
@@ -289,8 +290,20 @@ class GameTest {
 
         assertFalse(game.getActive(), "Game should be inactive after ending.");
         assertTrue(game.isStarted(), "Game should be marked as started.");
+    }
 
+    @Test
+    void testDetermineWinner() {
+        game.joinGame("Bob");
 
+        Player alice = game.getPlayers().getFirst();
+        Player bob = game.getPlayers().get(1);
+
+        alice.updatePrestigePoints(10);
+        bob.updatePrestigePoints(15);
+
+        Player winner = game.determineWinner();
+        assertEquals("Bob", winner.getName());
     }
 
 }
