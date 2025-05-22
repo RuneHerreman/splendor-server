@@ -10,7 +10,7 @@ public class TokenMapConvertor {
     public static Map<String, Integer> convertToStringMap(Map<Token, Integer> tokenMap) {
         Map<String, Integer> stringMap = new HashMap<>();
         for (Map.Entry<Token, Integer> entry : tokenMap.entrySet()) {
-            stringMap.put(entry.getKey().name(), entry.getValue());
+            stringMap.put(entry.getKey().toString(), entry.getValue());
         }
         return stringMap;
 
