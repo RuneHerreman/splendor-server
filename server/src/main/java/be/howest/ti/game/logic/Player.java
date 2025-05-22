@@ -21,8 +21,8 @@ public class Player {
         this.purchasedDevelopments = new ArrayList<>();
         this.reserved = new ArrayList<>();
         this.nobles = new ArrayList<>();
-        this.tokens = new HashMap<>();
-        this.bonuses = new HashMap<>();
+        this.tokens = new EnumMap<>(Token.class);
+        this.bonuses = new EnumMap<>(Token.class);
     }
 
     public void addToken(Token token, int amount) {

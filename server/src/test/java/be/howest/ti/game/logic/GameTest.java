@@ -5,6 +5,7 @@ import be.howest.ti.game.logic.gameTools.Token;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -93,7 +94,7 @@ class GameTest {
     @Test
     void testPlayerTakesTokensFromMarket_TwoOfSameTokenType() {
         game.joinGame("Bob");
-        Map<Token, Integer> tokens = new HashMap<>();
+        Map<Token, Integer> tokens = new EnumMap<>(Token.class);
         tokens.put(Token.DIAMOND, 2);
 
         boolean result = game.handleTokenPurchase(tokens);
@@ -116,7 +117,7 @@ class GameTest {
     @Test
     void testPlayerTakesTokensFromMarket_TwoOfSameTokenType_FailsIfNotEnoughTokensInMarket() {
         game.joinGame("Bob");
-        Map<Token, Integer> tokens = new HashMap<>();
+        Map<Token, Integer> tokens = new EnumMap<>(Token.class);
         tokens.put(Token.DIAMOND, 2);
 
         game.getMarket().removeTokensFromMarket(tokens);
@@ -135,7 +136,7 @@ class GameTest {
     @Test
     public void testPlayerTakesTokensFromMarket_OneOfEachType() {
         game.joinGame("Bob");
-        Map<Token, Integer> requestedTokens = new HashMap<>();
+        Map<Token, Integer> requestedTokens = new EnumMap<>(Token.class);
         requestedTokens.put(Token.ONYX, 1);
         requestedTokens.put(Token.EMERALD, 1);
         requestedTokens.put(Token.DIAMOND, 1);
@@ -156,12 +157,12 @@ class GameTest {
     public void testPlayerTakesTokensFromMarket_OneOfEachType_failsIfNotEnoughTokensInMarket() {
         game.joinGame("Bob");
 
-        Map<Token, Integer> toRemove = new HashMap<>();
+        Map<Token, Integer> toRemove = new EnumMap<>(Token.class);
         toRemove.put(Token.ONYX, 4);
         toRemove.put(Token.EMERALD, 1);
         toRemove.put(Token.DIAMOND, 1);
 
-        Map<Token, Integer> requestedTokens = new HashMap<>();
+        Map<Token, Integer> requestedTokens = new EnumMap<>(Token.class);
         requestedTokens.put(Token.ONYX, 1);
         requestedTokens.put(Token.EMERALD, 1);
         requestedTokens.put(Token.DIAMOND, 1);
@@ -183,11 +184,11 @@ class GameTest {
     void testHandleTokenReturn_Success() {
         game.joinGame("Bob");
 
-        Map<Token, Integer> tokensToAdd = new HashMap<>();
+        Map<Token, Integer> tokensToAdd = new EnumMap<>(Token.class);
         tokensToAdd.put(Token.EMERALD, 3);
         player1.addTokens(tokensToAdd);
 
-        Map<Token, Integer> tokensToReturn = new HashMap<>();
+        Map<Token, Integer> tokensToReturn = new EnumMap<>(Token.class);
         tokensToReturn.put(Token.EMERALD, 2);
 
         boolean result = game.handleTokenReturn(tokensToReturn);
@@ -200,7 +201,7 @@ class GameTest {
     void testHandleTokenReturn_Fails_PlayerDoesNotHaveTokens() {
         game.joinGame("Bob");
 
-        Map<Token, Integer> tokensToReturn = new HashMap<>();
+        Map<Token, Integer> tokensToReturn = new EnumMap<>(Token.class);
         tokensToReturn.put(Token.RUBY, 2);
 
         boolean result = game.handleTokenReturn(tokensToReturn);
@@ -214,11 +215,11 @@ class GameTest {
     void testHandleTokenReturn_SwitchesTurn() {
         game.joinGame("Bob");
 
-        Map<Token, Integer> tokensToAdd = new HashMap<>();
+        Map<Token, Integer> tokensToAdd = new EnumMap<>(Token.class);
         tokensToAdd.put(Token.ONYX, 2);
         player1.addTokens(tokensToAdd);
 
-        Map<Token, Integer> tokensToReturn = new HashMap<>();
+        Map<Token, Integer> tokensToReturn = new EnumMap<>(Token.class);
         tokensToReturn.put(Token.ONYX, 2);
 
         assertEquals("Alice", game.getActivePlayer().getName());
@@ -237,7 +238,7 @@ class GameTest {
         Map<Token, Integer> tokensToAdd = dev.getCost();
         player1.addTokens(tokensToAdd);
 
-        Map<Token, Integer> tokensProvided = new HashMap<>();
+        Map<Token, Integer> tokensProvided = new EnumMap<>(Token.class);
         tokensProvided.put(Token.DIAMOND, 1);
         tokensProvided.put(Token.EMERALD, 1);
 
@@ -256,7 +257,7 @@ class GameTest {
 
         player1.addTokens(tokensToAdd);
 
-        Map<Token, Integer> tokensProvided = new HashMap<>();
+        Map<Token, Integer> tokensProvided = new EnumMap<>(Token.class);
         tokensProvided.put(Token.EMERALD, 1);
         tokensProvided.put(Token.GOLD, 1);
         boolean result = game.handleDevelopmentCardPurchase(dev, false, tokensProvided);

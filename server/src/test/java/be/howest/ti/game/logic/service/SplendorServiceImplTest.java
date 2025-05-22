@@ -3,7 +3,6 @@ package be.howest.ti.game.logic.service;
 import be.howest.ti.game.logic.Game;
 import be.howest.ti.game.logic.Market;
 import be.howest.ti.game.logic.Player;
-import be.howest.ti.game.logic.gameTools.Noble;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

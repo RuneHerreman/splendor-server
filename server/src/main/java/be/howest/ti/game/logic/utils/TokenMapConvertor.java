@@ -2,6 +2,7 @@ package be.howest.ti.game.logic.utils;
 
 import be.howest.ti.game.logic.gameTools.Token;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +17,7 @@ public class TokenMapConvertor {
     }
 
     public static Map<Token, Integer> convertToTokenMap(Map<String, Integer> stringMap) {
-        Map<Token, Integer> tokenMap = new HashMap<>();
+        Map<Token, Integer> tokenMap = new EnumMap<>(Token.class);
         for (Map.Entry<String, Integer> entry : stringMap.entrySet()) {
             tokenMap.put(Token.valueOf(entry.getKey()), entry.getValue());
         }

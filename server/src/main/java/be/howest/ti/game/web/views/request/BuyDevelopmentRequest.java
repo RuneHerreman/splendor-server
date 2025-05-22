@@ -4,7 +4,7 @@ import be.howest.ti.game.logic.gameTools.Token;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 public class BuyDevelopmentRequest extends BaseSplendorRequest{
@@ -17,7 +17,7 @@ public class BuyDevelopmentRequest extends BaseSplendorRequest{
     }
 
     public Map<Token, Integer> getPayment(){
-        Map<Token, Integer> tokenMap = new HashMap<>();
+        Map<Token, Integer> tokenMap = new EnumMap<>(Token.class);
         JsonObject payment = params.body().getJsonObject().getJsonObject("payment");
 
         payment.forEach(pair -> {
