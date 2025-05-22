@@ -172,6 +172,17 @@ public class Market {
         return developmentCardsForMarket;
     }
 
+    public boolean decrementTokenGold(){
+        int tempAmountTokenGold = unclaimedTokens.get(Token.GOLD);
+        if(tempAmountTokenGold > 0){
+            tempAmountTokenGold--;
+            unclaimedTokens.put(Token.GOLD,tempAmountTokenGold);
+            return true;
+        }
+        return false;
+
+    }
+
 
     public boolean areValidTokensPick(Map<Token, Integer> tokens) {
         if (!tokens.isEmpty() && !tokens.containsKey(Token.GOLD)){

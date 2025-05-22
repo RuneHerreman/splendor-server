@@ -192,7 +192,13 @@ public class Game {
         market.removeCardFromMarket(card);
 
         if (reserved) {
-            activePlayer.buyReserved(card);
+            if( market.decrementTokenGold()){
+                activePlayer.buyReserved(card);
+            }else{
+                throw new IllegalArgumentException("No enough tokens to decrement gold");
+            }
+
+
         } else {
             activePlayer.addCard(card);
             market.addRandomCardToTheMarket(cardLevel, cardIndex);
