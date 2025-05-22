@@ -312,7 +312,7 @@ public class Game {
         if (active) {
             this.handleTokenPurchase(tokens);
         } else {
-            throw new IllegalArgumentException("You are not the current player");
+            throw new IllegalArgumentException(NOT_CURRENT_PLAYER_MESSAGE);
         }
         return this;
     }

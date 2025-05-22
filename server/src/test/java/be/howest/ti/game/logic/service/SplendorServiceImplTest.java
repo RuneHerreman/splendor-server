@@ -6,6 +6,8 @@ import be.howest.ti.game.logic.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class SplendorServiceImplTest {
@@ -95,7 +97,6 @@ class SplendorServiceImplTest {
         assertEquals(1, service.getAllGames(true).size());
     }
 
-
     @Test
     void chooseNoble_ThrowsIfNobleNull() {
         Game game = service.createGame(gameName, numberOfPlayers, john, true);
@@ -106,8 +107,6 @@ class SplendorServiceImplTest {
 
         assertEquals("Noble is not available", ex.getMessage());
     }
-
-
 
     @Test
     void reserveCard_ValidCase() {
@@ -146,5 +145,39 @@ class SplendorServiceImplTest {
                 () -> game.reserveCard("NotJohn", cardName));
 
         assertEquals("Development card is not available", ex.getMessage());
+    }
+
+    @Test
+    void testGetStartedGames() {
+        Game game1 = service.createGame("Game 1", numberOfPlayers, john, true);
+        Game game2 = service.createGame("Game 2", numberOfPlayers, john, true);
+        Game game3 = service.createGame("Game 3", numberOfPlayers, john, true);
+
+        game1.startGame();
+        game3.startGame();
+
+        List<Game> startedGames = service.getStartedGames();
+
+        assertEquals(2, startedGames.size(), "Expected 2 started games");
+        assertTrue(startedGames.contains(game1), "Started games should include game1");
+        assertTrue(startedGames.contains(game3), "Started games should include game3");
+        assertFalse(startedGames.contains(game2), "Started games should not include game2");
+
+    }
+
+    @Test
+    void testGetNonStartedGames() {
+        Game game1 = service.createGame("Game 1", numberOfPlayers, john, true);
+        Game game2 = service.createGame("Game 2", numberOfPlayers, john, true);
+        Game game3 = service.createGame("Game 3", numberOfPlayers, john, true);
+
+        game1.startGame();
+
+        List<Game> nonStartedGames = service.getNonStartedGames();
+
+        assertEquals(2, nonStartedGames.size(), "Expected 2 non-started games");
+        assertTrue(nonStartedGames.contains(game2), "Non-started games should include game2");
+        assertTrue(nonStartedGames.contains(game3), "Non-started games should include game3");
+        assertFalse(nonStartedGames.contains(game1), "Non-started games should not include game1");
     }
 }
