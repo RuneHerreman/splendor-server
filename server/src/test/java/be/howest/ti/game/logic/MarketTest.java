@@ -25,6 +25,9 @@ class MarketTest {
         List<List<Development>> allCards = market.getAllCards();
         assertEquals(3, allCards.size());
         assertEquals( 36,market.getAllCards().getFirst().size());
+        System.out.println(market.getAllCards().getFirst().size());
+        System.out.println(market.getAllCards().get(1).size());
+        System.out.println(market.getAllCards().get(2).size());
         assertEquals(26 ,market.getAllCards().get(1).size());
         assertEquals( 16,market.getAllCards().get(2).size());
         assertEquals(6, market.getAllNobles().size());

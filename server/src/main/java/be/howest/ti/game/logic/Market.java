@@ -4,30 +4,26 @@ import be.howest.ti.game.logic.gameTools.Development;
 import be.howest.ti.game.logic.gameTools.Noble;
 import be.howest.ti.game.logic.gameTools.Token;
 import be.howest.ti.game.logic.utils.*;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 import java.security.SecureRandom;
 
-import java.util.logging.Logger;
-
 public class Market {
-    private static final SecureRandom RANDOM = new SecureRandom();
+    private static  SecureRandom RANDOM  = new SecureRandom();
     private static List<List<Development>> allCards;
     private static List<Noble> allNobles;
-    private List<List<Development>> cardsAvailableInMarket;
-    private List<Noble> noblesAvailableInMarket;
+    private final List<List<Development>> cardsAvailableInMarket;
+    private final List<Noble> noblesAvailableInMarket;
     private final Map<Token , Integer> unclaimedTokens;
-    private final int amountOfCardsByLevel ;
 
     public Market(int amountOfPlayers) {
         allCards = createAllCards();
         allNobles = createNobles();
-        getInitDevelopmentCardsForMarket();
-        getInitNoblesForMarket(amountOfPlayers);
+        this.cardsAvailableInMarket = getInitDevelopmentCardsForMarket();
+        this.noblesAvailableInMarket = getInitNoblesForMarket(amountOfPlayers);
         this.unclaimedTokens = createInitTokens(amountOfPlayers);
-        this.amountOfCardsByLevel = 4;
+
     }
 
     public void removeCardFromMarket(Development developmentCard) {
@@ -86,7 +82,7 @@ public class Market {
         try {
             File noblesFile = new File("src/main/resources/data/nobles.txt");
             Scanner scanner = new Scanner(noblesFile);
-            if (scanner.hasNextLine()) scanner.nextLine(); // Skip header
+            if (scanner.hasNextLine()) scanner.nextLine();
 
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
@@ -132,7 +128,6 @@ public class Market {
     }
 
     private List<Noble> getInitNoblesForMarket(int amountOfPlayers) {
-        noblesAvailableInMarket = new ArrayList<>();
         List<Noble> noblesForMarket = new ArrayList<>();
         int amountOfNoblesToSelect = amountOfPlayers + 1;
 
@@ -149,22 +144,31 @@ public class Market {
         return noblesForMarket;
     }
 
-    private void getInitDevelopmentCardsForMarket() {
-        cardsAvailableInMarket = new ArrayList<>();
+
+
+    private List<List<Development>> getInitDevelopmentCardsForMarket() {
+        List<List<Development>> developmentCardsForMarket = new ArrayList<>();
+
+        int indexLevel = 0;
         for (List<Development> cardsByLevel : allCards) {
-            List<Development> marketCardsByLevel = new ArrayList<>();
+            List<Development> marketCardsByLevel= new ArrayList<>();
             Set<Integer> selectedIndexes = new HashSet<>();
+            int amountOfCardsByLevel = 4;
 
             while (marketCardsByLevel.size() < amountOfCardsByLevel && selectedIndexes.size() < cardsByLevel.size()) {
                 int index = RANDOM.nextInt(cardsByLevel.size());
                 if (selectedIndexes.add(index)) {
                     marketCardsByLevel.add(cardsByLevel.get(index));
                 }
+
             }
 
-            cardsByLevel.removeAll(marketCardsByLevel);
-            cardsAvailableInMarket.add(marketCardsByLevel);
+           allCards.get(indexLevel).removeAll(marketCardsByLevel);
+            developmentCardsForMarket.add(marketCardsByLevel);
+            indexLevel++;
         }
+
+        return developmentCardsForMarket;
     }
 
 
