@@ -32,7 +32,7 @@ class NobleTest {
 
     @Test
     void nobleTestIsClaimableByPlayer_succes() {
-        Player player = new Player("Test");
+        Player player = new Player("Test", ".");
         player.addBonus(Token.RUBY, 3);
         player.addBonus(Token.DIAMOND, 3);
         player.addBonus(Token.ONYX, 3);
@@ -41,7 +41,7 @@ class NobleTest {
 
     @Test
     void nobleTestIsClaimableByPlayer_failure() {
-        Player player = new Player("Test");
+        Player player = new Player("Test", ".");
         player.addBonus(Token.RUBY, 3);
         player.addBonus(Token.DIAMOND, 3);
         player.addBonus(Token.ONYX, 2);
