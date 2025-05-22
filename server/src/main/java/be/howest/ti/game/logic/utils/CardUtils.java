@@ -2,6 +2,8 @@ package be.howest.ti.game.logic.utils;
 
 import be.howest.ti.game.logic.gameTools.Noble;
 import be.howest.ti.game.logic.gameTools.Token;
+
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
@@ -23,7 +25,7 @@ public class CardUtils {
     }
 
     public static Map<Token, Integer> getCostTokenSetFromLetters(String tokensString) {
-        Map<Token, Integer> tokenCounts = new HashMap<>();
+        Map<Token, Integer> tokenCounts = new EnumMap<>(Token.class);
         char[] tokens = tokensString.toCharArray();
 
         for (char c : tokens) {

@@ -4,13 +4,16 @@ import be.howest.ti.game.logic.gameTools.Development;
 import be.howest.ti.game.logic.gameTools.Noble;
 import be.howest.ti.game.logic.gameTools.Token;
 import be.howest.ti.game.logic.utils.*;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 import java.security.SecureRandom;
 
+import java.util.logging.Logger;
+
 public class Market {
-    private static  SecureRandom RANDOM  = new SecureRandom();
+    private static final SecureRandom RANDOM = new SecureRandom();
     private static List<List<Development>> allCards;
     private static List<Noble> allNobles;
     private final List<List<Development>> cardsAvailableInMarket;
@@ -23,7 +26,6 @@ public class Market {
         this.cardsAvailableInMarket = getInitDevelopmentCardsForMarket();
         this.noblesAvailableInMarket = getInitNoblesForMarket(amountOfPlayers);
         this.unclaimedTokens = createInitTokens(amountOfPlayers);
-
     }
 
     public void removeCardFromMarket(Development developmentCard) {
@@ -160,7 +162,6 @@ public class Market {
                 if (selectedIndexes.add(index)) {
                     marketCardsByLevel.add(cardsByLevel.get(index));
                 }
-
             }
 
            allCards.get(indexLevel).removeAll(marketCardsByLevel);
