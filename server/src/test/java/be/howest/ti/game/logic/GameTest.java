@@ -293,7 +293,7 @@ class GameTest {
 
     @Test
     void testDetermineWinner() {
-        game.joinGame("Bob");
+        game.joinGame("Bob",".");
 
         Player alice = game.getPlayers().getFirst();
         Player bob = game.getPlayers().get(1);
