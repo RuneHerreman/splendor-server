@@ -30,6 +30,12 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
     private final Map<String, SplendorService> services = new HashMap<>();
 
     private SplendorService getService(ContextBasedRequestView request) {
+        String groupToken = "IkHouVanKoenKoremanEnMattiasDewael";
+
+        if (!request.getGroupSecret().toString().equals(groupToken)) {
+            throw new ForbiddenAccessException("You are not allowed to access this API");
+        }
+
         return services.computeIfAbsent(request.getGroupSecret().toString(),
                 k -> serviceFactory.get());
     }
