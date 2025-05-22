@@ -80,9 +80,9 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
 
         List<Game> games = new ArrayList<>();
         try {
-            if (request.getStarted()) {
+            if (Boolean.TRUE.equals(request.getStarted())) {
                 games = service.getStartedGames();
-            } else if (!request.getStarted()) {
+            } else if (Boolean.FALSE.equals(request.getStarted())) {
                 games = service.getNonStartedGames();
             }
         } catch (NullPointerException e) {

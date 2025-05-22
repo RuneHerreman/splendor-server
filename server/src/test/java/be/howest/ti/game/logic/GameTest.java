@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -134,7 +133,7 @@ class GameTest {
     }
 
     @Test
-    public void testPlayerTakesTokensFromMarket_OneOfEachType() {
+     void testPlayerTakesTokensFromMarket_OneOfEachType() {
         game.joinGame("Bob");
         Map<Token, Integer> requestedTokens = new EnumMap<>(Token.class);
         requestedTokens.put(Token.ONYX, 1);
@@ -154,7 +153,7 @@ class GameTest {
         assertEquals("Bob", game.getActivePlayer().getName());
     }
     @Test
-    public void testPlayerTakesTokensFromMarket_OneOfEachType_failsIfNotEnoughTokensInMarket() {
+     void testPlayerTakesTokensFromMarket_OneOfEachType_failsIfNotEnoughTokensInMarket() {
         game.joinGame("Bob");
 
         Map<Token, Integer> toRemove = new EnumMap<>(Token.class);

@@ -10,7 +10,7 @@ import java.io.FileNotFoundException;
 import java.util.*;
 import java.security.SecureRandom;
 
-import java.util.logging.Logger;
+
 
 public class Market {
     private static final SecureRandom RANDOM = new SecureRandom();
@@ -59,10 +59,16 @@ public class Market {
 
                 Development development = new Development(cardName, points, tokenBundles, cardType, level);
 
-                if (level == 1) {level1Cards.add(development);
-                } else if (level == 2) {level2Cards.add(development);
-                } else if (level == 3) {level3Cards.add(development);
-                } else {throw new IllegalArgumentException("Unexpected level: " + level);}
+                switch (level) {
+                    case 1 -> level1Cards.add(development);
+
+                    case 2 -> level2Cards.add(development);
+
+                    case 3 -> level3Cards.add(development);
+
+                    default -> throw new IllegalArgumentException("Unexpected level: " + level);
+
+                }
             }
 
             scanner.close();
@@ -120,13 +126,11 @@ public class Market {
     }
 
     private static int getTokenCountByPlayer(int totalPlayers) {
-        if(totalPlayers == 2) {
-            return 4;
-        }else if (totalPlayers == 3) {
-            return 5;
-        }else{
-            return 7;
-        }
+        return switch (totalPlayers) {
+            case 2 -> 4;
+            case 3 -> 5;
+            default -> 7;
+        };
     }
 
     private List<Noble> getInitNoblesForMarket(int amountOfPlayers) {
@@ -182,9 +186,16 @@ public class Market {
         int size = tokens.size();
         int expectedCount;
 
-        if (size == 3) {expectedCount = 1;
-        } else if (size == 1) {expectedCount = 2;
-        } else {return false;}
+        switch (size) {
+            case 3 -> expectedCount = 1;
+
+            case 1 -> expectedCount = 2;
+
+            default -> {
+                return false;
+            }
+
+        }
         for (int count : tokens.values()) {
             if (count != expectedCount) {
                 return false;
@@ -233,7 +244,7 @@ public class Market {
         int levelIndex = cardLevel - 1;
         if (levelIndex >= 0 && levelIndex < cardsAvailableInMarket.size()) {
             cardsAvailableInMarket.get(levelIndex).add(cardIndexInMarket, getRandomCardFromMarket(cardLevel));
-        };
+        }
 
     }
 

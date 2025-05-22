@@ -3,6 +3,7 @@ package be.howest.ti.game.web.views.request;
 import be.howest.ti.game.logic.gameTools.Token;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
+import java.util.logging.Logger;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -26,7 +27,7 @@ public class BuyDevelopmentRequest extends BaseSplendorRequest{
             tokenMap.put(token, amount);
         });
 
-        System.out.println("Payment: " + tokenMap);
+        Logger.getLogger("Payment: " + tokenMap);
         return tokenMap;
     }
 
