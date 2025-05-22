@@ -12,6 +12,19 @@ import static org.junit.jupiter.api.Assertions.*;
 class TokenMapConvertorTest {
 
     @Test
+    void testConvertToStringMap() {
+        Map<Token, Integer> tokenMap = new EnumMap<>(Token.class);
+        tokenMap.put(Token.GOLD, 3);
+        tokenMap.put(Token.DIAMOND, 5);
+
+        Map<String, Integer> stringMap = TokenMapConvertor.convertToStringMap(tokenMap);
+
+        assertEquals(2, stringMap.size());
+        assertEquals(3, stringMap.get("Gold"));
+        assertEquals(5, stringMap.get("Diamond"));
+    }
+
+    @Test
     void testConvertToTokenMap() {
         Map<String, Integer> stringMap = new HashMap<>();
         stringMap.put("DIAMOND", 2);
