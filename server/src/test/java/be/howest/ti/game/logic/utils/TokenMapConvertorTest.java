@@ -3,6 +3,7 @@ package be.howest.ti.game.logic.utils;
 import be.howest.ti.game.logic.gameTools.Token;
 import org.junit.jupiter.api.Test;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,7 +13,7 @@ class TokenMapConvertorTest {
 
     @Test
     void testConvertToStringMap() {
-        Map<Token, Integer> tokenMap = new HashMap<>();
+        Map<Token, Integer> tokenMap = new EnumMap<>(Token.class);
         tokenMap.put(Token.DIAMOND, 2);
         tokenMap.put(Token.EMERALD, 3);
 

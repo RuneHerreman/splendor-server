@@ -203,7 +203,7 @@ public class Game {
     }
 
     private Map<Token, Integer> calculateTokensToRemove(Map<Token, Integer> costCard, Map<Token, Integer> tokensProvided, int availableGoldTokens) {
-        Map<Token, Integer> tokensToDeduct = new HashMap<>();
+        Map<Token, Integer> tokensToDeduct = new EnumMap<>(Token.class);
 
         for (Token requiredToken : costCard.keySet()) {
             int requiredAmount = costCard.get(requiredToken);

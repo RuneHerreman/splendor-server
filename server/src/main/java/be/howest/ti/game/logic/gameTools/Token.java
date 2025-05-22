@@ -17,7 +17,7 @@ public enum Token {
     Token (String label) {
         this.label = label;
     }
-
+    @Override
     public String toString() {
         return label;
     }

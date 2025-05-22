@@ -5,7 +5,7 @@ import be.howest.ti.game.logic.gameTools.Token;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -93,7 +93,7 @@ class GameTest {
     @Test
     void testPlayerTakesTokensFromMarket_TwoOfSameTokenType() {
         game.joinGame("Bob");
-        Map<Token, Integer> tokens = new HashMap<>();
+        Map<Token, Integer> tokens = new EnumMap<>(Token.class);
         tokens.put(Token.DIAMOND, 2);
 
         boolean result = game.handleTokenPurchase(tokens);
@@ -116,7 +116,7 @@ class GameTest {
     @Test
     void testPlayerTakesTokensFromMarket_TwoOfSameTokenType_FailsIfNotEnoughTokensInMarket() {
         game.joinGame("Bob");
-        Map<Token, Integer> tokens = new HashMap<>();
+        Map<Token, Integer> tokens = new EnumMap<>(Token.class);
         tokens.put(Token.DIAMOND, 2);
 
         game.getMarket().removeTokensFromMarket(tokens);
@@ -133,9 +133,9 @@ class GameTest {
     }
 
     @Test
-    public void testPlayerTakesTokensFromMarket_OneOfEachType() {
+     void testPlayerTakesTokensFromMarket_OneOfEachType() {
         game.joinGame("Bob");
-        Map<Token, Integer> requestedTokens = new HashMap<>();
+        Map<Token, Integer> requestedTokens = new EnumMap<>(Token.class);
         requestedTokens.put(Token.ONYX, 1);
         requestedTokens.put(Token.EMERALD, 1);
         requestedTokens.put(Token.DIAMOND, 1);
@@ -153,15 +153,15 @@ class GameTest {
         assertEquals("Bob", game.getActivePlayer().getName());
     }
     @Test
-    public void testPlayerTakesTokensFromMarket_OneOfEachType_failsIfNotEnoughTokensInMarket() {
+     void testPlayerTakesTokensFromMarket_OneOfEachType_failsIfNotEnoughTokensInMarket() {
         game.joinGame("Bob");
 
-        Map<Token, Integer> toRemove = new HashMap<>();
+        Map<Token, Integer> toRemove = new EnumMap<>(Token.class);
         toRemove.put(Token.ONYX, 4);
         toRemove.put(Token.EMERALD, 1);
         toRemove.put(Token.DIAMOND, 1);
 
-        Map<Token, Integer> requestedTokens = new HashMap<>();
+        Map<Token, Integer> requestedTokens = new EnumMap<>(Token.class);
         requestedTokens.put(Token.ONYX, 1);
         requestedTokens.put(Token.EMERALD, 1);
         requestedTokens.put(Token.DIAMOND, 1);
@@ -183,11 +183,11 @@ class GameTest {
     void testHandleTokenReturn_Success() {
         game.joinGame("Bob");
 
-        Map<Token, Integer> tokensToAdd = new HashMap<>();
+        Map<Token, Integer> tokensToAdd = new EnumMap<>(Token.class);
         tokensToAdd.put(Token.EMERALD, 3);
         player1.addTokens(tokensToAdd);
 
-        Map<Token, Integer> tokensToReturn = new HashMap<>();
+        Map<Token, Integer> tokensToReturn = new EnumMap<>(Token.class);
         tokensToReturn.put(Token.EMERALD, 2);
 
         boolean result = game.handleTokenReturn(tokensToReturn);
@@ -200,7 +200,7 @@ class GameTest {
     void testHandleTokenReturn_Fails_PlayerDoesNotHaveTokens() {
         game.joinGame("Bob");
 
-        Map<Token, Integer> tokensToReturn = new HashMap<>();
+        Map<Token, Integer> tokensToReturn = new EnumMap<>(Token.class);
         tokensToReturn.put(Token.RUBY, 2);
 
         boolean result = game.handleTokenReturn(tokensToReturn);
@@ -214,11 +214,11 @@ class GameTest {
     void testHandleTokenReturn_SwitchesTurn() {
         game.joinGame("Bob");
 
-        Map<Token, Integer> tokensToAdd = new HashMap<>();
+        Map<Token, Integer> tokensToAdd = new EnumMap<>(Token.class);
         tokensToAdd.put(Token.ONYX, 2);
         player1.addTokens(tokensToAdd);
 
-        Map<Token, Integer> tokensToReturn = new HashMap<>();
+        Map<Token, Integer> tokensToReturn = new EnumMap<>(Token.class);
         tokensToReturn.put(Token.ONYX, 2);
 
         assertEquals("Alice", game.getActivePlayer().getName());
@@ -237,7 +237,7 @@ class GameTest {
         Map<Token, Integer> tokensToAdd = dev.getCost();
         player1.addTokens(tokensToAdd);
 
-        Map<Token, Integer> tokensProvided = new HashMap<>();
+        Map<Token, Integer> tokensProvided = new EnumMap<>(Token.class);
         tokensProvided.put(Token.DIAMOND, 1);
         tokensProvided.put(Token.EMERALD, 1);
 
@@ -256,7 +256,7 @@ class GameTest {
 
         player1.addTokens(tokensToAdd);
 
-        Map<Token, Integer> tokensProvided = new HashMap<>();
+        Map<Token, Integer> tokensProvided = new EnumMap<>(Token.class);
         tokensProvided.put(Token.EMERALD, 1);
         tokensProvided.put(Token.GOLD, 1);
         boolean result = game.handleDevelopmentCardPurchase(dev, false, tokensProvided);
@@ -266,29 +266,27 @@ class GameTest {
         assertEquals(dev.getPrestigePoints(), player1.getPrestigePoints());
     }
 
-//    @Test
-//    void purchaseFailsIfNotEnoughTokens() {
-//        Development dev = createTestDevelopmentCard();
-//        player1.addTokens(new HashMap<>());
-//
-//        Map<Token, Integer> tokensProvided = new HashMap<>();
-//        tokensProvided.put(Token.DIAMOND, 1);
-//        tokensProvided.put(Token.EMERALD, 1);
-//
-//        boolean result = game.handleDevelopmentCardPurchase(dev, false, tokensProvided);
-//        assertFalse(result);
-//        assertFalse(player1.getPurchasedDevelopments().contains(dev));
-//        assertEquals(player1, game.getActivePlayer());
-//    }
+    @Test
+    void purchaseFailsIfNotEnoughTokens() {
+        Development dev = createTestDevelopmentCard();
+        player1.addTokens(new EnumMap<>(Token.class));
+
+        Map<Token, Integer> tokensProvided = new EnumMap<>(Token.class);
+        tokensProvided.put(Token.DIAMOND, 1);
+        tokensProvided.put(Token.EMERALD, 1);
+
+        boolean result = game.handleDevelopmentCardPurchase(dev, false, tokensProvided);
+        assertFalse(result);
+        assertFalse(player1.getPurchasedDevelopments().contains(dev));
+        assertEquals(player1, game.getActivePlayer());
+    }
 
     @Test
     void testEndGame() {
         game.joinGame("Bob");
 
-        // Call method to end the game
         game.endGame();
 
-        // Verify the game state
         assertFalse(game.getActive(), "Game should be inactive after ending.");
         assertTrue(game.isStarted(), "Game should be marked as started.");
 

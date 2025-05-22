@@ -32,7 +32,7 @@ class CardUtilsTest {
 
     @Test
     void testGetDevelopmentCardByNameReturnsCorrectCard() {
-        Map<Token, Integer> cost = new HashMap<>();
+        Map<Token, Integer> cost = new EnumMap<>(Token.class);
         cost.put(Token.DIAMOND, 2);
 
         Development dev1 = new Development("CardA", 1, cost, Token.DIAMOND, 1);
@@ -56,7 +56,7 @@ class CardUtilsTest {
 
     @Test
     void testGetDevelopmentCardByNameReturnsNullIfNotFound() {
-        Map<Token, Integer> cost = new HashMap<>();
+        Map<Token, Integer> cost = new EnumMap<>(Token.class);
         cost.put(Token.DIAMOND, 1);
 
         Development dev1 = new Development("CardA", 1, cost, Token.DIAMOND, 1);

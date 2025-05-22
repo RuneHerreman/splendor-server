@@ -1,11 +1,10 @@
 package be.howest.ti.game.web.views.request;
 
 import be.howest.ti.game.logic.gameTools.Token;
-import be.howest.ti.game.logic.utils.TokenMapConvertor;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 public class UpdateTokensRequest extends BaseSplendorRequest {
@@ -22,7 +21,7 @@ public class UpdateTokensRequest extends BaseSplendorRequest {
     }
 
     public Map<Token, Integer> getTokens() {
-        Map<Token, Integer> tokenMap = new HashMap<>();
+        Map<Token, Integer> tokenMap = new EnumMap<>(Token.class);
         JsonObject take = params.body().getJsonObject().getJsonObject("take");
 
         take.forEach(pair -> {
