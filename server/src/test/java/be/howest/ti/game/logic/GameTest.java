@@ -232,8 +232,13 @@ class GameTest {
 
     @Test
     void purchaseWithExactTokensSucceeds() {
-        Development dev = createTestDevelopmentCard();
+        System.out.println(game.getMarket().getUnclaimedTokens());
+        System.out.println(game.getMarket().getAllCards().getFirst().size());
+        System.out.println(game.getMarket().getAllCards().get(1).size());
+        System.out.println(game.getMarket().getAllCards().get(2).size());
         game.joinGame("Bob");
+        game.startGame();
+        Development dev = createTestDevelopmentCard();
         Map<Token, Integer> tokensToAdd = dev.getCost();
         player1.addTokens(tokensToAdd);
 

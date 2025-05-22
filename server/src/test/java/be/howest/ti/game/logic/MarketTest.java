@@ -47,8 +47,6 @@ class MarketTest {
         }
     }
 
-
-
     @Test
     void testRemoveCardFromMarket() {
         List<Development> marketCards = market.getCardsAvailableInMarket().getFirst();

@@ -16,16 +16,18 @@ public class Market {
     private static final SecureRandom RANDOM = new SecureRandom();
     private static List<List<Development>> allCards;
     private static List<Noble> allNobles;
-    private final List<List<Development>> cardsAvailableInMarket;
-    private final List<Noble> noblesAvailableInMarket;
+    private List<List<Development>> cardsAvailableInMarket;
+    private List<Noble> noblesAvailableInMarket;
     private final Map<Token , Integer> unclaimedTokens;
+    private final int amountOfCardsByLevel ;
 
     public Market(int amountOfPlayers) {
         allCards = createAllCards();
         allNobles = createNobles();
-        this.cardsAvailableInMarket = getInitDevelopmentCardsForMarket();
-        this.noblesAvailableInMarket = getInitNoblesForMarket(amountOfPlayers);
+        getInitDevelopmentCardsForMarket();
+        getInitNoblesForMarket(amountOfPlayers);
         this.unclaimedTokens = createInitTokens(amountOfPlayers);
+        this.amountOfCardsByLevel = 4;
     }
 
     public void removeCardFromMarket(Development developmentCard) {
@@ -130,6 +132,7 @@ public class Market {
     }
 
     private List<Noble> getInitNoblesForMarket(int amountOfPlayers) {
+        noblesAvailableInMarket = new ArrayList<>();
         List<Noble> noblesForMarket = new ArrayList<>();
         int amountOfNoblesToSelect = amountOfPlayers + 1;
 
@@ -146,15 +149,11 @@ public class Market {
         return noblesForMarket;
     }
 
-
-
-    private List<List<Development>> getInitDevelopmentCardsForMarket() {
-        List<List<Development>> developmentCardsForMarket = new ArrayList<>();
-
+    private void getInitDevelopmentCardsForMarket() {
+        cardsAvailableInMarket = new ArrayList<>();
         for (List<Development> cardsByLevel : allCards) {
-            List<Development> marketCardsByLevel= new ArrayList<>();
+            List<Development> marketCardsByLevel = new ArrayList<>();
             Set<Integer> selectedIndexes = new HashSet<>();
-            int amountOfCardsByLevel = 4;
 
             while (marketCardsByLevel.size() < amountOfCardsByLevel && selectedIndexes.size() < cardsByLevel.size()) {
                 int index = RANDOM.nextInt(cardsByLevel.size());
@@ -164,10 +163,8 @@ public class Market {
             }
 
             cardsByLevel.removeAll(marketCardsByLevel);
-            developmentCardsForMarket.add(marketCardsByLevel);
+            cardsAvailableInMarket.add(marketCardsByLevel);
         }
-
-        return developmentCardsForMarket;
     }
 
 
