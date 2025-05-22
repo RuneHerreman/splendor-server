@@ -41,4 +41,8 @@ public class PlayerInListView {
     public Map<String, Integer> getBonuses() {
         return TokenMapConvertor.convertToStringMap(player.getBonuses());
     }
+
+    public String getIconPath() {
+        return player.getIconPath();
+    }
 }

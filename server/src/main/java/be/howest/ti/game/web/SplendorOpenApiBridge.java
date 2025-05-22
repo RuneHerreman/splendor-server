@@ -100,14 +100,14 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
         if (request.getGameName() == null) {
             game = service.createGame(
                     request.getNumberOfPlayers(),
-                    new Player(request.getPlayerName()),
+                    new Player(request.getPlayerName(), request.getIconPath()),
                     request.getPrivateStatus()
             );
         } else {
             game = service.createGame(
                     request.getGameName(),
                     request.getNumberOfPlayers(),
-                    new Player(request.getPlayerName()),
+                    new Player(request.getPlayerName(), request.getIconPath()),
                     request.getPrivateStatus()
             );
         }
@@ -139,7 +139,7 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
         Game game = service.getGameByID(request.getGameId());
 
         if (game != null) {
-            game.joinGame(request.getPlayerName());
+            game.joinGame(request.getPlayerName(), request.getIconPath());
         }
 
         return new JoinGameResponse(request.getGameId(), request.getPlayerName());

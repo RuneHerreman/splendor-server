@@ -14,4 +14,5 @@ public class JoinGameRequest extends BaseSplendorRequest {
     public String getPlayerName() {
         return params.pathParameter("playerName").getString();
     }
+    public String getIconPath() {return params.pathParameter("iconPath").getString();}
 }

@@ -49,7 +49,7 @@ class DevelopmentTest {
 
     @Test
     void testIsCardAffordableByPlayer_Affordable() {
-        Player player = new Player("TestPlayer");
+        Player player = new Player("TestPlayer", ".");
         player.addToken(Token.DIAMOND, 1);
         player.addToken(Token.RUBY, 1);
         player.addBonus(Token.DIAMOND, 1);
@@ -59,7 +59,7 @@ class DevelopmentTest {
 
     @Test
     void testIsCardAffordableByPlayer_NotAffordable() {
-        Player player = new Player("TestPlayer");
+        Player player = new Player("TestPlayer", ".");
         player.addToken(Token.DIAMOND, 1);
         player.addToken(Token.RUBY, 0);
 

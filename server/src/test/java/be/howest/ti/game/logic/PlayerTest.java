@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
     @BeforeEach
      void setUp() {
-        player = new Player("Alice");
+        player = new Player("Alice", ".");
     }
     @Test
      void testAddTokenAndAddTokens() {
