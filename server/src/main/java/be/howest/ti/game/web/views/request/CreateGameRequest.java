@@ -8,7 +8,11 @@ public class CreateGameRequest extends BaseSplendorRequest {
     }
 
     public String getPlayerName() {
-        return params.body().getJsonObject().getString("playerName");
+        return params.body().getJsonObject().getString("playerName").split("000")[0];
+    }
+
+    public String getIconPath() {
+        return params.body().getJsonObject().getString("playerName").split("000")[1];
     }
 
     public int getNumberOfPlayers() {
@@ -21,9 +25,5 @@ public class CreateGameRequest extends BaseSplendorRequest {
 
     public boolean getPrivateStatus() {
         return params.body().getJsonObject().getBoolean("isPrivateGame");
-    }
-
-    public String getIconPath() {
-        return params.body().getJsonObject().getString("iconPath");
     }
 }
