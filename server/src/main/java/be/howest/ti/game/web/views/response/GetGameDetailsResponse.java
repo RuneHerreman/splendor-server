@@ -63,6 +63,7 @@ public class GetGameDetailsResponse extends AbstractResponseWithHiddenStatus{
     }
 
     public Map<String, Integer> getUnclaimedTokens() {
+        System.out.println(TokenMapConvertor.convertToStringMap(game.getUnclaimedTokens()));
         return TokenMapConvertor.convertToStringMap(game.getUnclaimedTokens());
     }
 
