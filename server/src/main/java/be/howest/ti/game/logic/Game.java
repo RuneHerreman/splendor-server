@@ -275,9 +275,12 @@ public class Game {
     }
 
     public Game reserveCard(String playerName, String developmentName) {
-        boolean active = playerName.equals(activePlayer.getName());
-        Development developmentCard = CardUtils.getDevelopmentCardByName(developmentName, market.getCardsAvailableInMarket());
+        boolean active = playerName.equals(this.getActivePlayer().getName());
+        Development development = CardUtils.getDevelopmentCardByName(developmentName, market.getCardsAvailableInMarket());
 
+        if (development == null) {
+            throw new IllegalArgumentException("Development card is not available");
+        }
         if (active) {
             int cardLevel = developmentCard.getLevel();
             int cardIndexInMarket = market.getIndexCardFromMarket(developmentCard);

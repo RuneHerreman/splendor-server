@@ -327,6 +327,35 @@ class GameTest {
         assertTrue(currentPlayer.getNobles().contains(noble));
         assertEquals(initialPrestige + noble.getPrestigePoints(), currentPlayer.getPrestigePoints());
     }
+    @Test
+    void testBuyDevelopment() {
+        game.joinGame("Bob", ".");
+
+        Development dev = createTestDevelopmentCard();
+        Map<Token, Integer> cost = dev.getCost();
+
+        Map<Token, Integer> tokensToGive = new EnumMap<>(Token.class);
+        for (Map.Entry<Token, Integer> entry : cost.entrySet()) {
+            Token token = entry.getKey();
+            int amount = entry.getValue();
+            if (amount > 0) {
+                tokensToGive.put(token, amount - 1);
+                tokensToGive.put(Token.GOLD, tokensToGive.getOrDefault(Token.GOLD, 0) + 1);
+            }
+        }
+
+        player1.addTokens(tokensToGive);
+        Map<Token, Integer> tokensUsed = new EnumMap<>(tokensToGive);
+
+        boolean result = game.handleDevelopmentCardPurchase(dev, false, tokensUsed);
+
+        assertTrue(result);
+        assertTrue(player1.getPurchasedDevelopments().contains(dev));
+        assertEquals(dev.getPrestigePoints(), player1.getPrestigePoints());
+        assertTrue(player1.getBonuses().getOrDefault(dev.getBonus(), 0) > 0);
+        assertEquals("Bob", game.getActivePlayer().getName());
+    }
+
 }
 
 
