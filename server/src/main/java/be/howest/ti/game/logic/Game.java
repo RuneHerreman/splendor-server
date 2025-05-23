@@ -177,6 +177,7 @@ public class Game {
         return success;
     }
     public boolean handleDevelopmentCardPurchase(Development card, boolean reserved, Map<Token, Integer> paymentTokens) {
+        System.out.println(activePlayer);
         if (!card.isCardAffordableByPlayer(activePlayer) && !card.isCardAffordableByPlayerWithGoldToken(activePlayer)) {
             return false;
         }
@@ -197,6 +198,7 @@ public class Game {
             activePlayer.buyReserved(card);
         } else {
             activePlayer.addCard(card);
+            activePlayer.addBonus(card.getBonus());
             market.addRandomCardToTheMarket(cardLevel, cardIndex);
         }
         switchTurn();

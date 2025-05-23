@@ -12,6 +12,7 @@ public class Development {
     private final Map<Token, Integer> cost;
     private final Token bonus;
 
+    //Name	Level	Type	Image	Points	Cost
     public Development(String name, int prestigePoints, Map<Token, Integer>cost , Token bonus , int level) {
         this.name = name;
         this.prestigePoints = prestigePoints;
