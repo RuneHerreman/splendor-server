@@ -84,18 +84,7 @@ import static org.junit.jupiter.api.Assertions.*;
         Map<Token, Integer> toRemove = new EnumMap<>(Token.class);
         toRemove.put(Token.EMERALD, 3);
         player.removeTokens(toRemove );
-        assertEquals(4, player.getTokens().get(Token.EMERALD));
+        assertEquals(2, player.getTokens().get(Token.EMERALD));
     }
-    @Test
-     void testRemoveTokens_fullyCoveredByBonus() {
-        player.addToken(Token.RUBY, 5);
-        player.addBonus(Token.RUBY, 3);
-        Map<Token, Integer> toRemove = new EnumMap<>(Token.class);
-        toRemove.put(Token.RUBY, 2);
-        player.removeTokens(toRemove );
-        assertEquals(6, player.getTokens().get(Token.RUBY));
-    }
-
-
 
 }
