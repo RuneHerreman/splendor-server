@@ -288,7 +288,6 @@ public class Game {
         if (development == null) {
             throw new IllegalArgumentException("Development card is not available");
         }
-
         if (active) {
             Development developmentCard = CardUtils.getDevelopmentCardByName(developmentName, this.getMarket().getCardsAvailableInMarket());
             int cardLevel = developmentCard.getLevel();
