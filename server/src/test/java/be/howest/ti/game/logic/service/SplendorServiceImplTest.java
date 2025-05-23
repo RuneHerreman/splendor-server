@@ -103,7 +103,7 @@ class SplendorServiceImplTest {
         game.startGame();
 
         assertThrows(IllegalArgumentException.class,
-                () -> game.chooseNoble(john.getName() ,null ));
+                () -> game.handleChooseNoble(john.getName() ,null ));
 
 
     }
@@ -118,7 +118,7 @@ class SplendorServiceImplTest {
 
         String cardName = game.getMarket().getCardsAvailableInMarket().getFirst().getFirst().getName();
 
-        Game result = game.reserveCard(john.getName(), cardName);
+        Game result = game.handleReserveCard(john.getName(), cardName);
 
         assertNotNull(result, "Expected reserveCard to return a non-null Game instance");
         assertEquals(1, john.getReserved().size());
@@ -141,7 +141,7 @@ class SplendorServiceImplTest {
         game.startGame();
         String cardName = Market.createAllCards().getFirst().getFirst().getName();
 
-        assertThrows(IllegalArgumentException.class, () -> game.reserveCard("NotJohn", cardName));
+        assertThrows(IllegalArgumentException.class, () -> game.handleReserveCard("NotJohn", cardName));
 
 
     }

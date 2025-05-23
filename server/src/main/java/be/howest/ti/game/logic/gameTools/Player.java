@@ -50,6 +50,10 @@ public class Player {
 
     public void reserveCard(Development development) {
         reserved.add(development);
+        goldCoinIncrement();
+    }
+
+    public void goldCoinIncrement(){
         int currentGoldAmount =  tokens.getOrDefault(Token.GOLD, 0);
         int goldTokenAmount =currentGoldAmount + 1;
         addToken(Token.GOLD, goldTokenAmount);

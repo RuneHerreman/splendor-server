@@ -94,7 +94,7 @@ class GameTest {
         Map<Token, Integer> tokens = new EnumMap<>(Token.class);
         tokens.put(Token.DIAMOND, 2);
 
-        boolean result = game.handleTokenPurchase(tokens);
+        boolean result = game.tokenPurchase(tokens);
 
         assertTrue(result);
         assertEquals(2, game.getMarket().getUnclaimedTokens().get(Token.DIAMOND));
@@ -118,7 +118,7 @@ class GameTest {
         tokens.put(Token.DIAMOND, 2);
 
         game.getMarket().removeTokensFromMarket(tokens);
-        boolean result = game.handleTokenPurchase(tokens);
+        boolean result = game.tokenPurchase(tokens);
 
         assertFalse(result);
         assertEquals(2, game.getMarket().getUnclaimedTokens().get(Token.DIAMOND));
@@ -139,7 +139,7 @@ class GameTest {
         requestedTokens.put(Token.DIAMOND, 1);
 
         assertTrue(game.getMarket().areTokensAvailableInMarket(requestedTokens));
-        game.handleTokenPurchase(requestedTokens);
+        game.tokenPurchase(requestedTokens);
 
         assertEquals(1, player1.getTokens().get(Token.ONYX));
         assertEquals(1, player1.getTokens().get(Token.EMERALD));
@@ -166,7 +166,7 @@ class GameTest {
 
         game.getMarket().removeTokensFromMarket(toRemove);
         assertFalse(game.getMarket().areTokensAvailableInMarket(requestedTokens));
-        game.handleTokenPurchase(requestedTokens);
+        game.tokenPurchase(requestedTokens);
 
         assertNull( player1.getTokens().get(Token.ONYX));
         assertNull( player1.getTokens().get(Token.EMERALD));
@@ -188,7 +188,7 @@ class GameTest {
         Map<Token, Integer> tokensToReturn = new EnumMap<>(Token.class);
         tokensToReturn.put(Token.EMERALD, 2);
 
-        boolean result = game.handleTokenReturn(tokensToReturn);
+        boolean result = game.tokenReturn(tokensToReturn);
 
         assertTrue(result);
         assertEquals(1, player1.getTokens().getOrDefault(Token.EMERALD, 0));
@@ -201,7 +201,7 @@ class GameTest {
         Map<Token, Integer> tokensToReturn = new EnumMap<>(Token.class);
         tokensToReturn.put(Token.RUBY, 2);
 
-        boolean result = game.handleTokenReturn(tokensToReturn);
+        boolean result = game.tokenReturn(tokensToReturn);
 
         assertFalse(result);
         assertNull(player1.getTokens().get(Token.RUBY));
@@ -220,7 +220,7 @@ class GameTest {
         tokensToReturn.put(Token.ONYX, 2);
 
         assertEquals("Alice", game.getActivePlayer().getName());
-        game.handleTokenReturn(tokensToReturn);
+        game.tokenReturn(tokensToReturn);
         assertEquals("Bob", game.getActivePlayer().getName());
     }
     private Development createTestDevelopmentCard() {
@@ -239,7 +239,7 @@ class GameTest {
         tokensProvided.put(Token.DIAMOND, 1);
         tokensProvided.put(Token.EMERALD, 1);
 
-        boolean result = game.handleDevelopmentCardPurchase(dev, false, tokensProvided);
+        boolean result = game.developmentCardPurchase(dev, false, tokensProvided);
         assertTrue(result);
         assertTrue(player1.getPurchasedDevelopments().contains(dev));
         assertEquals("Bob", game.getActivePlayer().getName());
@@ -257,7 +257,7 @@ class GameTest {
         Map<Token, Integer> tokensProvided = new EnumMap<>(Token.class);
         tokensProvided.put(Token.EMERALD, 1);
         tokensProvided.put(Token.GOLD, 1);
-        boolean result = game.handleDevelopmentCardPurchase(dev, false, tokensProvided);
+        boolean result = game.developmentCardPurchase(dev, false, tokensProvided);
         assertTrue(result);
         assertTrue(player1.getPurchasedDevelopments().contains(dev));
         assertEquals("Bob", game.getActivePlayer().getName());
@@ -273,7 +273,7 @@ class GameTest {
         tokensProvided.put(Token.DIAMOND, 1);
         tokensProvided.put(Token.EMERALD, 1);
 
-        boolean result = game.handleDevelopmentCardPurchase(dev, false, tokensProvided);
+        boolean result = game.developmentCardPurchase(dev, false, tokensProvided);
         assertFalse(result);
         assertFalse(player1.getPurchasedDevelopments().contains(dev));
         assertEquals(player1, game.getActivePlayer());
@@ -317,7 +317,7 @@ class GameTest {
 
         int initialPrestige = currentPlayer.getPrestigePoints();
 
-        Noble returnedNoble = game.handleNobleVisit(noble);
+        Noble returnedNoble = game.nobleVisit(noble);
 
         assertNotNull(returnedNoble);
         assertEquals(noble, returnedNoble);

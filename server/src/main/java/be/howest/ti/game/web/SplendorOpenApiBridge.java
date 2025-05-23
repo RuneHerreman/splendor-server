@@ -158,7 +158,7 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
     public UpdateTokensResponse updateTokens(UpdateTokensRequest request) {
         SplendorService service = getService(request);
 
-        Game game = service.getGameByID(request.getGameId()).getTokens(
+        Game game = service.getGameByID(request.getGameId()).handleTokenPurchase(
                 request.getPlayerName(),
                 request.getTokens()
         );
@@ -170,7 +170,7 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
     public BuyDevelopmentResponse buyDevelopment(BuyDevelopmentRequest request) {
         SplendorService service = getService(request);
 
-        Game game = service.getGameByID(request.getGameId()).buyDevelopment(
+        Game game = service.getGameByID(request.getGameId()).handleDevelopmentCardPurchase(
                 request.getPlayerName(),
                 request.getDevelopment(),
                 false,
@@ -184,7 +184,7 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
     public ReserveDevelopmentResponse reserveDevelopment(ReserveDevelopmentRequest request) {
         SplendorService service = getService(request);
 
-        Game game = service.getGameByID(request.getGameID()).reserveCard(
+        Game game = service.getGameByID(request.getGameID()).handleReserveCard(
                 request.getPlayerName(),
                 request.getDevelopmentName()
         );
@@ -196,7 +196,7 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
     public BuyReservedDevelopmentResponse buyReserveDevelopment(BuyReservedDevelopmentRequest request) {
         SplendorService service = getService(request);
 
-        Game game = service.getGameByID(request.getGameId()).buyDevelopment(
+        Game game = service.getGameByID(request.getGameId()).handleDevelopmentCardPurchase(
                 request.getPlayerName(),
                 request.getDevelopment(),
                 true,
@@ -211,7 +211,7 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
         SplendorService service = getService(request);
         Game game = service.getGameByID(request.getGameID());
 
-        Noble noble = game.chooseNoble(
+        Noble noble = game.handleChooseNoble(
                 request.getPlayerName(),
                 request.getNoble()
         );

@@ -1,6 +1,8 @@
 package be.howest.ti.game.logic.utils;
 
 public class Rule {
+
+    private static final int MAX_RESERVED_CARDS = 3;
     /**
     * Returns the number of tokens per type based on the number of players.
     * Game rules:
@@ -31,5 +33,25 @@ public class Rule {
         } else {
             return -1;
         }
+    }
+    /*** the maximum number of cards a player can reserve during the game.*/
+    public static int getMaxReservedCards() {
+        return MAX_RESERVED_CARDS;
+    }
+    /// /*** * Determines the maximum number of reserved cards that can be visible in the market  based on the number of players.
+    public static int getMaxReservedCardsForMarket(int amountOfPlayers) {
+        return amountOfPlayers + 1;
+    }
+    /** the initial number of gold (wild) tokens in the game./*/
+    public static int initGoldToken() {
+        return 5 ;
+    }
+    /** * Returns how many cards should be available per level in the market.*/
+    public static int getAmountOfCardsByLevel() {
+        return 4;
+    }
+    /** the minimum number of tokens of a single type that must be present in the market to allow a player to take 2 of that type.*/
+    public static int getDoubleTokenPossibility() {
+        return 4;
     }
 }
