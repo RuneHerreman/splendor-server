@@ -191,14 +191,15 @@ public class Game {
 
         activePlayer.removeTokens(paymentTokens);
         activePlayer.updatePrestigePoints(cardPrestigePoints);
+        activePlayer.addBonus(card.getBonus());
         market.addTokens(paymentTokens);
         market.removeCardFromMarket(card);
+
 
         if (reserved) {
             activePlayer.buyReserved(card);
         } else {
             activePlayer.addCard(card);
-            activePlayer.addBonus(card.getBonus());
             market.addRandomCardToTheMarket(cardLevel, cardIndex);
         }
         switchTurn();
