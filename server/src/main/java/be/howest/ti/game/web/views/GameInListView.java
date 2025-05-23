@@ -13,14 +13,14 @@ public class GameInListView {
         this.game = game;
     }
 
-    public List<String> getPlayers() {
-        List<String> playerNames = new ArrayList<>();
+    public List<PlayerInListView> getPlayers() {
+        List<PlayerInListView> listView = new ArrayList<>();
 
         for (Player player : game.getPlayers()) {
-            playerNames.add(player.getName());
+            listView.add(new PlayerInListView(player));
         }
 
-        return playerNames;
+        return listView;
     }
 
     public boolean isStarted() {
