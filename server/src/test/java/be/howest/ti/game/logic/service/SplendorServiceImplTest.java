@@ -130,7 +130,9 @@ class SplendorServiceImplTest {
         game.startGame();
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
-                () -> game.reserveCard(john.getName(), "NonexistentCard"));
+                () -> {
+                    game.reserveCard(john.getName(), "NonexistentCard");
+                });
 
         assertEquals("Development card is not available", ex.getMessage());
     }
@@ -142,7 +144,9 @@ class SplendorServiceImplTest {
         String cardName = Market.createAllCards().getFirst().getFirst().getName();
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
-                () -> game.reserveCard("NotJohn", cardName));
+                () -> {
+                    game.reserveCard("NotJohn", cardName);
+                });
 
         assertEquals("Development card is not available", ex.getMessage());
     }
