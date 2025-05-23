@@ -28,14 +28,17 @@ public class Player {
     }
 
     public void addToken(Token token, int amount) {
-        int tempTokenAmountInInventory = tokens.getOrDefault(token ,0);
-        tokens.put(token, tempTokenAmountInInventory+ amount);
+        int tempTokenAmountInInventory = tokens.getOrDefault(token, 0);
+        tokens.put(token, tempTokenAmountInInventory + amount);
     }
 
     public void addTokens(Map<Token, Integer> tokens) {
-        for(Token token : tokens.keySet()){
+        for (Token token : tokens.keySet()) {
             int tokenAmount = tokens.get(token);
-            addToken(token, tokenAmount);
+            if(tokenAmount > 0) {
+                addToken(token, tokenAmount);
+            }
+
         }
     }
 
@@ -48,13 +51,13 @@ public class Player {
         purchasedDevelopments.add(development);
         Token bonus = development.getBonus();
         int tempBonusAmount = bonuses.getOrDefault(bonus, 0);
-        bonuses.put(bonus , tempBonusAmount + 1);
+        bonuses.put(bonus, tempBonusAmount + 1);
     }
 
     public void reserveCard(Development development) {
         reserved.add(development);
         int goldTokenAmount = tokens.getOrDefault(Token.GOLD, 0) + 1;
-        addToken(Token.GOLD , goldTokenAmount);
+        addToken(Token.GOLD, goldTokenAmount);
     }
 
     public void buyReserved(Development development) {
@@ -82,21 +85,19 @@ public class Player {
         return collectionTokensAndBonuses;
     }
 
-    private void removeToken(Token token, int amount, boolean cardPurchase) {
-        int amountTokenToRemove = amount;
-        if (cardPurchase) {
-            int amountBonus = bonuses.getOrDefault(token, 0);
-            amountTokenToRemove = amount - amountBonus;
-        }
-        int tempTokenAmountInInventory = tokens.getOrDefault(token, 0);
 
-        tokens.put(token, tempTokenAmountInInventory - amountTokenToRemove);
+    private void removeToken(Token token, int amount) {
+        int currentAmount = tokens.getOrDefault(token, 0);
+        tokens.replace(token,currentAmount - amount);
+
     }
 
-    public void removeTokens(Map<Token, Integer> toRemove, boolean cardPurchase) {
-        for(Token token : toRemove.keySet()) {
+    public void removeTokens(Map<Token, Integer> toRemove) {
+        for (Token token : toRemove.keySet()) {
             int amountTokenToRemove = toRemove.get(token);
-            removeToken(token ,amountTokenToRemove,cardPurchase );
+            if(amountTokenToRemove > 0){
+                removeToken(token, amountTokenToRemove);
+            }
         }
     }
 

@@ -169,7 +169,7 @@ public class Game {
     public boolean handleTokenReturn(Map<Token, Integer> tokens) {
         boolean success = market.areValidTokensPick(tokens) && activePlayer.checkValidTokensToReturn(tokens);
         if (success) {
-            activePlayer.removeTokens(tokens , false);
+            activePlayer.removeTokens(tokens );
             market.addTokens(tokens);
             switchTurn();
         }
@@ -180,6 +180,7 @@ public class Game {
         if (!card.isCardAffordableByPlayer(activePlayer) && !card.isCardAffordableByPlayerWithGoldToken(activePlayer)) {
             return false;
         }
+        System.out.println(paymentTokens);
         int cardLevel = card.getLevel();
         int cardIndex = market.getIndexCardFromMarket(card);
         int cardPrestigePoints = card.getPrestigePoints();
@@ -187,7 +188,7 @@ public class Game {
        // Map<Token, Integer> tokensToRemove = paymentTokens; //calculateTokensToRemove(card.getCost(), paymentTokens, goldAvailable);
 
 
-        activePlayer.removeTokens(paymentTokens, true);
+        activePlayer.removeTokens(paymentTokens);
         activePlayer.updatePrestigePoints(cardPrestigePoints);
         market.addTokens(paymentTokens);
         market.removeCardFromMarket(card);

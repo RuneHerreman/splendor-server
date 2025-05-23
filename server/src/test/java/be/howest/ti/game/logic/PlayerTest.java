@@ -83,7 +83,7 @@ import static org.junit.jupiter.api.Assertions.*;
         player.addBonus(Token.EMERALD, 2);
         Map<Token, Integer> toRemove = new EnumMap<>(Token.class);
         toRemove.put(Token.EMERALD, 3);
-        player.removeTokens(toRemove , true);
+        player.removeTokens(toRemove );
         assertEquals(4, player.getTokens().get(Token.EMERALD));
     }
     @Test
@@ -92,7 +92,7 @@ import static org.junit.jupiter.api.Assertions.*;
         player.addBonus(Token.RUBY, 3);
         Map<Token, Integer> toRemove = new EnumMap<>(Token.class);
         toRemove.put(Token.RUBY, 2);
-        player.removeTokens(toRemove , true);
+        player.removeTokens(toRemove );
         assertEquals(6, player.getTokens().get(Token.RUBY));
     }
 
