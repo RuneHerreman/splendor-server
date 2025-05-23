@@ -282,12 +282,12 @@ public class Game {
             throw new IllegalArgumentException("Development card is not available");
         }
         if (active) {
-            int cardLevel = developmentCard.getLevel();
-            int cardIndexInMarket = market.getIndexCardFromMarket(developmentCard);
+            int cardLevel = development.getLevel();
+            int cardIndexInMarket = market.getIndexCardFromMarket(development);
 
-            activePlayer.reserveCard(developmentCard);
+            activePlayer.reserveCard(development);
             market.decrementTokenGold();
-            market.removeCardFromMarket(developmentCard);
+            market.removeCardFromMarket(development);
             market.addRandomCardToTheMarket(cardLevel, cardIndexInMarket);
 
             switchTurn();
