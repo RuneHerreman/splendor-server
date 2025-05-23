@@ -324,6 +324,7 @@ class GameTest {
         assertTrue(currentPlayer.getNobles().contains(noble));
         assertEquals(initialPrestige + noble.getPrestigePoints(), currentPlayer.getPrestigePoints());
     }
+
 }
 
 
