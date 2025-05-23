@@ -1,7 +1,5 @@
 package be.howest.ti.game.logic.gameTools;
 
-import be.howest.ti.game.logic.Player;
-
 import java.util.Map;
 import java.util.Objects;
 
@@ -12,7 +10,6 @@ public class Development {
     private final Map<Token, Integer> cost;
     private final Token bonus;
 
-    //Name	Level	Type	Image	Points	Cost
     public Development(String name, int prestigePoints, Map<Token, Integer>cost , Token bonus , int level) {
         this.name = name;
         this.prestigePoints = prestigePoints;

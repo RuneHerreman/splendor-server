@@ -1,7 +1,4 @@
-package be.howest.ti.game.logic;
-import be.howest.ti.game.logic.gameTools.Development;
-import be.howest.ti.game.logic.gameTools.Noble;
-import be.howest.ti.game.logic.gameTools.Token;
+package be.howest.ti.game.logic.gameTools;
 
 import java.util.*;
 
@@ -38,13 +35,10 @@ public class Player {
             if(tokenAmount > 0) {
                 addToken(token, tokenAmount);
             }
-
         }
     }
 
-
-
-    public void addBonus(Token token) {
+    public void bonusIncrementByType(Token token) {
         int tempBonusAmount = bonuses.getOrDefault(token, 0);
         bonuses.put(token, tempBonusAmount + 1);
     }
@@ -56,7 +50,8 @@ public class Player {
 
     public void reserveCard(Development development) {
         reserved.add(development);
-        int goldTokenAmount = tokens.getOrDefault(Token.GOLD, 0) + 1;
+        int currentGoldAmount =  tokens.getOrDefault(Token.GOLD, 0);
+        int goldTokenAmount =currentGoldAmount + 1;
         addToken(Token.GOLD, goldTokenAmount);
     }
 
@@ -99,17 +94,6 @@ public class Player {
         }
     }
 
-    /*/
-    public boolean hasEnoughBonusesForNoble(Map<Token, Integer> nobleNeededBonuses) {
-        for (Token token : nobleNeededBonuses.keySet()) {
-            int amount = nobleNeededBonuses.get(token);
-            if (bonuses.getOrDefault(token, 0) < amount) {
-                return false;
-            }
-        }
-        return true;
-    }
-*/
     public boolean checkValidTokensToReturn(Map<Token, Integer> toRemove) {
         for (Token toRemoveToken : toRemove.keySet()) {
             int toRemoveAmount = toRemove.get(toRemoveToken);

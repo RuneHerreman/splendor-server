@@ -1,7 +1,7 @@
 package be.howest.ti.game.web.views;
 
 import be.howest.ti.game.logic.Game;
-import be.howest.ti.game.logic.Player;
+import be.howest.ti.game.logic.gameTools.Player;
 
 import java.util.ArrayList;
 import java.util.List;

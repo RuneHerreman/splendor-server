@@ -1,6 +1,5 @@
 package be.howest.ti.game.logic.gameTools;
 
-import be.howest.ti.game.logic.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -33,18 +32,18 @@ class NobleTest {
     @Test
     void nobleTestIsClaimableByPlayer_succes() {
         Player player = new Player("Test", ".");
-        player.addBonus(Token.RUBY, 3);
-        player.addBonus(Token.DIAMOND, 3);
-        player.addBonus(Token.ONYX, 3);
+        player.bonusIncrementByType(Token.RUBY, 3);
+        player.bonusIncrementByType(Token.DIAMOND, 3);
+        player.bonusIncrementByType(Token.ONYX, 3);
         assertTrue(noble.isNobleClaimableByPlayer(player));
     }
 
     @Test
     void nobleTestIsClaimableByPlayer_failure() {
         Player player = new Player("Test", ".");
-        player.addBonus(Token.RUBY, 3);
-        player.addBonus(Token.DIAMOND, 3);
-        player.addBonus(Token.ONYX, 2);
+        player.bonusIncrementByType(Token.RUBY, 3);
+        player.bonusIncrementByType(Token.DIAMOND, 3);
+        player.bonusIncrementByType(Token.ONYX, 2);
         assertFalse(noble.isNobleClaimableByPlayer(player));
     }
 

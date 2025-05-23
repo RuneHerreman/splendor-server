@@ -1,8 +1,6 @@
 package be.howest.ti.game.logic;
-
 import be.howest.ti.game.logic.gameTools.*;
 import be.howest.ti.game.logic.utils.CardUtils;
-
 import java.util.*;
 
 
@@ -177,21 +175,16 @@ public class Game {
         return success;
     }
     public boolean handleDevelopmentCardPurchase(Development card, boolean reserved, Map<Token, Integer> paymentTokens) {
-        System.out.println(activePlayer);
         if (!card.isCardAffordableByPlayer(activePlayer) && !card.isCardAffordableByPlayerWithGoldToken(activePlayer)) {
             return false;
         }
-        System.out.println(paymentTokens);
         int cardLevel = card.getLevel();
         int cardIndex = market.getIndexCardFromMarket(card);
         int cardPrestigePoints = card.getPrestigePoints();
-     //   int goldAvailable = paymentTokens.getOrDefault(Token.GOLD, 0);
-       // Map<Token, Integer> tokensToRemove = paymentTokens; //calculateTokensToRemove(card.getCost(), paymentTokens, goldAvailable);
-
 
         activePlayer.removeTokens(paymentTokens);
         activePlayer.updatePrestigePoints(cardPrestigePoints);
-        activePlayer.addBonus(card.getBonus());
+        activePlayer.bonusIncrementByType(card.getBonus());
         market.addTokens(paymentTokens);
         market.removeCardFromMarket(card);
 
@@ -281,7 +274,7 @@ public class Game {
         boolean active = playerName.equals(activePlayer.getName());
         Development developmentCard = CardUtils.getDevelopmentCardByName(developmentName, market.getCardsAvailableInMarket());
 
-        if (active) {
+        if (active && market.canReserveCard()) {
             int cardLevel = developmentCard.getLevel();
             int cardIndexInMarket = market.getIndexCardFromMarket(developmentCard);
 

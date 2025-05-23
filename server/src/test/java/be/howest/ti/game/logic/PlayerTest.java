@@ -2,6 +2,7 @@ package be.howest.ti.game.logic;
 
 import be.howest.ti.game.logic.gameTools.Noble;
 import be.howest.ti.game.logic.gameTools.Development;
+import be.howest.ti.game.logic.gameTools.Player;
 import be.howest.ti.game.logic.gameTools.Token;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,7 +37,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
     @Test
      void testAddBonus() {
-        player.addBonus(Token.DIAMOND, 2);
+        player.bonusIncrementByType(Token.DIAMOND, 2);
         assertEquals(2, player.getBonuses().get(Token.DIAMOND));
     }
 
@@ -73,14 +74,14 @@ import static org.junit.jupiter.api.Assertions.*;
     @Test
      void testGenerateTokensAndBonuses() {
         player.addToken(Token.RUBY, 2);
-        player.addBonus(Token.RUBY, 3);
+        player.bonusIncrementByType(Token.RUBY, 3);
         Map<Token, Integer> combined = player.generateTokensAndBonuses();
         assertEquals(5, combined.get(Token.RUBY));
     }
     @Test
      void testRemoveTokens_withBonus() {
         player.addToken(Token.EMERALD, 5);
-        player.addBonus(Token.EMERALD, 2);
+        player.bonusIncrementByType(Token.EMERALD, 2);
         Map<Token, Integer> toRemove = new EnumMap<>(Token.class);
         toRemove.put(Token.EMERALD, 3);
         player.removeTokens(toRemove );
@@ -89,7 +90,7 @@ import static org.junit.jupiter.api.Assertions.*;
     @Test
      void testRemoveTokens_fullyCoveredByBonus() {
         player.addToken(Token.RUBY, 5);
-        player.addBonus(Token.RUBY, 3);
+        player.bonusIncrementByType(Token.RUBY, 3);
         Map<Token, Integer> toRemove = new EnumMap<>(Token.class);
         toRemove.put(Token.RUBY, 2);
         player.removeTokens(toRemove );

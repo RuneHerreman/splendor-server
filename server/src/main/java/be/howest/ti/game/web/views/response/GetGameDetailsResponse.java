@@ -1,7 +1,7 @@
 package be.howest.ti.game.web.views.response;
 
 import be.howest.ti.game.logic.Game;
-import be.howest.ti.game.logic.Player;
+import be.howest.ti.game.logic.gameTools.Player;
 import be.howest.ti.game.logic.gameTools.Development;
 import be.howest.ti.game.logic.gameTools.GameState;
 import be.howest.ti.game.logic.gameTools.Noble;

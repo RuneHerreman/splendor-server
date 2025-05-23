@@ -1,8 +1,5 @@
 package be.howest.ti.game.logic;
-import be.howest.ti.game.logic.gameTools.Development;
-import be.howest.ti.game.logic.gameTools.GameState;
-import be.howest.ti.game.logic.gameTools.Noble;
-import be.howest.ti.game.logic.gameTools.Token;
+import be.howest.ti.game.logic.gameTools.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
