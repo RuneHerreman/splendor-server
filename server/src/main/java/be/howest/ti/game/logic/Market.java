@@ -10,7 +10,6 @@ import java.util.*;
 import java.security.SecureRandom;
 
 
-
 public class Market {
     private static final SecureRandom RANDOM = new SecureRandom();
     private static List<List<Development>> allCards;
@@ -58,16 +57,10 @@ public class Market {
 
                 Development development = new Development(cardName, points, tokenBundles, cardType, level);
 
-                switch (level) {
-                    case 1 -> level1Cards.add(development);
-
-                    case 2 -> level2Cards.add(development);
-
-                    case 3 -> level3Cards.add(development);
-
-                    default -> throw new IllegalArgumentException("Unexpected level: " + level);
-
-                }
+                if (level == 1) {level1Cards.add(development);
+                } else if (level == 2) {level2Cards.add(development);
+                } else if (level == 3) {level3Cards.add(development);
+                } else {throw new IllegalArgumentException("Unexpected level: " + level);}
             }
 
             scanner.close();
@@ -89,7 +82,7 @@ public class Market {
         try {
             File noblesFile = new File("src/main/resources/data/nobles.txt");
             Scanner scanner = new Scanner(noblesFile);
-            if (scanner.hasNextLine()) scanner.nextLine(); // Skip header
+            if (scanner.hasNextLine()) scanner.nextLine();
 
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
@@ -113,7 +106,7 @@ public class Market {
     }
 
     public static Map<Token, Integer> createInitTokens(int totalPlayers) {
-        Map<Token, Integer> initTokens = new EnumMap<>(Token.class);
+        Map<Token, Integer> initTokens = new EnumMap<>(Token.class);;
         for (Token token : Token.values()) {
             if (token == Token.GOLD) {
                 initTokens.put(token, 5);
@@ -124,12 +117,15 @@ public class Market {
         return initTokens;
     }
 
+
     private static int getTokenCountByPlayer(int totalPlayers) {
-        return switch (totalPlayers) {
-            case 2 -> 4;
-            case 3 -> 5;
-            default -> 7;
-        };
+        if(totalPlayers == 2) {
+            return 4;
+        }else if (totalPlayers == 3) {
+            return 5;
+        }else{
+            return 7;
+        }
     }
 
     private List<Noble> getInitNoblesForMarket(int amountOfPlayers) {
@@ -155,7 +151,7 @@ public class Market {
         List<List<Development>> developmentCardsForMarket = new ArrayList<>();
 
         for (List<Development> cardsByLevel : allCards) {
-            List<Development> marketCardsByLevel= new ArrayList<>();
+            List<Development> marketCardsByLevel = new ArrayList<>();
             Set<Integer> selectedIndexes = new HashSet<>();
             int amountOfCardsByLevel = 4;
 
@@ -173,6 +169,17 @@ public class Market {
         return developmentCardsForMarket;
     }
 
+    public boolean canReserveCard(){
+        int availableGoldTokens = unclaimedTokens.getOrDefault(Token.GOLD, 0);
+        return  availableGoldTokens > 0;
+    }
+
+    public void decrementTokenGold(){
+        int amountTokenGold = unclaimedTokens.get(Token.GOLD);
+        int newTokenGold = amountTokenGold - 1;
+        unclaimedTokens.replace(Token.GOLD,newTokenGold);
+    }
+
 
     public boolean areValidTokensPick(Map<Token, Integer> tokens) {
         if (!tokens.isEmpty() && !tokens.containsKey(Token.GOLD)){
@@ -185,16 +192,10 @@ public class Market {
         int size = tokens.size();
         int expectedCount;
 
-        switch (size) {
-            case 3 -> expectedCount = 1;
+        if (size == 3) {expectedCount = 1;
+        } else if (size == 1) {expectedCount = 2;
+        } else {return false;}
 
-            case 1 -> expectedCount = 2;
-
-            default -> {
-                return false;
-            }
-
-        }
         for (int count : tokens.values()) {
             if (count != expectedCount) {
                 return false;
@@ -222,12 +223,16 @@ public class Market {
 
     public void removeTokensFromMarket(Map<Token, Integer> tokens) {
         for (Token token : tokens.keySet()) {
-            removeTokensFromMarket(token,tokens.get(token));
+            removeTokenFromMarket(token,tokens.get(token));
         }
     }
-    private void removeTokensFromMarket(Token token, int amount) {
+    private void removeTokenFromMarket(Token token, int amount) {
         int tempAmount = unclaimedTokens.get(token);
         unclaimedTokens.replace(token , tempAmount - amount);
+    }
+
+    public void removeNobleFromMarket(Noble noble) {
+        noblesAvailableInMarket.remove(noble);
     }
 
     public int getIndexCardFromMarket(Development developmentCard) {
@@ -243,18 +248,20 @@ public class Market {
         int levelIndex = cardLevel - 1;
         if (levelIndex >= 0 && levelIndex < cardsAvailableInMarket.size()) {
             cardsAvailableInMarket.get(levelIndex).add(cardIndexInMarket, getRandomCardFromMarket(cardLevel));
-        }
+        };
 
     }
 
     private Development getRandomCardFromMarket(int cardLevel) {
         int cardLevelIndex = cardLevel - 1;
         List<Development> cardsByLevel = allCards.get(cardLevelIndex);
-        return cardsByLevel.get(RANDOM.nextInt(cardsByLevel.size()));
+        int indexNewCard = RANDOM.nextInt(cardsByLevel.size());
+        return cardsByLevel.get(indexNewCard);
     }
 
     public void addToken(Token token, int amount) {
-        unclaimedTokens.put(token, unclaimedTokens.getOrDefault(token, 0) + amount);
+        int tempTokenAmount = unclaimedTokens.getOrDefault(token, 0);
+        unclaimedTokens.replace(token, tempTokenAmount + amount);
     }
 
     public void addTokens(Map<Token, Integer> tokens) {
