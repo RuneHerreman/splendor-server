@@ -18,7 +18,7 @@ public class Development {
         this.level = level;
     }
 
-    public boolean isCardAffordableByPlayer(Player player) {
+    public boolean isCardAffordableByPlayer(Player player, Map<Token, Integer> payment) {
         Map<Token, Integer> playerTokens = player.generateTokensAndBonuses();
         return hasEnoughTokens(playerTokens);
     }
