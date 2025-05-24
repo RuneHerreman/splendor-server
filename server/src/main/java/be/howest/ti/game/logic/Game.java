@@ -169,7 +169,7 @@ public class Game {
         if (success) {
             activePlayer.removeTokens(tokens );
             market.addTokens(tokens);
-            switchTurn();
+           // switchTurn();
         }
 
         return success;
