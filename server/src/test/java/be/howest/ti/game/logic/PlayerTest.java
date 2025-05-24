@@ -37,7 +37,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
     @Test
      void testAddBonus() {
-        player.bonusIncrementByType(Token.DIAMOND, 2);
+        player.bonusIncrementByType(Token.DIAMOND);
+       player.bonusIncrementByType(Token.DIAMOND);
         assertEquals(2, player.getBonuses().get(Token.DIAMOND));
     }
 
@@ -74,23 +75,27 @@ import static org.junit.jupiter.api.Assertions.*;
     @Test
      void testGenerateTokensAndBonuses() {
         player.addToken(Token.RUBY, 2);
-        player.bonusIncrementByType(Token.RUBY, 3);
+       for(int i = 0 ; i < 3 ; i ++) {
+          player.bonusIncrementByType(Token.RUBY);
+       }
         Map<Token, Integer> combined = player.generateTokensAndBonuses();
         assertEquals(5, combined.get(Token.RUBY));
     }
     @Test
      void testRemoveTokens_withBonus() {
         player.addToken(Token.EMERALD, 5);
-        player.bonusIncrementByType(Token.EMERALD, 2);
+        player.bonusIncrementByType(Token.EMERALD);
         Map<Token, Integer> toRemove = new EnumMap<>(Token.class);
         toRemove.put(Token.EMERALD, 3);
         player.removeTokens(toRemove );
-        assertEquals(4, player.getTokens().get(Token.EMERALD));
+        assertEquals(2, player.getTokens().get(Token.EMERALD));
     }
     @Test
      void testRemoveTokens_fullyCoveredByBonus() {
         player.addToken(Token.RUBY, 5);
-        player.bonusIncrementByType(Token.RUBY, 3);
+        for(int i = 0 ; i < 3 ; i ++) {
+           player.bonusIncrementByType(Token.RUBY);
+        }
         Map<Token, Integer> toRemove = new EnumMap<>(Token.class);
         toRemove.put(Token.RUBY, 2);
         player.removeTokens(toRemove );
