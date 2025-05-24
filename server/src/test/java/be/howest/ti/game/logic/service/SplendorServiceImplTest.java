@@ -129,9 +129,10 @@ class SplendorServiceImplTest {
         Game game = service.createGame(gameName, numberOfPlayers, john, true);
         game.startGame();
 
-//        assertThrows(IllegalArgumentException.class,
-            ///    () -> game.reserveCard(john.getName(), null));
-
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+                () -> {
+                    game.reserveCard(john.getName(), "NonexistentCard");
+                });
 
     }
 

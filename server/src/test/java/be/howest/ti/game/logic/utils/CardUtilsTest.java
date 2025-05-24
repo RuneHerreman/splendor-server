@@ -1,5 +1,5 @@
 package be.howest.ti.game.logic.utils;
-
+import be.howest.ti.game.logic.gameTools.Noble;
 import be.howest.ti.game.logic.gameTools.Development;
 import be.howest.ti.game.logic.gameTools.Token;
 import org.junit.jupiter.api.Test;
@@ -69,4 +69,16 @@ class CardUtilsTest {
 
         assertNull(result);
     }
+
+    @Test
+    void testGetNobleCardByName() {
+        Noble noble1 = new Noble("N1", 3, Map.of(Token.DIAMOND, 3));
+        Noble noble2 = new Noble("N2", 2, Map.of(Token.ONYX, 2));
+        List<Noble> nobles = List.of(noble1, noble2);
+
+        assertEquals(noble1, CardUtils.getNobleCardByName("N1", nobles));
+        assertEquals(noble2, CardUtils.getNobleCardByName("N2", nobles));
+        assertNull(CardUtils.getNobleCardByName("N3", nobles));
+    }
+
 }
