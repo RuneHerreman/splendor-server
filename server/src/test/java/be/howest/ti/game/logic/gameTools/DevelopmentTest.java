@@ -53,7 +53,7 @@ class DevelopmentTest {
         player.addToken(Token.RUBY, 1);
         player.bonusIncrementByType(Token.DIAMOND);
 
-        assertTrue(development.isCardAffordableByPlayer(player));
+        assertTrue(development.validatePayment(player));
     }
 
     @Test
@@ -62,6 +62,6 @@ class DevelopmentTest {
         player.addToken(Token.DIAMOND, 1);
         player.addToken(Token.RUBY, 0);
 
-        assertTrue(!development.isCardAffordableByPlayer(player));
+        assertTrue(!development.validatePayment(player));
     }
 }

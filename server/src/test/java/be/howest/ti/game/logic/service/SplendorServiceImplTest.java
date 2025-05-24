@@ -104,8 +104,6 @@ class SplendorServiceImplTest {
 
         assertThrows(IllegalArgumentException.class,
                 () -> game.handleChooseNoble(john.getName() ,null ));
-
-
     }
 
     @Test
@@ -143,8 +141,6 @@ class SplendorServiceImplTest {
         String cardName = Market.createAllCards().getFirst().getFirst().getName();
 
         assertThrows(IllegalArgumentException.class, () -> game.handleReserveCard("NotJohn", cardName));
-
-
     }
 
     @Test
@@ -162,7 +158,6 @@ class SplendorServiceImplTest {
         assertTrue(startedGames.contains(game1), "Started games should include game1");
         assertTrue(startedGames.contains(game3), "Started games should include game3");
         assertFalse(startedGames.contains(game2), "Started games should not include game2");
-
     }
 
     @Test
