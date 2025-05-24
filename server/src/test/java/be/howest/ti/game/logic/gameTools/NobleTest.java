@@ -32,18 +32,25 @@ class NobleTest {
     @Test
     void nobleTestIsClaimableByPlayer_succes() {
         Player player = new Player("Test", ".");
-        player.bonusIncrementByType(Token.RUBY, 3);
-        player.bonusIncrementByType(Token.DIAMOND, 3);
-        player.bonusIncrementByType(Token.ONYX, 3);
+        Map<Token , Integer> bonuses = new EnumMap<>(Token.class);
+        for(int i = 0 ; i < 3 ;i++ ){
+            player.bonusIncrementByType(Token.RUBY);
+            player.bonusIncrementByType(Token.DIAMOND);
+            player.bonusIncrementByType(Token.ONYX);
+        }
+
         assertTrue(noble.isNobleClaimableByPlayer(player));
     }
 
     @Test
     void nobleTestIsClaimableByPlayer_failure() {
         Player player = new Player("Test", ".");
-        player.bonusIncrementByType(Token.RUBY, 3);
-        player.bonusIncrementByType(Token.DIAMOND, 3);
-        player.bonusIncrementByType(Token.ONYX, 2);
+        for(int i = 0 ; i < 3 ;i++ ){
+            player.bonusIncrementByType(Token.RUBY);
+            player.bonusIncrementByType(Token.DIAMOND);
+
+        }
+        player.bonusIncrementByType(Token.ONYX);
         assertFalse(noble.isNobleClaimableByPlayer(player));
     }
 

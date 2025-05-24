@@ -39,9 +39,7 @@ public class Market {
             while (scanner.hasNextLine()) {
                 String lineCard = scanner.nextLine();
                 Development development = CardUtils.parseDevelopmentFromFile(lineCard);
-                System.out.println(development);
-                if (development != null) {
-                    System.out.println(development);
+
                     int level = development.getLevel();
 
                     if (level == 1) {
@@ -51,7 +49,7 @@ public class Market {
                     } else {
                         level3Cards.add(development);
                     }
-                }
+
             }
 
         } catch (FileNotFoundException e) {

@@ -131,7 +131,7 @@ class SplendorServiceImplTest {
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
                 () -> {
-                    game.reserveCard(john.getName(), "NonexistentCard");
+                    game.handleReserveCard(john.getName(), "NonexistentCard");
                 });
 
     }

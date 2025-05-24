@@ -51,7 +51,7 @@ class DevelopmentTest {
         Player player = new Player("TestPlayer", ".");
         player.addToken(Token.DIAMOND, 1);
         player.addToken(Token.RUBY, 1);
-        player.bonusIncrementByType(Token.DIAMOND, 1);
+        player.bonusIncrementByType(Token.DIAMOND);
 
         assertTrue(development.isCardAffordableByPlayer(player));
     }
