@@ -1,6 +1,6 @@
 package be.howest.ti.game.web.views;
 
-import be.howest.ti.game.logic.Player;
+import be.howest.ti.game.logic.gameTools.Player;
 import be.howest.ti.game.logic.gameTools.Development;
 import be.howest.ti.game.logic.gameTools.Noble;
 import be.howest.ti.game.logic.utils.TokenMapConvertor;

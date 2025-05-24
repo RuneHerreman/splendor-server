@@ -1,8 +1,6 @@
 package be.howest.ti.game.logic;
-
 import be.howest.ti.game.logic.gameTools.*;
 import be.howest.ti.game.logic.utils.CardUtils;
-
 import java.util.*;
 
 
@@ -156,7 +154,7 @@ public class Game {
         return mostDevelopments;
     }
 
-    public boolean handleTokenPurchase(Map<Token, Integer> tokens) {
+    public boolean tokenPurchase(Map<Token, Integer> tokens) {
         boolean success = market.areTokensAvailableInMarket(tokens);
         if (success) {
             activePlayer.addTokens(tokens);
@@ -166,7 +164,7 @@ public class Game {
         return success;
     }
 
-    public boolean handleTokenReturn(Map<Token, Integer> tokens) {
+    public boolean tokenReturn(Map<Token, Integer> tokens) {
         boolean success = market.areValidTokensPick(tokens) && activePlayer.checkValidTokensToReturn(tokens);
         if (success) {
             activePlayer.removeTokens(tokens );
@@ -176,22 +174,20 @@ public class Game {
 
         return success;
     }
-    public boolean handleDevelopmentCardPurchase(Development card, boolean reserved, Map<Token, Integer> paymentTokens) {
+    public boolean developmentCardPurchase(Development card, boolean reserved, Map<Token, Integer> paymentTokens) {
         if (!card.isCardAffordableByPlayer(activePlayer) && !card.isCardAffordableByPlayerWithGoldToken(activePlayer)) {
             return false;
         }
-        System.out.println(paymentTokens);
         int cardLevel = card.getLevel();
         int cardIndex = market.getIndexCardFromMarket(card);
         int cardPrestigePoints = card.getPrestigePoints();
-     //   int goldAvailable = paymentTokens.getOrDefault(Token.GOLD, 0);
-       // Map<Token, Integer> tokensToRemove = paymentTokens; //calculateTokensToRemove(card.getCost(), paymentTokens, goldAvailable);
-
 
         activePlayer.removeTokens(paymentTokens);
         activePlayer.updatePrestigePoints(cardPrestigePoints);
+        activePlayer.bonusIncrementByType(card.getBonus());
         market.addTokens(paymentTokens);
         market.removeCardFromMarket(card);
+
 
         if (reserved) {
             activePlayer.buyReserved(card);
@@ -203,29 +199,24 @@ public class Game {
         return true;
     }
 
-    private Map<Token, Integer> calculateTokensToRemove(Map<Token, Integer> costCard, Map<Token, Integer> tokensProvided, int availableGoldTokens) {
-        Map<Token, Integer> tokensToDeduct = new EnumMap<>(Token.class);
-
-        for (Token requiredToken : costCard.keySet()) {
-            int requiredAmount = costCard.get(requiredToken);
-            int playerTokenAmount = tokensProvided.getOrDefault(requiredToken, 0);
-
-            if (playerTokenAmount >= requiredAmount) {
-                tokensToDeduct.put(requiredToken, requiredAmount);
-            } else {
-                int missingAmount = requiredAmount - playerTokenAmount;
-                if (missingAmount <= availableGoldTokens) {
-                    tokensToDeduct.put(requiredToken, playerTokenAmount);
-                    int tempGoldTokens = tokensToDeduct.getOrDefault(requiredToken, 0);
-                    tokensToDeduct.put(Token.GOLD, tempGoldTokens + missingAmount);
-                    availableGoldTokens -= missingAmount;
-                }
-            }
+    private boolean reserveCard(Development developmentCard){
+        if (developmentCard == null || !market.canReserveCard()) {
+            return false;
         }
-        return tokensToDeduct;
+
+        int cardLevel = developmentCard.getLevel();
+        int cardIndexInMarket = market.getIndexCardFromMarket(developmentCard);
+
+        activePlayer.reserveCard(developmentCard);
+        market.decrementTokenGold();
+        market.removeCardFromMarket(developmentCard);
+        market.addRandomCardToTheMarket(cardLevel, cardIndexInMarket);
+
+        switchTurn();
+        return true;
     }
 
-    public Noble handleNobleVisit(Noble noble ) {
+    public Noble nobleVisit(Noble noble ) {
         if(noble.isNobleClaimableByPlayer(activePlayer)) {
             activePlayer.addNoble(noble);
             activePlayer.updatePrestigePoints(noble.getPrestigePoints());
@@ -249,11 +240,11 @@ public class Game {
         }
     }
 
-    public Game buyDevelopment(String playerName, String developmentName, boolean reserved, Map<Token, Integer> payment) {
+    public Game handleDevelopmentCardPurchase(String playerName, String developmentName, boolean reserved, Map<Token, Integer> payment) {
         boolean isActivePlayer = activePlayer.getName().equals(playerName);
         if (isActivePlayer) {
             Development development = CardUtils.getDevelopmentCardByName(developmentName, this.getMarket().getCardsAvailableInMarket());
-            handleDevelopmentCardPurchase(development, reserved, payment);
+            developmentCardPurchase(development, reserved, payment);
         } else {
             throw new IllegalArgumentException(NOT_CURRENT_PLAYER_MESSAGE);
         }
@@ -261,48 +252,39 @@ public class Game {
         return this;
     }
 
-    public Noble chooseNoble(String playerName,Noble noble) {
+    public Noble handleChooseNoble(String playerName, Noble noble) {
         if (noble == null) {
             throw new IllegalArgumentException("Noble is not available");
         }
-
         boolean isActivePlayer = activePlayer.getName().equals(playerName);
         if (isActivePlayer) {
-            return this.handleNobleVisit(noble);
+            return nobleVisit(noble);
         } else {
             throw new IllegalArgumentException(NOT_CURRENT_PLAYER_MESSAGE);
         }
     }
 
-    public Game reserveCard(String playerName, String developmentName) {
-        boolean active = playerName.equals(this.getActivePlayer().getName());
-        Development development = CardUtils.getDevelopmentCardByName(developmentName, market.getCardsAvailableInMarket());
-
-        if (development == null) {
-            throw new IllegalArgumentException("Development card is not available");
-        }
-        if (active) {
-            int cardLevel = development.getLevel();
-            int cardIndexInMarket = market.getIndexCardFromMarket(development);
-
-            activePlayer.reserveCard(development);
-            market.decrementTokenGold();
-            market.removeCardFromMarket(development);
-            market.addRandomCardToTheMarket(cardLevel, cardIndexInMarket);
-
-            switchTurn();
-        } else {
+    public Game handleReserveCard(String playerName, String developmentName) {
+        if (!playerName.equals(activePlayer.getName())) {
             throw new IllegalArgumentException(NOT_CURRENT_PLAYER_MESSAGE);
+        }
+
+        Development developmentCard = CardUtils.getDevelopmentCardByName(developmentName, market.getCardsAvailableInMarket());
+
+        boolean success = reserveCard(developmentCard);
+        if (!success) {
+            throw new IllegalArgumentException("Card cannot be reserved.");
         }
 
         return this;
     }
 
-    public Game getTokens(String playerName, Map<Token, Integer> tokens) {
+
+    public Game handleTokenPurchase(String playerName, Map<Token, Integer> tokens) {
         boolean active = playerName.equals(activePlayer.getName());
 
         if (active) {
-            handleTokenPurchase(tokens);
+            tokenPurchase(tokens);
         } else {
             throw new IllegalArgumentException(NOT_CURRENT_PLAYER_MESSAGE);
         }

@@ -1,6 +1,6 @@
 package be.howest.ti.game.web.views.response;
 
-import be.howest.ti.game.logic.Market;
+import be.howest.ti.game.logic.gameTools.Market;
 import be.howest.ti.game.logic.gameTools.Development;
 import be.howest.ti.game.web.views.DevelopmentInListView;
 

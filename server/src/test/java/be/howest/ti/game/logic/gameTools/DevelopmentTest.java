@@ -1,6 +1,5 @@
 package be.howest.ti.game.logic.gameTools;
 
-import be.howest.ti.game.logic.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -52,7 +51,7 @@ class DevelopmentTest {
         Player player = new Player("TestPlayer", ".");
         player.addToken(Token.DIAMOND, 1);
         player.addToken(Token.RUBY, 1);
-        player.addBonus(Token.DIAMOND, 1);
+        player.bonusIncrementByType(Token.DIAMOND, 1);
 
         assertTrue(development.isCardAffordableByPlayer(player));
     }

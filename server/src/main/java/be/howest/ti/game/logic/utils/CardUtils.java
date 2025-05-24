@@ -57,4 +57,29 @@ public class CardUtils {
         }
         return null;
     }
+
+    public static Development parseDevelopmentFromFile(String tokenRow) {
+        String[] token = tokenRow.split("\\t");
+
+            String cardName = token[0];
+            int level = Integer.parseInt(token[1]);
+            char tokenSymbol = token[2].charAt(0);
+            Token cardType = CardUtils.getTokenFromLetters(tokenSymbol);
+            int points = Integer.parseInt(token[4]);
+            Map<Token, Integer> tokenBundles = CardUtils.getCostTokenSetFromLetters(token[5]);
+
+            return new Development(cardName, points, tokenBundles, cardType, level);
+
+
+    }
+
+    public static Noble parseNoblesFromFile(String line) {
+        String[] token = line.split("\\t");
+
+        String cardName = token[0];
+        Map<Token, Integer> tokenBundles = CardUtils.getCostTokenSetFromLetters(token[1]);
+        int point = Integer.parseInt(token[2]);
+
+        return new Noble(cardName, point, tokenBundles);
+    }
 }

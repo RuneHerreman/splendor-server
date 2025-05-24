@@ -1,7 +1,5 @@
 package be.howest.ti.game.logic.gameTools;
 
-import be.howest.ti.game.logic.Player;
-
 import java.util.Map;
 import java.util.Objects;
 

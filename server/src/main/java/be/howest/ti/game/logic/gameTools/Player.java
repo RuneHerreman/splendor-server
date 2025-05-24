@@ -1,7 +1,4 @@
-package be.howest.ti.game.logic;
-import be.howest.ti.game.logic.gameTools.Development;
-import be.howest.ti.game.logic.gameTools.Noble;
-import be.howest.ti.game.logic.gameTools.Token;
+package be.howest.ti.game.logic.gameTools;
 
 import java.util.*;
 
@@ -38,25 +35,27 @@ public class Player {
             if(tokenAmount > 0) {
                 addToken(token, tokenAmount);
             }
-
         }
     }
 
-    public void addBonus(Token token, int amount) {
+    public void bonusIncrementByType(Token token) {
         int tempBonusAmount = bonuses.getOrDefault(token, 0);
-        bonuses.put(token, tempBonusAmount + amount);
+        bonuses.put(token, tempBonusAmount + 1);
     }
 
     public void addCard(Development development) {
         purchasedDevelopments.add(development);
-        Token bonus = development.getBonus();
-        int tempBonusAmount = bonuses.getOrDefault(bonus, 0);
-        bonuses.put(bonus, tempBonusAmount + 1);
+
     }
 
     public void reserveCard(Development development) {
         reserved.add(development);
-        int goldTokenAmount = tokens.getOrDefault(Token.GOLD, 0) + 1;
+        goldCoinIncrement();
+    }
+
+    public void goldCoinIncrement(){
+        int currentGoldAmount =  tokens.getOrDefault(Token.GOLD, 0);
+        int goldTokenAmount =currentGoldAmount + 1;
         addToken(Token.GOLD, goldTokenAmount);
     }
 
@@ -74,17 +73,15 @@ public class Player {
     }
 
     public Map<Token, Integer> generateTokensAndBonuses() {
-        Map<Token, Integer> collectionTokensAndBonuses = tokens;
-
-        for (Token token : bonuses.keySet()) {
-            int tempTokenCollection = collectionTokensAndBonuses.getOrDefault(token, 0);
-            int tokenCollectionWithBonuses = tempTokenCollection + bonuses.get(token);
-            collectionTokensAndBonuses.put(token, tokenCollectionWithBonuses);
+        Map<Token, Integer> combined = new EnumMap<>(Token.class);
+        for (Token token : Token.values()) {
+            int tempTokenAmount = tokens.getOrDefault(token, 0);
+            int tokenBonusAmount = bonuses.getOrDefault(token, 0);
+            int total = tempTokenAmount + tokenBonusAmount;
+            combined.put(token, total);
         }
-
-        return collectionTokensAndBonuses;
+        return combined;
     }
-
 
     private void removeToken(Token token, int amount) {
         int currentAmount = tokens.getOrDefault(token, 0);
@@ -101,17 +98,6 @@ public class Player {
         }
     }
 
-    /*/
-    public boolean hasEnoughBonusesForNoble(Map<Token, Integer> nobleNeededBonuses) {
-        for (Token token : nobleNeededBonuses.keySet()) {
-            int amount = nobleNeededBonuses.get(token);
-            if (bonuses.getOrDefault(token, 0) < amount) {
-                return false;
-            }
-        }
-        return true;
-    }
-*/
     public boolean checkValidTokensToReturn(Map<Token, Integer> toRemove) {
         for (Token toRemoveToken : toRemove.keySet()) {
             int toRemoveAmount = toRemove.get(toRemoveToken);
