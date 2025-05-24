@@ -23,7 +23,7 @@ public class PlayerInListView {
     }
 
     public List<Development> getReserved() {
-        return player.getReserved();
+        return (player.getReserved()) ;
     }
 
     public List<Development> getBuilt() {
