@@ -3,7 +3,6 @@ package be.howest.ti.game.logic.gameTools;
 import java.util.*;
 
 public class Player {
-
     private final String name;
     private int prestigePoints;
     private final List<Development> purchasedDevelopments;

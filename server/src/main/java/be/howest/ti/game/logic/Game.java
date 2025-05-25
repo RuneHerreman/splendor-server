@@ -177,7 +177,7 @@ public class Game {
         return success;
     }
     public boolean developmentCardPurchase(Development card, boolean reserved, Map<Token, Integer> paymentTokens) {
-        if (!card.isCardAffordableByPlayer(activePlayer) && !card.isCardAffordableByPlayerWithGoldToken(activePlayer)) {
+        if (card.validatePayment(activePlayer, paymentTokens)) {
             return false;
         }
         int cardLevel = card.getLevel();

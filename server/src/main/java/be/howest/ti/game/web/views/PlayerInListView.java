@@ -5,6 +5,7 @@ import be.howest.ti.game.logic.gameTools.Development;
 import be.howest.ti.game.logic.gameTools.Noble;
 import be.howest.ti.game.logic.utils.TokenMapConvertor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,12 +23,22 @@ public class PlayerInListView {
         return player.getPrestigePoints();
     }
 
-    public List<Development> getReserved() {
-        return (player.getReserved()) ;
+    public List<DevelopmentInListView> getReserved() {
+        List<DevelopmentInListView> listView = new ArrayList<>();
+
+        for (Development development : player.getReserved()) {
+            listView.add(new DevelopmentInListView(development));
+        }
+        return listView;
     }
 
-    public List<Development> getBuilt() {
-        return player.getPurchasedDevelopments();
+    public List<DevelopmentInListView> getBuilt() {
+        List<DevelopmentInListView> listView = new ArrayList<>();
+
+        for (Development development : player.getPurchasedDevelopments()) {
+            listView.add(new DevelopmentInListView(development));
+        }
+        return listView;
     }
 
     public List<Noble> getNobles() {
