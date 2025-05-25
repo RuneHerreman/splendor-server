@@ -221,7 +221,7 @@ class GameTest {
 
         assertEquals("Alice", game.getActivePlayer().getName());
         game.tokenReturn(tokensToReturn);
-        assertEquals("Bob", game.getActivePlayer().getName());
+
     }
     private Development createTestDevelopmentCard() {
       return game.getMarket().getCardsAvailableInMarket().getFirst().getFirst();

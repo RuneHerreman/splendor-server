@@ -161,7 +161,7 @@ public class Game {
         if (success) {
             activePlayer.addTokens(tokens);
             market.removeTokensFromMarket(tokens);
-         //   switchTurn();
+            switchTurn();
         }
         return success;
     }
@@ -197,7 +197,7 @@ public class Game {
             activePlayer.addCard(card);
             market.addRandomCardToTheMarket(cardLevel, cardIndex);
         }
-       // switchTurn();
+        switchTurn();
         return true;
     }
 
@@ -214,7 +214,7 @@ public class Game {
         market.removeCardFromMarket(developmentCard);
         market.addRandomCardToTheMarket(cardLevel, cardIndexInMarket);
 
-       // switchTurn();
+        switchTurn();
         return true;
     }
 
