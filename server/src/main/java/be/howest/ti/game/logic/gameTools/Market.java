@@ -63,7 +63,6 @@ public class Market {
         return allCards;
     }
 
-
     public static List<Noble> createNobles() {
         List<Noble> allNobles = new ArrayList<>();
 
@@ -119,8 +118,6 @@ public class Market {
         allNobles.removeAll(noblesForMarket);
         return noblesForMarket;
     }
-
-
 
     private List<List<Development>> getInitDevelopmentCardsForMarket() {
         List<List<Development>> developmentCardsForMarket = new ArrayList<>();
