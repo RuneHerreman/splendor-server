@@ -175,17 +175,15 @@ public class Game {
         return success;
     }
     public boolean developmentCardPurchase(Development card, boolean reserved, Map<Token, Integer> paymentTokens) {
-        if (card.validatePayment(activePlayer, paymentTokens)) {
-            return false;
-        }
         int cardLevel = card.getLevel();
         int cardIndex = market.getIndexCardFromMarket(card);
         int cardPrestigePoints = card.getPrestigePoints();
+        Map<Token, Integer> cardPaymentTokens = card.validatePayment(activePlayer, paymentTokens);
 
-        activePlayer.removeTokens(paymentTokens);
+        activePlayer.removeTokens(cardPaymentTokens);
         activePlayer.updatePrestigePoints(cardPrestigePoints);
         activePlayer.bonusIncrementByType(card.getBonus());
-        market.addTokens(paymentTokens);
+        market.addTokens(cardPaymentTokens);
         market.removeCardFromMarket(card);
 
 

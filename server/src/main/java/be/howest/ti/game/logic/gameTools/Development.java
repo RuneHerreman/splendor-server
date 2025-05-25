@@ -1,5 +1,6 @@
 package be.howest.ti.game.logic.gameTools;
 
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -18,45 +19,73 @@ public class Development {
         this.level = level;
     }
 
-    public boolean validatePayment(Player player, Map<Token, Integer> payment) {
-        Map<Token, Integer> playerTokens = player.generateTokensAndBonuses();
-        return hasEnoughTokens(playerTokens);
+    public Map<Token, Integer> validatePayment(Player player, Map<Token, Integer> payment) {
+        Map<Token, Integer> playerTokens = player.getTokens();
+        Map<Token, Integer> actualCost = getEffectiveCost(player);
+
+        Map<Token, Integer> tokensToTake = new EnumMap<>(Token.class);
+        int goldUsed = payment.getOrDefault(Token.GOLD, 0);
+
+        validateTokens(playerTokens, payment);
+        int totalGoldNeededForMissingTokens = calculateGoldNeeded(actualCost, payment, tokensToTake);
+
+        if (goldUsed < totalGoldNeededForMissingTokens) {
+            throw new IllegalArgumentException("Not enough gold in payment");
+        }
+
+        tokensToTake.put(Token.GOLD, totalGoldNeededForMissingTokens);
+
+        checkForNegativeTokens(tokensToTake);
+
+        return tokensToTake;
     }
 
-    public boolean isCardAffordableByPlayerWithGoldToken(Player player) {
-        Map<Token, Integer> playerTokens = player.generateTokensAndBonuses();
-        return hasEnoughTokensWithGold(playerTokens);
+    public Map<Token, Integer> getEffectiveCost(Player player) {
+        Map<Token, Integer> playerBonuses = player.getBonuses();
+        Map<Token, Integer> actualCost = new EnumMap<>(Token.class);
+
+        for (Token token: Token.values()) {
+            int baseCost = cost.getOrDefault(token, 0);
+            int bonusAmount = playerBonuses.getOrDefault(token, 0);
+            actualCost.put(token, Math.max(0, baseCost - bonusAmount));
+        }
+        return actualCost;
     }
 
-    private boolean hasEnoughTokens(Map<Token, Integer> playerTokens) {
-        for (Token token : cost.keySet()) {
-            int requiredTokenAmount = cost.get(token);
-            int availableTokenAmount = playerTokens.getOrDefault(token, 0);
-
-            if (availableTokenAmount < requiredTokenAmount) {
-                return false;
+    public void validateTokens(Map<Token, Integer> playerTokens, Map<Token, Integer> payment) {
+        for (Token token : payment.keySet()) {
+            int providedAmount = payment.getOrDefault(token, 0);
+            if (playerTokens.getOrDefault(token, 0) < providedAmount) {
+                throw new IllegalArgumentException("Not enough tokens in payment. Token: " + token);
             }
         }
-        return true;
     }
 
-    private boolean hasEnoughTokensWithGold(Map<Token, Integer> playerTokens) {
-        int availableGoldTokenAmount = playerTokens.getOrDefault(Token.GOLD, 0);
-        int missingTokenAmount = 0;
+    public int calculateGoldNeeded(Map<Token, Integer> actualCost, Map<Token, Integer> payment, Map<Token, Integer> tokensToTake) {
+        int totalGoldNeeded = 0;
 
-        for (Token token : cost.keySet()) {
-            int requiredTokenAmount = cost.get(token);
-            int availableTokenAmount = playerTokens.getOrDefault(token, 0);
+        for (Token token : Token.values()) {
+            int neededAmount = actualCost.getOrDefault(token, 0);
+            int providedAmount = payment.getOrDefault(token, 0);
 
-            if (availableTokenAmount < requiredTokenAmount) {
-                missingTokenAmount += requiredTokenAmount - availableGoldTokenAmount;
+            int paidAmount = Math.min(neededAmount, providedAmount);
+            tokensToTake.put(token, paidAmount);
 
-                if (missingTokenAmount > availableGoldTokenAmount) {
-                    return false;
-                }
+            int deficit = neededAmount - paidAmount;
+            if (deficit > 0) {
+                totalGoldNeeded += deficit;
             }
         }
-        return true;
+
+        return totalGoldNeeded;
+    }
+
+    public void checkForNegativeTokens(Map<Token, Integer> tokensToTake) {
+        for (Token token : tokensToTake.keySet()) {
+            if (tokensToTake.get(token) < 0) {
+                throw new IllegalArgumentException("Payment contains more tokens than needed for token: " + token);
+            }
+        }
     }
 
     @Override
