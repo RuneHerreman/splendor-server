@@ -99,7 +99,7 @@ import static org.junit.jupiter.api.Assertions.*;
         Map<Token, Integer> toRemove = new EnumMap<>(Token.class);
         toRemove.put(Token.RUBY, 2);
         player.removeTokens(toRemove );
-        assertEquals(6, player.getTokens().get(Token.RUBY));
+        assertEquals(3, player.getTokens().get(Token.RUBY));
     }
 
 
