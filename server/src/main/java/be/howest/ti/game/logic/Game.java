@@ -187,7 +187,6 @@ public class Game {
         activePlayer.updatePrestigePoints(cardPrestigePoints);
         activePlayer.bonusIncrementByType(card.getBonus());
         market.addTokens(cardPaymentTokens);
-        market.removeCardFromMarket(card);
 
 
         if (reserved) {
@@ -195,9 +194,23 @@ public class Game {
         } else {
             activePlayer.addCard(card);
             market.addRandomCardToTheMarket(cardLevel, cardIndex);
+            market.removeCardFromMarket(card);
         }
-        switchTurn();
+
+        if (!eligibleForNobles()) {
+            switchTurn();
+        }
         return true;
+    }
+
+    public boolean eligibleForNobles() {
+        List<Noble> nobles = market.getNoblesAvailableInMarket();
+        for (Noble noble : nobles) {
+            if (noble.isNobleClaimableByPlayer(activePlayer)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean reserveCard(Development developmentCard){
@@ -270,6 +283,10 @@ public class Game {
             throw new IllegalArgumentException(NOT_CURRENT_PLAYER_MESSAGE);
         }
 
+        if (activePlayer.getReserved().size() == 3) {
+            throw new IllegalStateException("You cannot have more than 3 reserved cards");
+        }
+
         Development developmentCard = CardUtils.getDevelopmentCardByName(developmentName, market.getCardsAvailableInMarket());
 
         boolean success = reserveCard(developmentCard);
@@ -279,9 +296,6 @@ public class Game {
 
         return this;
     }
-
-
-
 
     public Game handleTokenPurchase(String playerName, Map<Token, Integer> tokens) {
         boolean active = playerName.equals(activePlayer.getName());
@@ -304,6 +318,7 @@ public class Game {
         }
         return this;
     }
+
     public Player getPlayerWithLastAction() {
         int activeIndex = players.indexOf(activePlayer);
 
