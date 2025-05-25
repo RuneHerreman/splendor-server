@@ -16,11 +16,14 @@ public class BuyDevelopmentResponse extends AbstractResponseWithHiddenStatus{
     }
 
     public List<Development> getDevelopments(){
-        return game.getActivePlayer().getPurchasedDevelopments();
+        return game.getPlayerWithLastAction().getPurchasedDevelopments();
+    }
+    public Map<String, Integer>  getBonuses(){
+        return TokenMapConvertor.convertToStringMap(game.getPlayerWithLastAction().getBonuses());
     }
 
     public Map<String, Integer> getTokens(){
-        return TokenMapConvertor.convertToStringMap(game.getActivePlayer().getTokens());
+        return TokenMapConvertor.convertToStringMap(game.getPlayerWithLastAction().getTokens());
     }
 
     public int getGameId() {
