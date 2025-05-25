@@ -33,7 +33,9 @@ public class Development {
             throw new IllegalArgumentException("Not enough gold in payment");
         }
 
-        tokensToTake.put(Token.GOLD, totalGoldNeededForMissingTokens);
+        if (totalGoldNeededForMissingTokens > 0) {
+            tokensToTake.put(Token.GOLD, totalGoldNeededForMissingTokens);
+        }
 
         checkForNegativeTokens(tokensToTake);
 
@@ -69,7 +71,9 @@ public class Development {
             int providedAmount = payment.getOrDefault(token, 0);
 
             int paidAmount = Math.min(neededAmount, providedAmount);
-            tokensToTake.put(token, paidAmount);
+            if (paidAmount > 0) {
+                tokensToTake.put(token, paidAmount);
+            }
 
             int deficit = neededAmount - paidAmount;
             if (deficit > 0) {

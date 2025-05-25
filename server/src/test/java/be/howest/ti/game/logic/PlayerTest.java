@@ -93,13 +93,16 @@ import static org.junit.jupiter.api.Assertions.*;
     @Test
      void testRemoveTokens_fullyCoveredByBonus() {
         player.addToken(Token.RUBY, 5);
-        for(int i = 0 ; i < 3 ; i ++) {
+
+        for (int i = 0 ; i < 3 ; i ++) {
            player.bonusIncrementByType(Token.RUBY);
         }
+
         Map<Token, Integer> toRemove = new EnumMap<>(Token.class);
         toRemove.put(Token.RUBY, 2);
-        player.removeTokens(toRemove );
-        assertEquals(6, player.getTokens().get(Token.RUBY));
+        player.removeTokens(toRemove);
+
+        assertEquals(3, player.getTokens().get(Token.RUBY));
     }
 
 

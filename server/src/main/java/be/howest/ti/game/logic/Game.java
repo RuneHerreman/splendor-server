@@ -161,7 +161,7 @@ public class Game {
         if (success) {
             activePlayer.addTokens(tokens);
             market.removeTokensFromMarket(tokens);
-         //   switchTurn();
+            switchTurn();
         }
         return success;
     }
@@ -171,11 +171,12 @@ public class Game {
         if (success) {
             activePlayer.removeTokens(tokens );
             market.addTokens(tokens);
-           // switchTurn();
+//            switchTurn();
         }
 
         return success;
     }
+
     public boolean developmentCardPurchase(Development card, boolean reserved, Map<Token, Integer> paymentTokens) {
         int cardLevel = card.getLevel();
         int cardIndex = market.getIndexCardFromMarket(card);
@@ -195,7 +196,7 @@ public class Game {
             activePlayer.addCard(card);
             market.addRandomCardToTheMarket(cardLevel, cardIndex);
         }
-       // switchTurn();
+        switchTurn();
         return true;
     }
 
@@ -212,7 +213,7 @@ public class Game {
         market.removeCardFromMarket(developmentCard);
         market.addRandomCardToTheMarket(cardLevel, cardIndexInMarket);
 
-       // switchTurn();
+        switchTurn();
         return true;
     }
 
@@ -243,7 +244,7 @@ public class Game {
     public Game handleDevelopmentCardPurchase(String playerName, String developmentName, boolean reserved, Map<Token, Integer> payment) {
         boolean isActivePlayer = activePlayer.getName().equals(playerName);
         if (isActivePlayer) {
-            Development development = CardUtils.getDevelopmentCardByName(developmentName, this.getMarket().getCardsAvailableInMarket());
+            Development development = CardUtils.getDevelopmentCardByName(developmentName, Market.createAllCards());
             developmentCardPurchase(development, reserved, payment);
         } else {
             throw new IllegalArgumentException(NOT_CURRENT_PLAYER_MESSAGE);
