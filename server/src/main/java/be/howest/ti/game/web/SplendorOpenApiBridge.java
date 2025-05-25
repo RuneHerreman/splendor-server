@@ -157,14 +157,24 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
     @Operation("update-tokens")
     public UpdateTokensResponse updateTokens(UpdateTokensRequest request) {
         SplendorService service = getService(request);
+        Game game;
 
-        Game game = service.getGameByID(request.getGameId()).handleTokenPurchase(
-                request.getPlayerName(),
-                request.getTokens()
-        );
+        if (request.isTake()) {
+            game = service.getGameByID(request.getGameId()).handleTokenPurchase(
+                    request.getPlayerName(),
+                    request.getTokens()
+            );
+            game.switchTurn();
+
+        } else {
+            game = service.getGameByID(request.getGameId()).handleTokenReturn(
+                    request.getPlayerName(),
+                    request.getTokens());
+        }
 
         return new UpdateTokensResponse(game);
     }
+
 
     @Operation("buy-development")
     public BuyDevelopmentResponse buyDevelopment(BuyDevelopmentRequest request) {
@@ -176,6 +186,8 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
                 false,
                 request.getPayment()
         );
+
+        game.switchTurn();
 
         return new BuyDevelopmentResponse(game);
     }
@@ -189,7 +201,9 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
                 request.getDevelopmentName()
         );
 
-        return new ReserveDevelopmentResponse(game.getActivePlayer());
+        game.switchTurn();
+
+        return new ReserveDevelopmentResponse(game.getPlayerWithLastAction());
     }
 
     @Operation("buy-reserved-development")
@@ -202,6 +216,8 @@ public class SplendorOpenApiBridge extends OpenApiBridge { // NOSONAR this is no
                 true,
                 request.getPayment()
         );
+
+        game.switchTurn();
 
         return new BuyReservedDevelopmentResponse(game);
     }

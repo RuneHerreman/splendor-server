@@ -16,10 +16,10 @@ public class BuyReservedDevelopmentResponse extends AbstractResponseWithHiddenSt
     }
 
     public Map<String, Integer> getToken() {
-        return TokenMapConvertor.convertToStringMap(game.getActivePlayer().getTokens());
+        return TokenMapConvertor.convertToStringMap(game.getPlayerWithLastAction().getTokens());
     }
 
-    public List<Development> getDeveloments() {
-        return game.getActivePlayer().getPurchasedDevelopments();
+    public List<Development> getDevelopments() {
+        return game.getPlayerWithLastAction().getPurchasedDevelopments();
     }
 }
