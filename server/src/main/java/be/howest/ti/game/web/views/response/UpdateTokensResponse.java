@@ -14,7 +14,7 @@ public class UpdateTokensResponse extends AbstractResponseWithHiddenStatus {
     }
 
     public Map<String, Integer> getTokens() {
-        return TokenMapConvertor.convertToStringMap(game.getActivePlayer().getTokens());
+        return TokenMapConvertor.convertToStringMap(game.getPlayerWithLastAction().getTokens());
     }
 }
 

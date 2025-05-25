@@ -58,8 +58,10 @@ public class Game {
         if (winner != null) {
             gameState = GameState.WINNER_IS_FOUND;
             active = false;
+            winner = activePlayer;
         }
     }
+
 
     private Player checkForWinner() {
         List<Player> eligiblePlayers = new ArrayList<>();
@@ -159,13 +161,13 @@ public class Game {
         if (success) {
             activePlayer.addTokens(tokens);
             market.removeTokensFromMarket(tokens);
-            switchTurn();
+         //   switchTurn();
         }
         return success;
     }
 
     public boolean tokenReturn(Map<Token, Integer> tokens) {
-        boolean success = market.areValidTokensPick(tokens) && activePlayer.checkValidTokensToReturn(tokens);
+        boolean success = activePlayer.checkValidTokensToReturn(tokens);
         if (success) {
             activePlayer.removeTokens(tokens );
             market.addTokens(tokens);
@@ -193,7 +195,7 @@ public class Game {
             activePlayer.addCard(card);
             market.addRandomCardToTheMarket(cardLevel, cardIndex);
         }
-        switchTurn();
+       // switchTurn();
         return true;
     }
 
@@ -210,7 +212,7 @@ public class Game {
         market.removeCardFromMarket(developmentCard);
         market.addRandomCardToTheMarket(cardLevel, cardIndexInMarket);
 
-        switchTurn();
+       // switchTurn();
         return true;
     }
 
@@ -278,6 +280,8 @@ public class Game {
     }
 
 
+
+
     public Game handleTokenPurchase(String playerName, Map<Token, Integer> tokens) {
         boolean active = playerName.equals(activePlayer.getName());
 
@@ -288,6 +292,27 @@ public class Game {
         }
         return this;
     }
+
+    public Game handleTokenReturn(String playerName, Map<Token, Integer> tokens) {
+        boolean active = playerName.equals(activePlayer.getName());
+
+        if (active) {
+            tokenReturn(tokens);
+        } else {
+            throw new IllegalArgumentException(NOT_CURRENT_PLAYER_MESSAGE);
+        }
+        return this;
+    }
+    public Player getPlayerWithLastAction() {
+        int activeIndex = players.indexOf(activePlayer);
+
+        if (activeIndex == 0) {
+            return players.get(numberOfPlayers - 1);
+        } else {
+            return players.get(activeIndex - 1);
+        }
+    }
+
 
     public void startGame() {started = true;}
     public void endGame() {active = false;}
@@ -307,4 +332,5 @@ public class Game {
     public boolean isReturnExcessTokensRequired() {return returnExcessTokensRequired;}
     public boolean isPickNobleRequired() {return pickNobleRequired;}
     public boolean getActive() {return active;}
+
 }
