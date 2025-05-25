@@ -1,6 +1,8 @@
 package be.howest.ti.game.logic;
 import be.howest.ti.game.logic.gameTools.*;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.EnumMap;
@@ -328,7 +330,6 @@ class GameTest {
         assertTrue(currentPlayer.getNobles().contains(noble));
         assertEquals(initialPrestige + noble.getPrestigePoints(), currentPlayer.getPrestigePoints());
     }
-
 }
 
 
