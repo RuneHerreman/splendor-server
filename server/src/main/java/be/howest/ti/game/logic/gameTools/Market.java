@@ -1,7 +1,9 @@
 package be.howest.ti.game.logic.gameTools;
+import be.howest.ti.game.logic.GameResourceNotFoundException;
 import be.howest.ti.game.logic.utils.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.*;
 import java.security.SecureRandom;
 
@@ -29,9 +31,9 @@ public class Market {
         List<Development> level2Cards = new ArrayList<>();
         List<Development> level3Cards = new ArrayList<>();
 
-        File developmentCards = new File("/data/developments.txt");
+        InputStream in = Market.class.getResourceAsStream("/data/developments.txt");
 
-        try (Scanner scanner = new Scanner(developmentCards)) {
+        try (Scanner scanner = new Scanner(in)) {
             if (scanner.hasNextLine()) {
                 scanner.nextLine(); // skip header
             }
@@ -52,7 +54,7 @@ public class Market {
 
             }
 
-        } catch (FileNotFoundException e) {
+        } catch (GameResourceNotFoundException e) {
             throw new IllegalArgumentException("Could not find development cards file", e);
         }
 
@@ -67,8 +69,8 @@ public class Market {
         List<Noble> allNobles = new ArrayList<>();
 
         try {
-            File noblesFile = new File("src/main/resources/data/nobles.txt");
-            Scanner scanner = new Scanner(noblesFile);
+            InputStream in = Market.class.getResourceAsStream("/data/nobles.txt");
+            Scanner scanner = new Scanner(in);
             if (scanner.hasNextLine()) scanner.nextLine();
 
             while (scanner.hasNextLine()) {
@@ -79,7 +81,7 @@ public class Market {
 
             scanner.close();
 
-        } catch (FileNotFoundException e) {
+        } catch (GameResourceNotFoundException e) {
             throw new IllegalArgumentException("Could not find nobles file");
         }
 
