@@ -29,12 +29,14 @@ public class Development {
         int goldNeeded = calculateGoldNeeded(actualCost, costWithGoldSubstitutes, tokensToTake);
         validateTokens(playerTokens, actualCost, goldNeeded);
 
+        int goldToTake = Math.min(goldUsed, goldNeeded);
+
         if (goldUsed < goldNeeded) {
-            throw new IllegalArgumentException("Not enough gold in payment");
+            throw new IllegalArgumentException("Not enough gold in payment. You need "+ goldNeeded +" gold tokens to cover missing regular tokens, but only " + goldUsed + " were provided.");
         }
 
-        if (goldNeeded > 0) {
-            tokensToTake.put(Token.GOLD, goldNeeded);
+        if (goldToTake > 0) {
+            tokensToTake.put(Token.GOLD, goldToTake);
         }
 
         checkForNegativeTokens(tokensToTake);
