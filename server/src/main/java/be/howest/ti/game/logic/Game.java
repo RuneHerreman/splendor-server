@@ -268,7 +268,12 @@ public class Game {
     public Game handleDevelopmentCardPurchase(String playerName, String developmentName, boolean reserved, Map<Token, Integer> payment) {
         boolean isActivePlayer = activePlayer.getName().equals(playerName);
         if (isActivePlayer) {
-            Development development = CardUtils.getDevelopmentCardByName(developmentName, market.getCardsAvailableInMarket());
+            Development development;
+            if (reserved) {
+                development = CardUtils.getReservedDevelopmentFromPlayer(developmentName, activePlayer);
+            } else {
+                development = CardUtils.getDevelopmentCardByName(developmentName, market.getCardsAvailableInMarket());
+            }
             developmentCardPurchase(development, reserved, payment);
         } else {
             throw new IllegalArgumentException(NOT_CURRENT_PLAYER_MESSAGE);
