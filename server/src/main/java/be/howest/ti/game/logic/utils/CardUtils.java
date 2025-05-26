@@ -1,6 +1,7 @@
 package be.howest.ti.game.logic.utils;
 
 import be.howest.ti.game.logic.gameTools.Noble;
+import be.howest.ti.game.logic.gameTools.Player;
 import be.howest.ti.game.logic.gameTools.Token;
 
 import java.util.EnumMap;
@@ -49,6 +50,16 @@ public class CardUtils {
         }
         return null;
     }
+
+    public static Development getReservedDevelopmentFromPlayer(String name, Player player) {
+        for (Development development : player.getReserved()) {
+            if (development.getName().equals(name)) {
+                return development;
+            }
+        }
+        return null;
+    }
+
     public static Noble getNobleCardByName(String name , List<Noble> noblesInMarket) {
         for(Noble noble : noblesInMarket) {
             if(noble.getName().equals(name)) {
