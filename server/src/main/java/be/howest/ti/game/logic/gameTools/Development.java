@@ -57,15 +57,16 @@ public class Development {
     public void validateTokens(Map<Token, Integer> playerTokens, Map<Token, Integer> actualCost, int missingGold) {
         int missingCount = 0;
         for (Token token : actualCost.keySet()) {
-            int providedAmount = actualCost.getOrDefault(token, 0);
-            int amountOwed = playerTokens.getOrDefault(token, 0);
-            if (amountOwed < providedAmount) {
-                missingCount += providedAmount - amountOwed;
-            }
-            if (missingCount > missingGold) {
-                throw new IllegalArgumentException("Not enough tokens in payment. Token: " + token);
+            int costAmount = actualCost.getOrDefault(token, 0);
+            int playerAmount = playerTokens.getOrDefault(token, 0);
+            if (playerAmount < costAmount) {
+                missingCount += costAmount - playerAmount;
             }
         }
+        if (missingCount > missingGold) {
+            throw new IllegalArgumentException("Not enough tokens in payment. Missing: " + missingCount + ", but only " + missingGold + " gold available to cover the deficit.");
+        }
+
     }
 
     public int calculateGoldNeeded(Map<Token, Integer> actualCost, Map<Token, Integer> payment, Map<Token, Integer> tokensToTake) {

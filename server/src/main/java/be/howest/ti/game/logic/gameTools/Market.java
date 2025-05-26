@@ -157,7 +157,6 @@ public class Market {
         unclaimedTokens.replace(Token.GOLD,newTokenGold);
     }
 
-
     public boolean areValidTokensPick(Map<Token, Integer> tokens) {
         if (!tokens.isEmpty() && !tokens.containsKey(Token.GOLD)){
             return checkValueBySize(tokens);
@@ -199,6 +198,7 @@ public class Market {
             removeTokenFromMarket(token,tokens.get(token));
         }
     }
+
     private void removeTokenFromMarket(Token token, int amount) {
         int tempAmount = unclaimedTokens.get(token);
         unclaimedTokens.replace(token , tempAmount - amount);
@@ -222,14 +222,15 @@ public class Market {
         if (levelIndex >= 0 && levelIndex < cardsAvailableInMarket.size()) {
             cardsAvailableInMarket.get(levelIndex).add(cardIndexInMarket, getRandomCardFromMarket(cardLevel));
         }
-
     }
 
     private Development getRandomCardFromMarket(int cardLevel) {
         int cardLevelIndex = cardLevel - 1;
         List<Development> cardsByLevel = allCards.get(cardLevelIndex);
         int indexNewCard = RANDOM.nextInt(cardsByLevel.size());
-        return cardsByLevel.get(indexNewCard);
+        Development selectedCard = cardsByLevel.get(indexNewCard);
+        cardsByLevel.remove(indexNewCard);
+        return selectedCard;
     }
 
     public void addToken(Token token, int amount) {

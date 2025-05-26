@@ -57,46 +57,51 @@ public class Game {
 
         if (winner != null) {
             gameState = GameState.WINNER_IS_FOUND;
-            active = false;
-            winner = activePlayer;
+            endGame();
         }
     }
 
-
     private Player checkForWinner() {
-        List<Player> eligiblePlayers = new ArrayList<>();
-        Player winningplayer = null;
+        boolean playerHasEnoughPrestige = false;
+
         for (Player player : players) {
             if (player.getPrestigePoints() >= 15) {
-                eligiblePlayers.add(player);
+                playerHasEnoughPrestige = true;
+                break;
             }
         }
 
-        if (lastRound && activePlayer.equals(getPlayers().getFirst())) {
-            winningplayer = determineWinner();
-        }
-
-        if (!lastRound && !eligiblePlayers.isEmpty()) {
+        if (playerHasEnoughPrestige && !lastRound) {
             lastRound = true;
+            return null;
         }
 
-        return winningplayer;
+        if (lastRound && activePlayer.equals(players.getFirst())) {
+            return determineWinner();
+        }
+        return null;
     }
 
     public Player determineWinner() {
-        List<List<Player>> playerData = new ArrayList<>(List.of(
-                mostPrestige(),
-                mostDevelopments(),
-                mostNobles()
-        ));
+        List<Player> mostPrestige = mostPrestige();
 
-        for (List<Player> playerDataList : playerData) {
-            if (playerDataList.size() == 1) {
-                return playerDataList.getFirst();
-            }
+        if (mostPrestige.size() == 1) {
+            return mostPrestige.getFirst();
         }
 
-        return null;
+        List<Player> mostDevelopments = mostDevelopments(mostPrestige);
+
+        if (mostDevelopments.size() == 1) {
+            return mostDevelopments.getFirst();
+        }
+
+        List<Player> mostNobles = mostNobles(mostDevelopments);
+
+        if (mostNobles.size() == 1) {
+            return mostNobles.getFirst();
+        }
+
+        return mostPrestige.getFirst();
     }
 
     public List<Player> mostPrestige() {
@@ -118,11 +123,11 @@ public class Game {
         return mostPrestige;
     }
 
-    public List<Player> mostNobles() {
+    public List<Player> mostNobles(List<Player> remainingPlayers) {
         List<Player> mostNobles = new ArrayList<>();
         int max = 0;
 
-        for (Player player : players) {
+        for (Player player : remainingPlayers) {
             int fieldLength = player.getNobles().size();
 
             if (fieldLength > max) {
@@ -137,11 +142,11 @@ public class Game {
         return mostNobles;
     }
 
-    public List<Player> mostDevelopments() {
+    public List<Player> mostDevelopments(List<Player> remainingPlayers) {
         List<Player> mostDevelopments = new ArrayList<>();
         int max = 0;
 
-        for (Player player : players) {
+        for (Player player : remainingPlayers) {
             int developmentCount = player.getPurchasedDevelopments().size();
 
             if (developmentCount > max) {
@@ -177,7 +182,7 @@ public class Game {
         return success;
     }
 
-    public boolean developmentCardPurchase(Development card, boolean reserved, Map<Token, Integer> paymentTokens) {
+    public void developmentCardPurchase(Development card, boolean reserved, Map<Token, Integer> paymentTokens) {
         int cardLevel = card.getLevel();
         int cardIndex = market.getIndexCardFromMarket(card);
         int cardPrestigePoints = card.getPrestigePoints();
@@ -193,14 +198,16 @@ public class Game {
             activePlayer.buyReserved(card);
         } else {
             activePlayer.addCard(card);
-            market.addRandomCardToTheMarket(cardLevel, cardIndex);
             market.removeCardFromMarket(card);
+            market.addRandomCardToTheMarket(cardLevel, cardIndex);
         }
 
-        if (!eligibleForNobles()) {
+        if (eligibleForNobles()) {
+            gameState = GameState.CHOOSE_NOBLE;
+        } else {
+            gameState = GameState.TURN_ACTION;
             switchTurn();
         }
-        return true;
     }
 
     public boolean eligibleForNobles() {
@@ -230,11 +237,15 @@ public class Game {
         return true;
     }
 
-    public Noble nobleVisit(Noble noble ) {
+    public Noble nobleVisit(Noble noble) {
         if(noble.isNobleClaimableByPlayer(activePlayer)) {
             activePlayer.addNoble(noble);
             activePlayer.updatePrestigePoints(noble.getPrestigePoints());
             market.removeNobleFromMarket(noble);
+
+            gameState = GameState.TURN_ACTION;
+            switchTurn();
+
             return noble;
         }
         return null;
@@ -257,7 +268,7 @@ public class Game {
     public Game handleDevelopmentCardPurchase(String playerName, String developmentName, boolean reserved, Map<Token, Integer> payment) {
         boolean isActivePlayer = activePlayer.getName().equals(playerName);
         if (isActivePlayer) {
-            Development development = CardUtils.getDevelopmentCardByName(developmentName, Market.createAllCards());
+            Development development = CardUtils.getDevelopmentCardByName(developmentName, market.getCardsAvailableInMarket());
             developmentCardPurchase(development, reserved, payment);
         } else {
             throw new IllegalArgumentException(NOT_CURRENT_PLAYER_MESSAGE);
@@ -268,14 +279,20 @@ public class Game {
 
     public Noble handleChooseNoble(String playerName, Noble noble) {
         if (noble == null) {
-            throw new IllegalArgumentException("Noble is not available");
+            throw new IllegalArgumentException("Noble is not found");
         }
+
         boolean isActivePlayer = activePlayer.getName().equals(playerName);
-        if (isActivePlayer) {
-            return nobleVisit(noble);
-        } else {
+        if (!isActivePlayer) {
             throw new IllegalArgumentException(NOT_CURRENT_PLAYER_MESSAGE);
+
         }
+
+        if (gameState != GameState.CHOOSE_NOBLE) {
+            throw new IllegalStateException("You cannot choose a noble at this time.");
+        }
+
+        return nobleVisit(noble);
     }
 
     public Game handleReserveCard(String playerName, String developmentName) {
