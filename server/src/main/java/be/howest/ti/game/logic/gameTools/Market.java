@@ -67,7 +67,7 @@ public class Market {
         List<Noble> allNobles = new ArrayList<>();
 
         try {
-            File noblesFile = new File("src/main/resources/data/nobles.txt");
+            File noblesFile = new File("/data/nobles.txt");
             Scanner scanner = new Scanner(noblesFile);
             if (scanner.hasNextLine()) scanner.nextLine();
 
