@@ -57,10 +57,9 @@ public class Game {
 
         if (winner != null) {
             gameState = GameState.WINNER_IS_FOUND;
-            active = false;
+            endGame();
         }
     }
-
 
     private Player checkForWinner() {
         boolean playerHasEnoughPrestige = false;
@@ -203,7 +202,10 @@ public class Game {
             market.addRandomCardToTheMarket(cardLevel, cardIndex);
         }
 
-        if (!eligibleForNobles()) {
+        if (eligibleForNobles()) {
+            gameState = GameState.CHOOSE_NOBLE;
+        } else {
+            gameState = GameState.TURN_ACTION;
             switchTurn();
         }
     }
@@ -235,11 +237,15 @@ public class Game {
         return true;
     }
 
-    public Noble nobleVisit(Noble noble ) {
+    public Noble nobleVisit(Noble noble) {
         if(noble.isNobleClaimableByPlayer(activePlayer)) {
             activePlayer.addNoble(noble);
             activePlayer.updatePrestigePoints(noble.getPrestigePoints());
             market.removeNobleFromMarket(noble);
+
+            gameState = GameState.TURN_ACTION;
+            switchTurn();
+
             return noble;
         }
         return null;
@@ -273,14 +279,20 @@ public class Game {
 
     public Noble handleChooseNoble(String playerName, Noble noble) {
         if (noble == null) {
-            throw new IllegalArgumentException("Noble is not available");
+            throw new IllegalArgumentException("Noble is not found");
         }
+
         boolean isActivePlayer = activePlayer.getName().equals(playerName);
-        if (isActivePlayer) {
-            return nobleVisit(noble);
-        } else {
+        if (!isActivePlayer) {
             throw new IllegalArgumentException(NOT_CURRENT_PLAYER_MESSAGE);
+
         }
+
+        if (gameState != GameState.CHOOSE_NOBLE) {
+            throw new IllegalStateException("You cannot choose a noble at this time.");
+        }
+
+        return nobleVisit(noble);
     }
 
     public Game handleReserveCard(String playerName, String developmentName) {
