@@ -1,8 +1,6 @@
 package be.howest.ti.game.logic.gameTools;
 import be.howest.ti.game.logic.GameResourceNotFoundException;
 import be.howest.ti.game.logic.utils.*;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.*;
 import java.security.SecureRandom;
