@@ -177,7 +177,7 @@ public class Game {
         return success;
     }
 
-    public boolean developmentCardPurchase(Development card, boolean reserved, Map<Token, Integer> paymentTokens) {
+    public void developmentCardPurchase(Development card, boolean reserved, Map<Token, Integer> paymentTokens) {
         int cardLevel = card.getLevel();
         int cardIndex = market.getIndexCardFromMarket(card);
         int cardPrestigePoints = card.getPrestigePoints();
@@ -193,14 +193,13 @@ public class Game {
             activePlayer.buyReserved(card);
         } else {
             activePlayer.addCard(card);
-            market.addRandomCardToTheMarket(cardLevel, cardIndex);
             market.removeCardFromMarket(card);
+            market.addRandomCardToTheMarket(cardLevel, cardIndex);
         }
 
         if (!eligibleForNobles()) {
             switchTurn();
         }
-        return true;
     }
 
     public boolean eligibleForNobles() {
@@ -257,7 +256,7 @@ public class Game {
     public Game handleDevelopmentCardPurchase(String playerName, String developmentName, boolean reserved, Map<Token, Integer> payment) {
         boolean isActivePlayer = activePlayer.getName().equals(playerName);
         if (isActivePlayer) {
-            Development development = CardUtils.getDevelopmentCardByName(developmentName, Market.createAllCards());
+            Development development = CardUtils.getDevelopmentCardByName(developmentName, market.getCardsAvailableInMarket());
             developmentCardPurchase(development, reserved, payment);
         } else {
             throw new IllegalArgumentException(NOT_CURRENT_PLAYER_MESSAGE);
