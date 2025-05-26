@@ -58,45 +58,51 @@ public class Game {
         if (winner != null) {
             gameState = GameState.WINNER_IS_FOUND;
             active = false;
-            winner = activePlayer;
         }
     }
 
 
     private Player checkForWinner() {
-        List<Player> eligiblePlayers = new ArrayList<>();
-        Player winningplayer = null;
+        boolean playerHasEnoughPrestige = false;
+
         for (Player player : players) {
             if (player.getPrestigePoints() >= 15) {
-                eligiblePlayers.add(player);
+                playerHasEnoughPrestige = true;
+                break;
             }
         }
 
-        if (lastRound && activePlayer.equals(getPlayers().getFirst())) {
-            winningplayer = determineWinner();
-        }
-
-        if (!lastRound && !eligiblePlayers.isEmpty()) {
+        if (playerHasEnoughPrestige && !lastRound) {
             lastRound = true;
+            return null;
         }
 
-        return winningplayer;
+        if (lastRound && activePlayer.equals(players.getFirst())) {
+            return determineWinner();
+        }
+        return null;
     }
 
     public Player determineWinner() {
-        List<List<Player>> playerData = new ArrayList<>(List.of(
-                mostPrestige(),
-                mostDevelopments(),
-                mostNobles()
-        ));
+        List<Player> mostPrestige = mostPrestige();
 
-        for (List<Player> playerDataList : playerData) {
-            if (playerDataList.size() == 1) {
-                return playerDataList.getFirst();
-            }
+        if (mostPrestige.size() == 1) {
+            return mostPrestige.getFirst();
         }
 
-        return null;
+        List<Player> mostDevelopments = mostDevelopments(mostPrestige);
+
+        if (mostDevelopments.size() == 1) {
+            return mostDevelopments.getFirst();
+        }
+
+        List<Player> mostNobles = mostNobles(mostDevelopments);
+
+        if (mostNobles.size() == 1) {
+            return mostNobles.getFirst();
+        }
+
+        return mostPrestige.getFirst();
     }
 
     public List<Player> mostPrestige() {
@@ -118,11 +124,11 @@ public class Game {
         return mostPrestige;
     }
 
-    public List<Player> mostNobles() {
+    public List<Player> mostNobles(List<Player> remainingPlayers) {
         List<Player> mostNobles = new ArrayList<>();
         int max = 0;
 
-        for (Player player : players) {
+        for (Player player : remainingPlayers) {
             int fieldLength = player.getNobles().size();
 
             if (fieldLength > max) {
@@ -137,11 +143,11 @@ public class Game {
         return mostNobles;
     }
 
-    public List<Player> mostDevelopments() {
+    public List<Player> mostDevelopments(List<Player> remainingPlayers) {
         List<Player> mostDevelopments = new ArrayList<>();
         int max = 0;
 
-        for (Player player : players) {
+        for (Player player : remainingPlayers) {
             int developmentCount = player.getPurchasedDevelopments().size();
 
             if (developmentCount > max) {
