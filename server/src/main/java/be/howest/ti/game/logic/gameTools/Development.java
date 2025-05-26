@@ -85,15 +85,6 @@ public class Development {
         return actualCost;
     }
 
-
-    public void checkForNegativeTokens(Map<Token, Integer> tokensToTake) {
-        for (Token token : tokensToTake.keySet()) {
-            if (tokensToTake.get(token) < 0) {
-                throw new IllegalArgumentException("Payment contains more tokens than needed for token: " + token);
-            }
-        }
-    }
-
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
