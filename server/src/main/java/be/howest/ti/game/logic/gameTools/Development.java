@@ -25,25 +25,6 @@ public class Development {
         validateTokens(player.getTokens(), tokenToTake);
 
         return tokenToTake;
-//        Map<Token, Integer> tokensToTake = new EnumMap<>(Token.class);
-//        int goldUsed = costWithGoldSubstitutes.getOrDefault(Token.GOLD, 0);
-//
-//        int goldNeeded = calculateGoldNeeded(actualCost, costWithGoldSubstitutes, tokensToTake);
-//        validateTokens(playerTokens, actualCost, goldUsed);
-//
-//        int goldToTake = Math.min(goldUsed, goldNeeded);
-//
-//        if (goldUsed < goldNeeded) {
-//            throw new IllegalArgumentException("Not enough gold in payment. You need "+ goldNeeded +" gold tokens to cover missing regular tokens, but only " + goldUsed + " were provided.");
-//        }
-//
-//        if (goldToTake > 0) {
-//            tokensToTake.put(Token.GOLD, goldToTake);
-//        }
-//
-//        checkForNegativeTokens(tokensToTake);
-//
-//        return tokensToTake;
     }
 
     public Map<Token, Integer> calculateTokensToTake(Map<Token, Integer> actualCost, Map<Token, Integer> costWithGoldSubstitutes, Map<Token, Integer> playerTokens) {
@@ -104,51 +85,6 @@ public class Development {
         return actualCost;
     }
 
-
-
-//    public void validateTokens(Map<Token, Integer> playerTokens, Map<Token, Integer> actualCost, int goldUsed) {
-//        int missingCount = 0;
-//        for (Token token : actualCost.keySet()) {
-//            int costAmount = actualCost.getOrDefault(token, 0);
-//            int playerAmount = playerTokens.getOrDefault(token, 0);
-//            if (playerAmount < costAmount) {
-//                missingCount += costAmount - playerAmount;
-//            }
-//        }
-//        if (missingCount > goldUsed) {
-//            throw new IllegalArgumentException("Not enough tokens in payment. Missing: " + missingCount + ", but only " + goldUsed + " gold available to cover the deficit.");
-//        }
-//
-//    }
-
-//    public int calculateGoldNeeded(Map<Token, Integer> actualCost, Map<Token, Integer> payment, Map<Token, Integer> tokensToTake) {
-//
-//        for (Token token : Token.values()) {
-//            if (token != Token.GOLD) {
-//                int costAmount = actualCost.getOrDefault(token, 0);
-//                int paymentAmount = payment.getOrDefault(token, 0);
-//
-//                int toTake = Math.min(costAmount, paymentAmount);
-//                if (toTake > 0) {
-//                    tokensToTake.put(token, toTake);
-//                }
-//
-//                if (paymentAmount < costAmount) {
-//                    int totalGoldNeeded = costAmount - paymentAmount;
-//                    int currentGold = tokensToTake.getOrDefault(Token.GOLD, 0);
-//                    tokensToTake.put(Token.GOLD, currentGold + totalGoldNeeded);
-//                }
-//
-//                int deficit = costAmount - toTake;
-//
-//                if (deficit > 0) {
-//                    totalGoldNeeded += deficit;
-//                }
-//            }
-//        }
-//
-//        return totalGoldNeeded;
-//    }
 
     public void checkForNegativeTokens(Map<Token, Integer> tokensToTake) {
         for (Token token : tokensToTake.keySet()) {
