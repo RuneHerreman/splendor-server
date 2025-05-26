@@ -29,7 +29,7 @@ public class Market {
         List<Development> level2Cards = new ArrayList<>();
         List<Development> level3Cards = new ArrayList<>();
 
-        File developmentCards = new File("src/main/resources/data/developments.txt");
+        File developmentCards = new File("/data/developments.txt");
 
         try (Scanner scanner = new Scanner(developmentCards)) {
             if (scanner.hasNextLine()) {
@@ -67,7 +67,7 @@ public class Market {
         List<Noble> allNobles = new ArrayList<>();
 
         try {
-            File noblesFile = new File("src/main/resources/data/nobles.txt");
+            File noblesFile = new File("/data/nobles.txt");
             Scanner scanner = new Scanner(noblesFile);
             if (scanner.hasNextLine()) scanner.nextLine();
 
