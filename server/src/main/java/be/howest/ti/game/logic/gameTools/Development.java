@@ -27,7 +27,7 @@ public class Development {
         int goldUsed = costWithGoldSubstitutes.getOrDefault(Token.GOLD, 0);
 
         int goldNeeded = calculateGoldNeeded(actualCost, costWithGoldSubstitutes, tokensToTake);
-        validateTokens(playerTokens, actualCost, goldNeeded);
+        validateTokens(playerTokens, actualCost, goldUsed);
 
         int goldToTake = Math.min(goldUsed, goldNeeded);
 
@@ -56,7 +56,7 @@ public class Development {
         return actualCost;
     }
 
-    public void validateTokens(Map<Token, Integer> playerTokens, Map<Token, Integer> actualCost, int missingGold) {
+    public void validateTokens(Map<Token, Integer> playerTokens, Map<Token, Integer> actualCost, int goldUsed) {
         int missingCount = 0;
         for (Token token : actualCost.keySet()) {
             int costAmount = actualCost.getOrDefault(token, 0);
@@ -65,8 +65,8 @@ public class Development {
                 missingCount += costAmount - playerAmount;
             }
         }
-        if (missingCount > missingGold) {
-            throw new IllegalArgumentException("Not enough tokens in payment. Missing: " + missingCount + ", but only " + missingGold + " gold available to cover the deficit.");
+        if (missingCount > goldUsed) {
+            throw new IllegalArgumentException("Not enough tokens in payment. Missing: " + missingCount + ", but only " + goldUsed + " gold available to cover the deficit.");
         }
 
     }
